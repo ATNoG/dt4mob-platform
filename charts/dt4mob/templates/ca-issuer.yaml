@@ -1,0 +1,56 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Release.Name }}-selfsigned-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}-root-ca
+spec:
+  isCA: true
+  commonName: {{ .Release.Name }}-root-ca
+  secretName: {{ .Release.Name }}-root-ca-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: {{ .Release.Name }}-selfsigned-issuer
+    kind: Issuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Release.Name }}-root-ca-issuer
+spec:
+  ca:
+    secretName: {{ .Release.Name }}-root-ca-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}-server-intermediate-ca
+spec:
+  isCA: true
+  subject:
+    organizationalUnits: ["DT4MOB;Hono"]
+  commonName: {{ .Release.Name }}-server-intermediate-ca
+  secretName: {{ .Release.Name }}-server-intermediate-ca-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: {{ .Release.Name }}-root-ca-issuer
+    kind: Issuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Release.Name }}-server-intermediate-ca-issuer
+spec:
+  ca:
+    secretName: {{ .Release.Name }}-server-intermediate-ca-secret

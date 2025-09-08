@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}-artemis-cert
+spec:
+  commonName: artemis
+  subject:
+    organizationalUnits: ["DT4MOB;Hono"]
+  secretName: {{ .Release.Name }}-artemis-cert
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: {{ .Release.Name }}-server-intermediate-ca-issuer
+    kind: Issuer
+    group: cert-manager.io
+  keystores:
+    jks:
+      create: true
+      password: artemiskeys
