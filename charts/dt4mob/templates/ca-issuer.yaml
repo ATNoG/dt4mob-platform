@@ -1,56 +1,56 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: {{ .Release.Name }}-selfsigned-issuer
+  name: {{ include "dt4mob.fullname" . }}-selfsigned-issuer
 spec:
   selfSigned: {}
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Release.Name }}-root-ca
+  name: {{ include "dt4mob.fullname" . }}-root-ca
 spec:
   isCA: true
-  commonName: {{ .Release.Name }}-root-ca
-  secretName: {{ .Release.Name }}-root-ca-secret
+  commonName: {{ include "dt4mob.fullname" . }}-root-ca
+  secretName: {{ include "dt4mob.fullname" . }}-root-ca-secret
   privateKey:
     algorithm: ECDSA
     size: 256
   issuerRef:
-    name: {{ .Release.Name }}-selfsigned-issuer
+    name: {{ include "dt4mob.fullname" . }}-selfsigned-issuer
     kind: Issuer
     group: cert-manager.io
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: {{ .Release.Name }}-root-ca-issuer
+  name: {{ include "dt4mob.fullname" . }}-root-ca-issuer
 spec:
   ca:
-    secretName: {{ .Release.Name }}-root-ca-secret
+    secretName: {{ include "dt4mob.fullname" . }}-root-ca-secret
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Release.Name }}-server-intermediate-ca
+  name: {{ include "dt4mob.fullname" . }}-server-intermediate-ca
 spec:
   isCA: true
   subject:
     organizationalUnits: ["DT4MOB;Hono"]
-  commonName: {{ .Release.Name }}-server-intermediate-ca
-  secretName: {{ .Release.Name }}-server-intermediate-ca-secret
+  commonName: {{ include "dt4mob.fullname" . }}-server-intermediate-ca
+  secretName: {{ include "dt4mob.fullname" . }}-server-intermediate-ca-secret
   privateKey:
     algorithm: ECDSA
     size: 256
   issuerRef:
-    name: {{ .Release.Name }}-root-ca-issuer
+    name: {{ include "dt4mob.fullname" . }}-root-ca-issuer
     kind: Issuer
     group: cert-manager.io
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: {{ .Release.Name }}-server-intermediate-ca-issuer
+  name: {{ include "dt4mob.fullname" . }}-server-intermediate-ca-issuer
 spec:
   ca:
-    secretName: {{ .Release.Name }}-server-intermediate-ca-secret
+    secretName: {{ include "dt4mob.fullname" . }}-server-intermediate-ca-secret

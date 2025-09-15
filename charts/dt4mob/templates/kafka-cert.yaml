@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-kafka-cert
+spec:
+  commonName: kafka
+  subject:
+    organizationalUnits: ["DT4MOB;Hono"]
+  dnsNames:
+  - {{ include "dt4mob.fullname" . }}-kafka
+  secretName: {{ include "dt4mob.fullname" . }}-kafka-cert
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: {{ include "dt4mob.fullname" . }}-server-intermediate-ca-issuer
+    kind: Issuer
+    group: cert-manager.io

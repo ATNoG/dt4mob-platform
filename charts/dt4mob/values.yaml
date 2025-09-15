@@ -1,154 +1,257 @@
-cert-manager:
-  crds:
+tenant: "test-tenant"
+
+hono:
+  messagingNetworkTypes:
+    - kafka
+
+  kafkaMessagingClusterExample:
     enabled: true
 
+  kafka:
+    listeners:
+      client:
+        protocol: "SSL"
+        sslClientAuth: "required"
+      external:
+        protocol: "SSL"
+        sslClientAuth: "required"
 
-cloud2edge:
-  # TODO: Make this configurable under a more appropriate key
-  demoDevice:
-    tenant: "test-tenant"
-
-  hono:
-    messagingNetworkTypes:
-      - amqp
-
-    kafkaMessagingClusterExample:
-      enabled: false
-
-    amqpMessagingNetworkExample:
-      enabled: true
-      dispatchRouter:
-        adapterUids: "DT4MOB;Hono"
-        tlsKeysSecret: "c2e-dispatch-router-cert"
-        tlsTrustStoreConfigMap: "none"
-        tlsTrustStoreSecret:
-          secretName: "c2e-dispatch-router-cert"
-          # secretName: "c2e-server-intermediate-ca-secret"
-          # selector: "tls.crt"
-
-      broker:
-        artemis:
-          keyStorePath: "/opt/amq/tls/keystore.jks"
-          trustStorePath: "/opt/amq/tls/truststore.jks"
-          certUsersFilePath: "users/users.properties"
-          extraVolumeMounts:
-          - name: "tls-keys"
-            mountPath: "/opt/amq/tls"
-            readOnly: true
-          - name: "users"
-            mountPath: "/opt/amq/conf/users"
-            readOnly: true
-          extraVolumes:
-          - name: "users"
-            secret:
-              secretName: "c2e-artemis-users"
-          - name: "tls-keys"
-            secret:
-              secretName: "c2e-artemis-cert"
-
-
-    useLoadBalancer: false
     externalAccess:
-      enabled: false
+      broker:
+        service:
+          type: NodePort
+      controller:
+        service:
+          type: NodePort
 
-    deviceRegistryExample:
-      addExampleData: true
+    tls:
+      pemChainIncluded: false
+      existingSecret: "c2e-dt4mob-kafka-cert"
 
-      mongoDBBasedDeviceRegistry:
-        containerRegistry: "atnog-harbor.av.it.pt"
-        imageName: "capucho/hono-service-device-registry-mongodb"
-        imageTag: "2.7.0-SNAPSHOT"
+  livenessProbeInitialDelaySeconds: 900
+  readinessProbeInitialDelaySeconds: 45
+  useLoadBalancer: false
+  externalAccess:
+    enabled: false
 
-      tlsKeysSecret: "c2e-device-registry-cert"
+  deviceRegistryExample:
+    type: mongodb
+    addExampleData: false
+    mongoDBBasedDeviceRegistry:
+      containerRegistry: "atnog-harbor.av.it.pt"
+      imageName: "capucho/hono-service-device-registry-mongodb"
+      imageTag: "2.7.0-SNAPSHOT"
+      resources:
+        requests:
+          cpu: 200m
+      mongodb:
+        host: '{{ .Release.Name }}-mongodb'
+        port: 27017
+        dbName: hono
+
+    tlsKeysSecret: "c2e-dt4mob-device-registry-cert"
+    tlsTrustStoreConfigMap: "none"
+    tlsTrustStoreSecret:
+      secretName: "c2e-dt4mob-device-registry-cert"
+      # selector: "tls.crt"
+
+    extraVolumeMounts:
+    - name: "tls-keys"
+      mountPath: "/opt/hono/tls/keystore.jks"
+      subPath: keystore.jks
+      readOnly: true
+
+  adapters:
+    useExternalAuth: true
+    mqtt:
+      resources:
+        requests:
+          cpu: 200m
+
+      tlsKeysSecret: "c2e-dt4mob-mqtt-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "c2e-device-registry-cert"
-        # selector: "tls.crt"
+        secretName: "c2e-dt4mob-mqtt-adapter-cert"
 
-    adapters:
-      useExternalAuth: true
-      mqtt:
-        tlsKeysSecret: "c2e-mqtt-adapter-cert"
-        tlsTrustStoreConfigMap: "none"
-        tlsTrustStoreSecret:
-          secretName: "c2e-mqtt-adapter-cert"
-      http:
-        tlsKeysSecret: "c2e-http-adapter-cert"
-        tlsTrustStoreConfigMap: "none"
-        tlsTrustStoreSecret:
-          secretName: "c2e-http-adapter-cert"
-      amqp:
-        tlsKeysSecret: "c2e-amqp-adapter-cert"
-        tlsTrustStoreConfigMap: "none"
-        tlsTrustStoreSecret:
-          secretName: "c2e-amqp-adapter-cert"
+      extraVolumeMounts:
+      - name: "tls-keys"
+        mountPath: "/opt/hono/tls/keystore.jks"
+        subPath: keystore.jks
+        readOnly: true
+    http:
+      resources:
+        requests:
+          cpu: 200m
 
-    authServer:
-      containerRegistry: "atnog-harbor.av.it.pt"
-      imageName: "capucho/hono-service-auth"
-      imageTag: "2.7.0-SNAPSHOT"
-
-      tlsKeysSecret: "c2e-auth-server-cert"
-      tlsTrustStoreSecret:
-        secretName: "c2e-auth-server-cert"
-        # secretName: "c2e-server-intermediate-ca-secret"
-        # selector: "tls.crt"
-
-      extraVolumes:
-        - name: "permissions"
-          secret:
-            secretName: "dt4mob-permissions"
-      hono:
-        auth:
-          svc:
-            supportedSaslMechanisms: "EXTERNAL,PLAIN"
-
-    commandRouterService:
-      containerRegistry: "atnog-harbor.av.it.pt"
-      imageName: "capucho/hono-service-command-router-infinispan"
-      imageTag: "2.7.0-SNAPSHOT"
-
-      tlsKeysSecret: "c2e-command-router-cert"
+      tlsKeysSecret: "c2e-dt4mob-http-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "c2e-command-router-cert"
-        # secretName: "c2e-server-intermediate-ca-secret"
-        # selector: "tls.crt"
+        secretName: "c2e-dt4mob-http-adapter-cert"
 
-
-  ditto:
-    ingress:
-      enabled: true
-      className: nginx
-      root:
-        paths:
-        - path: /
-          pathType: Exact
-          backendSuffix: nginx
-        - path: /index.html
-          pathType: ImplementationSpecific
-          backendSuffix: nginx
-        - path: /ditto-up.svg
-          pathType: ImplementationSpecific
-          backendSuffix: nginx
-        - path: /ditto-down.svg
-          pathType: ImplementationSpecific
-          backendSuffix: nginx
-
-    swaggerui:
+      extraVolumeMounts:
+      - name: "tls-keys"
+        mountPath: "/opt/hono/tls/keystore.jks"
+        subPath: keystore.jks
+        readOnly: true
+    amqp:
       resources:
-        memoryMi: 64
+        requests:
+          cpu: 200m
 
-    nginx:
-      service:
-        type: ClusterIP
+      tlsKeysSecret: "c2e-dt4mob-amqp-adapter-cert"
+      tlsTrustStoreConfigMap: "none"
+      tlsTrustStoreSecret:
+        secretName: "c2e-dt4mob-amqp-adapter-cert"
 
-    mongodb:
-      # TODO: Use replicated mongo
-      resources:
-        limits:
-          cpu: 1.0
-          memory: "512Mi"
+      extraVolumeMounts:
+      - name: "tls-keys"
+        mountPath: "/opt/hono/tls/keystore.jks"
+        subPath: keystore.jks
+        readOnly: true
 
-      podSecurityContext:
-        fsGroup: null
+  authServer:
+    containerRegistry: "atnog-harbor.av.it.pt"
+    imageName: "capucho/hono-service-auth"
+    imageTag: "2.7.0-SNAPSHOT"
+
+    tlsKeysSecret: "c2e-dt4mob-auth-server-cert"
+    tlsTrustStoreSecret:
+      secretName: "c2e-dt4mob-auth-server-cert"
+      # secretName: "c2e-dt4mob-server-intermediate-ca-secret"
+      # selector: "tls.crt"
+
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "196Mi"
+      limits:
+        cpu: "1"
+        memory: "256Mi"
+
+    extraVolumes:
+      - name: "permissions"
+        secret:
+          secretName: "dt4mob-permissions"
+    extraVolumeMounts:
+      - name: "permissions"
+        mountPath: "/var/run/hono/auth"
+    hono:
+      auth:
+        svc:
+          permissionsPath: "/var/run/hono/auth/permissions.json"
+          supportedSaslMechanisms: "EXTERNAL"
+          signing:
+            # tokenExpiration contains the number of seconds after which tokens issued
+            # by the Auth server will expire.
+            tokenExpiration: 3600
+
+
+  commandRouterService:
+    containerRegistry: "atnog-harbor.av.it.pt"
+    imageName: "capucho/hono-service-command-router-infinispan"
+    imageTag: "2.7.0-SNAPSHOT"
+
+    tlsKeysSecret: "c2e-dt4mob-command-router-cert"
+    tlsTrustStoreConfigMap: "none"
+    tlsTrustStoreSecret:
+      secretName: "c2e-dt4mob-command-router-cert"
+      # secretName: "c2e-dt4mob-server-intermediate-ca-secret"
+      # selector: "tls.crt"
+
+    extraVolumeMounts:
+    - name: "tls-keys"
+      mountPath: "/opt/hono/tls/keystore.jks"
+      subPath: keystore.jks
+      readOnly: true
+
+
+ditto:
+  # TODO
+  global:
+    basicAuthUsers:
+    - user: ditto
+      password: ditto
+
+  connectivity:
+    resources:
+      cpu: 0.2
+      memoryMi: 1024
+    image:
+      repository: atnog-harbor.av.it.pt/capucho/ditto-connectivity
+      tag: 0-SNAPSHOT
+      pullPolicy: Always
+
+  gateway:
+    resources:
+      cpu: 0.2
+      memoryMi: 768
+
+  policies:
+    resources:
+      cpu: 0.2
+      memoryMi: 768
+
+  things:
+    resources:
+      cpu: 0.2
+      memoryMi: 768
+
+  thingsSearch:
+    resources:
+      cpu: 0.2
+      memoryMi: 768
+
+  dittoui:
+    resources:
+      cpu: 0.05
+      memoryMi: 32
+
+  ingress:
+    enabled: true
+    className: nginx
+    root:
+      paths:
+      - path: /
+        pathType: Exact
+        backendSuffix: nginx
+      - path: /index.html
+        pathType: ImplementationSpecific
+        backendSuffix: nginx
+      - path: /ditto-up.svg
+        pathType: ImplementationSpecific
+        backendSuffix: nginx
+      - path: /ditto-down.svg
+        pathType: ImplementationSpecific
+        backendSuffix: nginx
+
+  swaggerui:
+    resources:
+      memoryMi: 64
+
+  nginx:
+    service:
+      type: ClusterIP
+    resources:
+      cpu: 0.05
+      memoryMi: 32
+
+  # TODO: Use replicated mongo
+  mongodb:
+    enabled: true
+    resources:
+      requests:
+        cpu: 150m
+        memory: "256Mi"
+      limits:
+        cpu: 1.0
+        memory: "512Mi"
+    podSecurityContext:
+      fsGroup: null
+    livenessProbe:
+      initialDelaySeconds: 40
+      periodSeconds: 30
+      timeoutSeconds: 15
+    readinessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 15
+      timeoutSeconds: 13

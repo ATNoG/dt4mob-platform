@@ -81,42 +81,6 @@
         "operation": "registration/*:*",
         "activities": [ "EXECUTE" ]
       }
-    ],
-    "application_all_tenants": [
-      {
-        "resource": "telemetry/*",
-        "activities": [ "READ" ]
-      },
-      {
-        "resource": "event/*",
-        "activities": [ "READ" ]
-      },
-      {
-        "resource": "command/*",
-        "activities": [ "WRITE" ]
-      },
-      {
-        "resource": "command_response/*",
-        "activities": [ "READ" ]
-      }
-    ],
-    "application_c2e": [
-      {
-        "resource": "telemetry/{{ .Values.cloud2edge.demoDevice.tenant }}",
-        "activities": [ "READ" ]
-      },
-      {
-        "resource": "event/{{ .Values.cloud2edge.demoDevice.tenant }}",
-        "activities": [ "READ" ]
-      },
-      {
-        "resource": "command/{{ .Values.cloud2edge.demoDevice.tenant }}",
-        "activities": [ "WRITE" ]
-      },
-      {
-        "resource": "command_response/{{ .Values.cloud2edge.demoDevice.tenant }}/*",
-        "activities": [ "READ" ]
-      }
     ]
   },
   "users": {
@@ -151,11 +115,6 @@
     "device-registry": {
       "mechanism": "EXTERNAL",
       "authorities": ["hono-component"]
-    },
-    "{{ .Values.cloud2edge.honoConnection.username }}": {
-      "mechanism": "PLAIN",
-      "password": "{{ .Values.cloud2edge.honoConnection.password }}",
-      "authorities": [ "application_c2e" ]
     }
   }
 }

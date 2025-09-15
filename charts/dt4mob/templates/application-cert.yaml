@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-application-cert
+spec:
+  commonName: application
+  subject:
+    organizationalUnits: ["DT4MOB;Application"]
+  secretName: {{ include "dt4mob.fullname" . }}-application-cert
+  privateKey:
+    algorithm: RSA
+    size: 4096
+  issuerRef:
+    name: {{ include "dt4mob.fullname" . }}-server-intermediate-ca-issuer
+    kind: Issuer
+    group: cert-manager.io
