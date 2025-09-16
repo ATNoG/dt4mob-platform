@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-controller
+  labels:
+    {{- include "dt4mob.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "dt4mob.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: controller
+  template:
+    metadata:
+      {{- with .Values.controller.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dt4mob.labels" . | nindent 8 }}
+        app.kubernetes.io/component: controller
+        {{- with .Values.controller.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dt4mob.controller.serviceAccountName" . }}
+      {{- with .Values.controller.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: dt4mob-controller
+          {{- with .Values.controller.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          env:
+            - name: TLS_SECRET_NAME
+              value: "{{ include "dt4mob.fullname" . }}-application-cert"
+
+            - name: DEVOPS_SECRET_NAME
+              value: "{{ include "ditto.fullname" .Subcharts.ditto }}-gateway-secret"
+
+            - name: TENANT_CONFIG_MAP_NAME
+              value: "{{ include "dt4mob.fullname" . }}-config"
+
+            - name: REGISTRY_HOST
+              value: "http://{{ include "hono.fullname" .Subcharts.hono }}-service-device-registry:8080"
+
+            - name: DITTO_HOST
+              value: "http://{{ include "ditto.fullname" .Subcharts.ditto }}-gateway:{{ .Subcharts.ditto.Values.gateway.service.port }}"
+
+            - name: KAFKA_HOST
+              value: "{{ include "common.names.fullname" .Subcharts.hono.Subcharts.kafka }}:{{ .Subcharts.hono.Subcharts.kafka.Values.service.ports.client }}"
+
+          {{- with .Values.controller.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.controller.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.controller.extraVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

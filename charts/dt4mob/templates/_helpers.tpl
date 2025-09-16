@@ -76,3 +76,14 @@ spec:
       create: true
       password: kafkakeys
 {{- end }}
+
+{{/*
+Create the name of the service account to use for the controller
+*/}}
+{{- define "dt4mob.controller.serviceAccountName" -}}
+{{- if .Values.controller.serviceAccount.create }}
+{{- default (printf "%s-controller" (include "dt4mob.fullname" .)) .Values.controller.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.controller.serviceAccount.name }}
+{{- end }}
+{{- end }}

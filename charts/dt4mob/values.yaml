@@ -1,3 +1,8 @@
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
 tenant: "test-tenant"
 
 hono:
@@ -255,3 +260,27 @@ ditto:
       initialDelaySeconds: 30
       periodSeconds: 15
       timeoutSeconds: 13
+
+controller:
+  image:
+    repository: atnog-harbor.av.it.pt/capucho/dt4mob-controller
+    pullPolicy: Always # IfNotPresent
+    tag: "latest"
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+
+  extraVolumes: []
+  extraVolumeMounts: []
+
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  securityContext: {}
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

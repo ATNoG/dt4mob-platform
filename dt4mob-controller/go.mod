@@ -1,4 +1,4 @@
-module github.com/ATNoG/dt4mob/ditto-controller
+module github.com/ATNoG/dt4mob/dt4mob-controller
 
 go 1.24.4
 
