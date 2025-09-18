@@ -74,7 +74,9 @@ spec:
   keystores:
     jks:
       create: true
-      password: kafkakeys
+      passwordSecretRef:
+        name: {{ include "dt4mob.keyStorePasswordSecret" .dot | quote }}
+        key: "password"
 {{- end }}
 
 {{/*
@@ -86,4 +88,11 @@ Create the name of the service account to use for the controller
 {{- else }}
 {{- default "default" .Values.controller.serviceAccount.name }}
 {{- end }}
+{{- end }}
+
+{{/*
+Create the name of the secret with the keystore's password
+*/}}
+{{- define "dt4mob.keyStorePasswordSecret" -}}
+{{ include "dt4mob.fullname" . }}-keystore-password-secret
 {{- end }}

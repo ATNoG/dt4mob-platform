@@ -3,7 +3,7 @@ dependencies:
   repository: file://../../../eclipse-packages/charts/hono
   version: 2.6.4
 - name: ditto
-  repository: file://../../../ditto/deployment/helm/ditto
-  version: 3.8.0-M7
-digest: sha256:25b7b961b07004bc83021a8cc61cbb4882a6bfd88c30034def1dc151f5a0bb7d
-generated: "2025-09-16T13:03:28.172076639+01:00"
+  repository: oci://registry-1.docker.io/eclipse
+  version: 3.7.6
+digest: sha256:0a45c83ca5e64f8d60ff9dddac968755ce92f24851da5f0f9c1523abc051bf63
+generated: "2025-09-18T11:38:00.234367339+01:00"

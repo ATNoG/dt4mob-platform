@@ -9,6 +9,5 @@ dependencies:
     # repository: "https://ATNoG.github.io/ditto-helm-chart/"
     repository: "file://../../../eclipse-packages/charts/hono"
   - name: ditto
-    version: 3.8.0-M7
-    # repository: "https://ATNoG.github.io/ditto-helm-chart/"
-    repository: "file://../../../ditto/deployment/helm/ditto"
+    version: 3.7.6
+    repository: "oci://registry-1.docker.io/eclipse"

@@ -7,7 +7,7 @@ spec:
   subject:
     organizationalUnits: ["DT4MOB;Hono"]
   dnsNames:
-  - {{ include "dt4mob.fullname" . }}-kafka
+  - {{ include "common.names.fullname" .Subcharts.hono.Subcharts.kafka }}
   secretName: {{ include "dt4mob.fullname" . }}-kafka-cert
   privateKey:
     algorithm: ECDSA

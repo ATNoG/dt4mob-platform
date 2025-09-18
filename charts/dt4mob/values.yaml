@@ -31,13 +31,18 @@ hono:
 
     tls:
       pemChainIncluded: false
-      existingSecret: "c2e-dt4mob-kafka-cert"
+      existingSecret: "dt4mob-kafka-cert"
 
   livenessProbeInitialDelaySeconds: 900
   readinessProbeInitialDelaySeconds: 45
   useLoadBalancer: false
   externalAccess:
     enabled: false
+
+  clientBrokerKeyStore:
+    passwordSecretRef:
+      name: "dt4mob-keystore-password-secret"
+      selector: "password"
 
   deviceRegistryExample:
     type: mongodb
@@ -54,17 +59,10 @@ hono:
         port: 27017
         dbName: hono
 
-    tlsKeysSecret: "c2e-dt4mob-device-registry-cert"
+    tlsKeysSecret: "dt4mob-device-registry-cert"
     tlsTrustStoreConfigMap: "none"
     tlsTrustStoreSecret:
-      secretName: "c2e-dt4mob-device-registry-cert"
-      # selector: "tls.crt"
-
-    extraVolumeMounts:
-    - name: "tls-keys"
-      mountPath: "/opt/hono/tls/keystore.jks"
-      subPath: keystore.jks
-      readOnly: true
+      secretName: "dt4mob-device-registry-cert"
 
   adapters:
     useExternalAuth: true
@@ -73,57 +71,37 @@ hono:
         requests:
           cpu: 200m
 
-      tlsKeysSecret: "c2e-dt4mob-mqtt-adapter-cert"
+      tlsKeysSecret: "dt4mob-mqtt-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "c2e-dt4mob-mqtt-adapter-cert"
-
-      extraVolumeMounts:
-      - name: "tls-keys"
-        mountPath: "/opt/hono/tls/keystore.jks"
-        subPath: keystore.jks
-        readOnly: true
+        secretName: "dt4mob-mqtt-adapter-cert"
     http:
       resources:
         requests:
           cpu: 200m
 
-      tlsKeysSecret: "c2e-dt4mob-http-adapter-cert"
+      tlsKeysSecret: "dt4mob-http-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "c2e-dt4mob-http-adapter-cert"
-
-      extraVolumeMounts:
-      - name: "tls-keys"
-        mountPath: "/opt/hono/tls/keystore.jks"
-        subPath: keystore.jks
-        readOnly: true
+        secretName: "dt4mob-http-adapter-cert"
     amqp:
       resources:
         requests:
           cpu: 200m
 
-      tlsKeysSecret: "c2e-dt4mob-amqp-adapter-cert"
+      tlsKeysSecret: "dt4mob-amqp-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "c2e-dt4mob-amqp-adapter-cert"
-
-      extraVolumeMounts:
-      - name: "tls-keys"
-        mountPath: "/opt/hono/tls/keystore.jks"
-        subPath: keystore.jks
-        readOnly: true
+        secretName: "dt4mob-amqp-adapter-cert"
 
   authServer:
     containerRegistry: "atnog-harbor.av.it.pt"
     imageName: "capucho/hono-service-auth"
     imageTag: "2.7.0-SNAPSHOT"
 
-    tlsKeysSecret: "c2e-dt4mob-auth-server-cert"
+    tlsKeysSecret: "dt4mob-auth-server-cert"
     tlsTrustStoreSecret:
-      secretName: "c2e-dt4mob-auth-server-cert"
-      # secretName: "c2e-dt4mob-server-intermediate-ca-secret"
-      # selector: "tls.crt"
+      secretName: "dt4mob-auth-server-cert"
 
     resources:
       requests:
@@ -156,18 +134,10 @@ hono:
     imageName: "capucho/hono-service-command-router-infinispan"
     imageTag: "2.7.0-SNAPSHOT"
 
-    tlsKeysSecret: "c2e-dt4mob-command-router-cert"
+    tlsKeysSecret: "dt4mob-command-router-cert"
     tlsTrustStoreConfigMap: "none"
     tlsTrustStoreSecret:
-      secretName: "c2e-dt4mob-command-router-cert"
-      # secretName: "c2e-dt4mob-server-intermediate-ca-secret"
-      # selector: "tls.crt"
-
-    extraVolumeMounts:
-    - name: "tls-keys"
-      mountPath: "/opt/hono/tls/keystore.jks"
-      subPath: keystore.jks
-      readOnly: true
+      secretName: "dt4mob-command-router-cert"
 
 
 ditto:
@@ -190,6 +160,10 @@ ditto:
     resources:
       cpu: 0.2
       memoryMi: 768
+    config:
+      authentication:
+        devops:
+          existingSecret: "dt4mob-ditto-gateway-secret"
 
   policies:
     resources:
@@ -214,20 +188,6 @@ ditto:
   ingress:
     enabled: true
     className: nginx
-    root:
-      paths:
-      - path: /
-        pathType: Exact
-        backendSuffix: nginx
-      - path: /index.html
-        pathType: ImplementationSpecific
-        backendSuffix: nginx
-      - path: /ditto-up.svg
-        pathType: ImplementationSpecific
-        backendSuffix: nginx
-      - path: /ditto-down.svg
-        pathType: ImplementationSpecific
-        backendSuffix: nginx
 
   swaggerui:
     resources:
@@ -250,8 +210,6 @@ ditto:
       limits:
         cpu: 1.0
         memory: "512Mi"
-    podSecurityContext:
-      fsGroup: null
     livenessProbe:
       initialDelaySeconds: 40
       periodSeconds: 30

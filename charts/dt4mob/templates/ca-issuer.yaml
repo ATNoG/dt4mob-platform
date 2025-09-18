@@ -11,6 +11,7 @@ metadata:
   name: {{ include "dt4mob.fullname" . }}-root-ca
 spec:
   isCA: true
+  duration: "87660h" # 10 years
   commonName: {{ include "dt4mob.fullname" . }}-root-ca
   secretName: {{ include "dt4mob.fullname" . }}-root-ca-secret
   privateKey:
