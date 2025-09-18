@@ -188,6 +188,13 @@ ditto:
   ingress:
     enabled: true
     className: nginx
+    # Use this instead of setting existingSecret because otherwise the secret
+    # needs to exist before the chart is rendered.
+    api:
+      kubernetesAuthAnnotations: |
+        nginx.ingress.kubernetes.io/auth-type: basic
+        nginx.ingress.kubernetes.io/auth-secret: {{ .Release.Name }}-auth-secret
+        nginx.ingress.kubernetes.io/auth-realm: 'Authentication required to use HTTP API!'
 
   swaggerui:
     resources:
