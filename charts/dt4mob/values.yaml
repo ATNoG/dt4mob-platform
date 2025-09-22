@@ -13,6 +13,9 @@ hono:
     enabled: true
 
   kafka:
+    commonAnnotations:
+      reloader.stakater.com/auto: "true"
+
     listeners:
       client:
         protocol: "SSL"
@@ -35,6 +38,8 @@ hono:
 
   livenessProbeInitialDelaySeconds: 900
   readinessProbeInitialDelaySeconds: 45
+
+  useDynamicNodePorts: true
   useLoadBalancer: false
   externalAccess:
     enabled: false
@@ -51,6 +56,11 @@ hono:
       containerRegistry: "atnog-harbor.av.it.pt"
       imageName: "capucho/hono-service-device-registry-mongodb"
       imageTag: "2.7.0-SNAPSHOT"
+
+      deployment:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
       resources:
         requests:
           cpu: 200m
@@ -71,6 +81,10 @@ hono:
         requests:
           cpu: 200m
 
+      deployment:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
       tlsKeysSecret: "dt4mob-mqtt-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
@@ -80,6 +94,10 @@ hono:
         requests:
           cpu: 200m
 
+      deployment:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
       tlsKeysSecret: "dt4mob-http-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
@@ -88,6 +106,10 @@ hono:
       resources:
         requests:
           cpu: 200m
+
+      deployment:
+        annotations:
+          reloader.stakater.com/auto: "true"
 
       tlsKeysSecret: "dt4mob-amqp-adapter-cert"
       tlsTrustStoreConfigMap: "none"
@@ -133,6 +155,10 @@ hono:
     containerRegistry: "atnog-harbor.av.it.pt"
     imageName: "capucho/hono-service-command-router-infinispan"
     imageTag: "2.7.0-SNAPSHOT"
+
+    deployment:
+      annotations:
+        reloader.stakater.com/auto: "true"
 
     tlsKeysSecret: "dt4mob-command-router-cert"
     tlsTrustStoreConfigMap: "none"
@@ -249,3 +275,6 @@ controller:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+reloader:
+  watchGlobally: false

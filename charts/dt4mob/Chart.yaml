@@ -11,3 +11,6 @@ dependencies:
   - name: ditto
     version: 3.7.6
     repository: "oci://registry-1.docker.io/eclipse"
+  - name: reloader
+    version: ~2.2.3
+    repository: "https://stakater.github.io/stakater-charts"
