@@ -17,6 +17,7 @@ spec:
   privateKey:
     algorithm: ECDSA
     size: 256
+    rotationPolicy: Always
   issuerRef:
     name: {{ include "dt4mob.fullname" . }}-selfsigned-issuer
     kind: Issuer
@@ -36,6 +37,7 @@ metadata:
   name: {{ include "dt4mob.fullname" . }}-server-intermediate-ca
 spec:
   isCA: true
+  duration: "720h" # 30 days
   subject:
     organizationalUnits: ["DT4MOB;Hono"]
   commonName: {{ include "dt4mob.fullname" . }}-server-intermediate-ca
@@ -43,6 +45,7 @@ spec:
   privateKey:
     algorithm: ECDSA
     size: 256
+    rotationPolicy: Always
   issuerRef:
     name: {{ include "dt4mob.fullname" . }}-root-ca-issuer
     kind: Issuer

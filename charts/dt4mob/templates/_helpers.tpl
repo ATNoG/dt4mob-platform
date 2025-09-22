@@ -60,9 +60,11 @@ spec:
   subject:
     organizationalUnits: ["DT4MOB;Hono"]
   secretName: {{ include "dt4mob.fullname" .dot }}-{{ .component }}-cert
+  duration: "168h" # 7 days
   privateKey:
     algorithm: ECDSA
     size: 256
+    rotationPolicy: Always
   issuerRef:
     name: {{ include "dt4mob.fullname" .dot }}-server-intermediate-ca-issuer
     kind: Issuer
