@@ -14,6 +14,8 @@ import (
 type State struct {
 	Client http.Client
 
+	KafkaHost string
+
 	Tenant  string
 	KeyPair *tls.Certificate
 	CaCrt   string
@@ -21,11 +23,12 @@ type State struct {
 	DevopsPassword string
 }
 
-func NewState(config *config.Config) State {
+func NewState(config *config.Config, kafkaHost string) State {
 	tlsConfig := &tls.Config{InsecureSkipVerify: true}
 	tr := &http.Transport{TLSClientConfig: tlsConfig}
 	return State{
-		Client: http.Client{Transport: tr},
+		Client:    http.Client{Transport: tr},
+		KafkaHost: kafkaHost,
 	}
 }
 

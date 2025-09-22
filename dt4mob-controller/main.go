@@ -75,7 +75,7 @@ func updateConnection(config *config.Config, state *state.State, connectionUrl s
 		"cert": string(utils.PemCertificateChain(state.KeyPair.Certificate)),
 		"key":  string(pemKey),
 	}
-	connection["uri"] = fmt.Sprintf("ssl://%s", config.KafkaHost)
+	connection["uri"] = fmt.Sprintf("ssl://%s", state.KafkaHost)
 	connection["validateCertificates"] = true
 
 	updateReq := state.JsonRequest("PUT", connectionUrl, connection)
@@ -97,7 +97,7 @@ func updateConnection(config *config.Config, state *state.State, connectionUrl s
 func update(config *config.Config, state *state.State) bool {
 	if !state.IsInitialized() {
 		slog.Warn("State is not yet initialized, skipping update")
-		return true
+		return false
 	}
 
 	retry := updateHonoTenant(config, state)
@@ -134,7 +134,7 @@ func update(config *config.Config, state *state.State) bool {
 		writer := new(bytes.Buffer)
 		err = tmpl.Execute(writer, map[string]any{
 			"Tenant":    state.Tenant,
-			"KafkaHost": config.KafkaHost,
+			"KafkaHost": state.KafkaHost,
 		})
 		if err != nil {
 			panic(err.Error())
@@ -202,9 +202,25 @@ func main() {
 
 	slog.Info("Configuration loaded", "config", config)
 
-	state := state.NewState(&config)
-
 	ctx := context.Background()
+
+	slog.Info("Waiting for device registry to be ready")
+	registrySvc := utils.WaitService(ctx, clientset, &config, config.RegistryService)
+	if config.RegistryHost == "" {
+		config.RegistryHost = fmt.Sprintf("http://%s:%d", config.RegistryService, utils.GetPortByName(registrySvc, "http").Port)
+	}
+
+	slog.Info("Waiting for ditto gateway to be ready")
+	dittoSvc := utils.WaitService(ctx, clientset, &config, config.DittoService)
+	if config.DittoHost == "" {
+		config.DittoHost = fmt.Sprintf("http://%s:%d", config.DittoService, utils.GetPortByName(dittoSvc, "http").Port)
+	}
+
+	kafkaSvc := utils.WaitService(ctx, clientset, &config, config.KafkaService)
+	kafkaHost := fmt.Sprintf("%s:%d", config.KafkaService, utils.GetPortByName(kafkaSvc, "tcp-client").Port)
+
+	state := state.NewState(&config, kafkaHost)
+
 	tlsWatch := utils.WatchSecret(ctx, clientset, &config, config.TLSSecretName)
 	caWatch := utils.WatchSecret(ctx, clientset, &config, config.CASecretName)
 	devopsWatch := utils.WatchSecret(ctx, clientset, &config, config.DevopsSecretName)

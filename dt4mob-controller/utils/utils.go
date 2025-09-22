@@ -10,6 +10,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"slices"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -18,6 +19,41 @@ import (
 
 	"github.com/ATNoG/dt4mob/dt4mob-controller/config"
 )
+
+func WaitService(ctx context.Context, clientset *kubernetes.Clientset, config *config.Config, serviceName string) *corev1.Service {
+	svc, err := clientset.CoreV1().Services(config.Namespace).Get(ctx, serviceName, metav1.GetOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	watch, err := clientset.CoreV1().Pods(config.Namespace).Watch(ctx, metav1.ListOptions{
+		LabelSelector: metav1.FormatLabelSelector(metav1.SetAsLabelSelector(svc.Spec.Selector)),
+	})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+outerLoop:
+	for event := range watch.ResultChan() {
+		if event.Type != watchv1.Added && event.Type != watchv1.Modified {
+			continue
+		}
+
+		pod := event.Object.(*corev1.Pod)
+
+		for _, condition := range pod.Status.Conditions {
+			if condition.Type == "Ready" && condition.Status == corev1.ConditionTrue {
+				break outerLoop
+			}
+		}
+	}
+
+	watch.Stop()
+
+	return svc
+}
 
 func WatchSecret(ctx context.Context, clientset *kubernetes.Clientset, config *config.Config, secretName string) <-chan *corev1.Secret {
 	watch, err := clientset.CoreV1().Secrets(config.Namespace).Watch(ctx, metav1.ListOptions{
@@ -98,4 +134,12 @@ func LogHttpError(msg string, res *http.Response) {
 	} else {
 		slog.Error(msg, "status", res.StatusCode)
 	}
+}
+
+func GetPortByName(svc *corev1.Service, name string) *corev1.ServicePort {
+	portIdx := slices.IndexFunc(svc.Spec.Ports, func(ele corev1.ServicePort) bool { return ele.Name == name })
+	if portIdx < 0 {
+		return nil
+	}
+	return &svc.Spec.Ports[portIdx]
 }

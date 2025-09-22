@@ -16,7 +16,9 @@ type Config struct {
 	TenantConfigMapName     string `env:"TENANT_CONFIG_MAP_NAME,required"`
 	TenantConfigMapSelector string `env:"TENANT_CONFIG_MAP_SELECTOR" envDefault:"tenant"`
 
-	RegistryHost string `env:"REGISTRY_HOST,required"`
-	DittoHost    string `env:"DITTO_HOST,required"`
-	KafkaHost    string `env:"KAFKA_HOST,required"`
+	RegistryService string `env:"REGISTRY_SERVICE,required"`
+	RegistryHost    string `env:"REGISTRY_HOST"`
+	DittoService    string `env:"DITTO_SERVICE,required"`
+	DittoHost       string `env:"DITTO_HOST"`
+	KafkaService    string `env:"KAFKA_SERVICE,required"`
 }

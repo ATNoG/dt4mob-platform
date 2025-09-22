@@ -50,14 +50,14 @@ spec:
             - name: TENANT_CONFIG_MAP_NAME
               value: "{{ include "dt4mob.fullname" . }}-config"
 
-            - name: REGISTRY_HOST
-              value: "http://{{ include "hono.fullname" .Subcharts.hono }}-service-device-registry:8080"
+            - name: REGISTRY_SERVICE
+              value: "{{ include "hono.fullname" .Subcharts.hono }}-service-device-registry"
 
-            - name: DITTO_HOST
-              value: "http://{{ include "ditto.fullname" .Subcharts.ditto }}-gateway:{{ .Subcharts.ditto.Values.gateway.service.port }}"
+            - name: DITTO_SERVICE
+              value: "{{ include "ditto.fullname" .Subcharts.ditto }}-gateway"
 
-            - name: KAFKA_HOST
-              value: "{{ include "common.names.fullname" .Subcharts.hono.Subcharts.kafka }}:{{ .Subcharts.hono.Subcharts.kafka.Values.service.ports.client }}"
+            - name: KAFKA_SERVICE
+              value: "{{ include "common.names.fullname" .Subcharts.hono.Subcharts.kafka }}"
 
           {{- with .Values.controller.resources }}
           resources:
