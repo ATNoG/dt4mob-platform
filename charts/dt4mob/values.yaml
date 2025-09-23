@@ -121,6 +121,10 @@ hono:
     imageName: "capucho/hono-service-auth"
     imageTag: "2.7.0-SNAPSHOT"
 
+    deployment:
+      annotations:
+        reloader.stakater.com/auto: "true"
+
     tlsKeysSecret: "dt4mob-auth-server-cert"
     tlsTrustStoreSecret:
       secretName: "dt4mob-auth-server-cert"
