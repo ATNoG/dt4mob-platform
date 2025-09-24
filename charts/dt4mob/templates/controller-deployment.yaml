@@ -42,7 +42,16 @@ spec:
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           env:
             - name: TLS_SECRET_NAME
-              value: "{{ include "dt4mob.fullname" . }}-application-cert"
+              value: "{{ include "dt4mob.fullname" . }}-application-kafka-user"
+
+            - name: TLS_SECRET_KEY_SELECTOR
+              value: "user.key"
+
+            - name: TLS_SECRET_CRT_SELECTOR
+              value: "user.crt"
+
+            - name: CA_SECRET_NAME
+              value: "{{ include "dt4mob.fullname" . }}-kafka-cluster-cluster-ca-cert"
 
             - name: DEVOPS_SECRET_NAME
               value: "{{ include "ditto.fullname" .Subcharts.ditto }}-gateway-secret"
@@ -57,7 +66,7 @@ spec:
               value: "{{ include "ditto.fullname" .Subcharts.ditto }}-gateway"
 
             - name: KAFKA_SERVICE
-              value: "{{ include "common.names.fullname" .Subcharts.hono.Subcharts.kafka }}"
+              value: "{{ include "dt4mob.fullname" . }}-kafka-cluster-kafka-bootstrap"
 
           {{- with .Values.controller.resources }}
           resources:

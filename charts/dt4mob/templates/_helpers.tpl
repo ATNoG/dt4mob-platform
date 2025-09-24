@@ -69,12 +69,23 @@ spec:
     name: {{ include "dt4mob.fullname" .dot }}-server-intermediate-ca-issuer
     kind: Issuer
     group: cert-manager.io
-  keystores:
-    jks:
-      create: true
-      passwordSecretRef:
-        name: {{ include "dt4mob.keyStorePasswordSecret" .dot | quote }}
-        key: "password"
+{{- end }}
+
+{{/*
+Configuration for a kafka user
+- (mandatory) "dot": the root scope (".") and
+- (mandatory) "component": the name of the component
+*/}}
+{{- define "dt4mob.kafkaUser" -}}
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: {{ include "dt4mob.fullname" .dot }}-{{ .component }}-kafka-user
+  labels:
+    strimzi.io/cluster: {{ include "dt4mob.fullname" .dot }}-kafka-cluster
+spec:
+  authentication:
+    type: tls
 {{- end }}
 
 {{/*

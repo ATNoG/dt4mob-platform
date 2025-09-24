@@ -10,31 +10,7 @@ hono:
     - kafka
 
   kafkaMessagingClusterExample:
-    enabled: true
-
-  kafka:
-    commonAnnotations:
-      reloader.stakater.com/auto: "true"
-
-    listeners:
-      client:
-        protocol: "SSL"
-        sslClientAuth: "required"
-      external:
-        protocol: "SSL"
-        sslClientAuth: "required"
-
-    externalAccess:
-      broker:
-        service:
-          type: NodePort
-      controller:
-        service:
-          type: NodePort
-
-    tls:
-      pemChainIncluded: false
-      existingSecret: "dt4mob-kafka-cert"
+    enabled: false
 
   livenessProbeInitialDelaySeconds: 900
   readinessProbeInitialDelaySeconds: 45
@@ -43,11 +19,6 @@ hono:
   useLoadBalancer: false
   externalAccess:
     enabled: false
-
-  clientBrokerKeyStore:
-    passwordSecretRef:
-      name: "dt4mob-keystore-password-secret"
-      selector: "password"
 
   deviceRegistryExample:
     type: mongodb
@@ -60,6 +31,13 @@ hono:
       deployment:
         annotations:
           reloader.stakater.com/auto: "true"
+
+      extraEnv:
+      - name: KEY_STORE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: "dt4mob-device-registry-kafka-user"
+            key: "user.password"
 
       resources:
         requests:
@@ -74,8 +52,35 @@ hono:
     tlsTrustStoreSecret:
       secretName: "dt4mob-device-registry-cert"
 
+    extraVolumes:
+    - name: kafka-certs
+      secret:
+        secretName: "dt4mob-device-registry-kafka-user"
+    - name: kafka-trust
+      secret:
+        secretName: "dt4mob-kafka-cluster-cluster-ca-cert"
+    extraVolumeMounts:
+    - name: kafka-certs
+      mountPath: "/opt/hono/tls/kafka-certs"
+      readOnly: true
+    - name: kafka-trust
+      mountPath: "/opt/hono/tls/kafka-trust"
+      readOnly: true
+
   adapters:
     useExternalAuth: true
+
+    # Despite being in the adapters section, it's shared by all services
+    kafkaMessagingSpec:
+      commonClientConfig:
+        bootstrap.servers: "dt4mob-kafka-cluster-kafka-bootstrap:9092"
+        security.protocol: "SSL"
+        ssl.truststore.type: "PEM"
+        ssl.truststore.location: "/opt/hono/tls/kafka-trust/ca.crt"
+        ssl.keystore.type: "PKCS12"
+        ssl.keystore.password: ${KEY_STORE_PASSWORD}
+        ssl.keystore.location: "/opt/hono/tls/kafka-certs/user.p12"
+
     mqtt:
       resources:
         requests:
@@ -89,6 +94,28 @@ hono:
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
         secretName: "dt4mob-mqtt-adapter-cert"
+
+      extraEnv:
+      - name: KEY_STORE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: "dt4mob-mqtt-adapter-kafka-user"
+            key: "user.password"
+
+      extraVolumes:
+      - name: kafka-certs
+        secret:
+          secretName: "dt4mob-mqtt-adapter-kafka-user"
+      - name: kafka-trust
+        secret:
+          secretName: "dt4mob-kafka-cluster-cluster-ca-cert"
+      extraVolumeMounts:
+      - name: kafka-certs
+        mountPath: "/opt/hono/tls/kafka-certs"
+        readOnly: true
+      - name: kafka-trust
+        mountPath: "/opt/hono/tls/kafka-trust"
+        readOnly: true
     http:
       resources:
         requests:
@@ -102,6 +129,28 @@ hono:
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
         secretName: "dt4mob-http-adapter-cert"
+
+      extraEnv:
+      - name: KEY_STORE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: "dt4mob-http-adapter-kafka-user"
+            key: "user.password"
+
+      extraVolumes:
+      - name: kafka-certs
+        secret:
+          secretName: "dt4mob-http-adapter-kafka-user"
+      - name: kafka-trust
+        secret:
+          secretName: "dt4mob-kafka-cluster-cluster-ca-cert"
+      extraVolumeMounts:
+      - name: kafka-certs
+        mountPath: "/opt/hono/tls/kafka-certs"
+        readOnly: true
+      - name: kafka-trust
+        mountPath: "/opt/hono/tls/kafka-trust"
+        readOnly: true
     amqp:
       resources:
         requests:
@@ -115,6 +164,28 @@ hono:
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
         secretName: "dt4mob-amqp-adapter-cert"
+
+      extraEnv:
+      - name: KEY_STORE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: "dt4mob-amqp-adapter-kafka-user"
+            key: "user.password"
+
+      extraVolumes:
+      - name: kafka-certs
+        secret:
+          secretName: "dt4mob-amqp-adapter-kafka-user"
+      - name: kafka-trust
+        secret:
+          secretName: "dt4mob-kafka-cluster-cluster-ca-cert"
+      extraVolumeMounts:
+      - name: kafka-certs
+        mountPath: "/opt/hono/tls/kafka-certs"
+        readOnly: true
+      - name: kafka-trust
+        mountPath: "/opt/hono/tls/kafka-trust"
+        readOnly: true
 
   authServer:
     containerRegistry: "atnog-harbor.av.it.pt"
@@ -169,6 +240,32 @@ hono:
     tlsTrustStoreSecret:
       secretName: "dt4mob-command-router-cert"
 
+    resources:
+      limits:
+        cpu: "1"
+        memory: "800Mi"
+
+    extraEnv:
+    - name: KEY_STORE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: "dt4mob-command-router-kafka-user"
+          key: "user.password"
+
+    extraVolumes:
+    - name: kafka-certs
+      secret:
+        secretName: "dt4mob-command-router-kafka-user"
+    - name: kafka-trust
+      secret:
+        secretName: "dt4mob-kafka-cluster-cluster-ca-cert"
+    extraVolumeMounts:
+    - name: kafka-certs
+      mountPath: "/opt/hono/tls/kafka-certs"
+      readOnly: true
+    - name: kafka-trust
+      mountPath: "/opt/hono/tls/kafka-trust"
+      readOnly: true
 
 ditto:
   # TODO
@@ -279,6 +376,23 @@ controller:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+kafka:
+  controller:
+    replicas: 1
+  broker:
+    replicas: 1
+  config:
+    # offsets.topic.replication.factor: 3
+    # transaction.state.log.replication.factor: 3
+    # transaction.state.log.min.isr: 2
+    # default.replication.factor: 3
+    # min.insync.replicas: 2
+    offsets.topic.replication.factor: 1
+    transaction.state.log.replication.factor: 1
+    transaction.state.log.min.isr: 1
+    default.replication.factor: 1
+    min.insync.replicas: 1
 
 reloader:
   watchGlobally: false

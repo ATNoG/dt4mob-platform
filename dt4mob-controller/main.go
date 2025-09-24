@@ -217,7 +217,7 @@ func main() {
 	}
 
 	kafkaSvc := utils.WaitService(ctx, clientset, &config, config.KafkaService)
-	kafkaHost := fmt.Sprintf("%s:%d", config.KafkaService, utils.GetPortByName(kafkaSvc, "tcp-client").Port)
+	kafkaHost := fmt.Sprintf("%s:%d", config.KafkaService, utils.GetPortByName(kafkaSvc, "tcp-clients").Port)
 
 	state := state.NewState(&config, kafkaHost)
 

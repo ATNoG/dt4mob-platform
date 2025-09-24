@@ -1,0 +1,5 @@
+{{- include "dt4mob.kafkaUser" ( dict "dot" . "component" "mqtt-adapter" ) }}
+---
+{{- include "dt4mob.kafkaUser" ( dict "dot" . "component" "http-adapter" ) }}
+---
+{{- include "dt4mob.kafkaUser" ( dict "dot" . "component" "amqp-adapter" ) }}

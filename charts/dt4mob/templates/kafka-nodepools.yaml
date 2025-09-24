@@ -1,0 +1,38 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-controller
+  labels:
+    strimzi.io/cluster: {{ include "dt4mob.fullname" . }}-kafka-cluster
+spec:
+  replicas: {{ .Values.kafka.controller.replicas }}
+  roles:
+    - controller
+  storage:
+    type: jbod
+    volumes:
+      - id: 0
+        type: persistent-claim
+        size: 10Gi
+        kraftMetadata: shared
+        deleteClaim: false
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-broker
+  labels:
+    strimzi.io/cluster: {{ include "dt4mob.fullname" . }}-kafka-cluster
+spec:
+  replicas: {{ .Values.kafka.broker.replicas }}
+  roles:
+    - broker
+  storage:
+    type: jbod
+    volumes:
+      - id: 0
+        type: persistent-claim
+        size: 10Gi
+        kraftMetadata: shared
+        deleteClaim: false

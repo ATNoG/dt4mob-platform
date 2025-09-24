@@ -1,0 +1,23 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-kafka-cluster
+  annotations:
+    strimzi.io/node-pools: enabled
+    strimzi.io/kraft: enabled
+spec:
+  kafka:
+    version: 4.0.0
+    metadataVersion: 4.0-IV3
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: true
+        authentication:
+          type: tls
+    config:
+      {{- .Values.kafka.config | toYaml | nindent 6 }}
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}

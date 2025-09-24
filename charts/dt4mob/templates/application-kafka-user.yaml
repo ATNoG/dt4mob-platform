@@ -1,0 +1,1 @@
+{{- include "dt4mob.kafkaUser" ( dict "dot" . "component" "application" ) }}
