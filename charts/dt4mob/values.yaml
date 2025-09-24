@@ -43,7 +43,7 @@ hono:
         requests:
           cpu: 200m
       mongodb:
-        host: '{{ .Release.Name }}-mongodb'
+        host: '{{ .Release.Name }}-mongodb-headless'
         port: 27017
         dbName: hono
 
@@ -268,12 +268,6 @@ hono:
       readOnly: true
 
 ditto:
-  # TODO
-  global:
-    basicAuthUsers:
-    - user: ditto
-      password: ditto
-
   connectivity:
     resources:
       cpu: 0.2
@@ -337,13 +331,18 @@ ditto:
   # TODO: Use replicated mongo
   mongodb:
     enabled: true
+    architecture: "replicaset"
+    replicaCount: 2
+    persistence:
+      enabled: true
+      storageClass: "local-path"
     resources:
       requests:
         cpu: 150m
         memory: "256Mi"
       limits:
         cpu: 1.0
-        memory: "512Mi"
+        memory: "1024Mi"
     livenessProbe:
       initialDelaySeconds: 40
       periodSeconds: 30
@@ -352,6 +351,16 @@ ditto:
       initialDelaySeconds: 30
       periodSeconds: 15
       timeoutSeconds: 13
+
+  dbconfig:
+    policies:
+      uri: "mongodb://dt4mob-mongodb-headless:27017/ditto?replicaSet=rs0"
+    things:
+      uri: "mongodb://dt4mob-mongodb-headless:27017/ditto?replicaSet=rs0"
+    connectivity:
+      uri: "mongodb://dt4mob-mongodb-headless:27017/ditto?replicaSet=rs0"
+    thingsSearch:
+      uri: "mongodb://dt4mob-mongodb-headless:27017/ditto?replicaSet=rs0"
 
 controller:
   image:
@@ -379,20 +388,15 @@ controller:
 
 kafka:
   controller:
-    replicas: 1
+    replicas: 3
   broker:
-    replicas: 1
+    replicas: 3
   config:
-    # offsets.topic.replication.factor: 3
-    # transaction.state.log.replication.factor: 3
-    # transaction.state.log.min.isr: 2
-    # default.replication.factor: 3
-    # min.insync.replicas: 2
-    offsets.topic.replication.factor: 1
-    transaction.state.log.replication.factor: 1
-    transaction.state.log.min.isr: 1
-    default.replication.factor: 1
-    min.insync.replicas: 1
+    offsets.topic.replication.factor: 3
+    transaction.state.log.replication.factor: 3
+    transaction.state.log.min.isr: 2
+    default.replication.factor: 3
+    min.insync.replicas: 2
 
 reloader:
   watchGlobally: false
