@@ -83,6 +83,7 @@ metadata:
   name: {{ include "dt4mob.fullname" .dot }}-{{ .component }}-kafka-user
   labels:
     strimzi.io/cluster: {{ include "dt4mob.fullname" .dot }}-kafka-cluster
+    {{- include "dt4mob.labels" .dot | nindent 4 }}
 spec:
   authentication:
     type: tls
