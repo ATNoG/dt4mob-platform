@@ -279,7 +279,7 @@ func main() {
 				retries--
 				retry = update(&config, &state)
 
-				if retries == 0 {
+				if retries == 0 && retry {
 					panic("Too many retries")
 				}
 			}
