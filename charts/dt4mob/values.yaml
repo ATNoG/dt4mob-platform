@@ -38,14 +38,21 @@ hono:
           secretKeyRef:
             name: "dt4mob-device-registry-kafka-user"
             key: "user.password"
+      - name: MONGODB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: "dt4mob-mongodb-hono-secret"
+            key: "password"
 
       resources:
         requests:
           cpu: 200m
       mongodb:
-        host: '{{ .Release.Name }}-mongodb-headless'
-        port: 27017
+        connectionString: "mongodb+srv://${hono.mongodb.username}:${hono.mongodb.password}@${hono.mongodb.host}/${hono.mongodb.dbName}?replicaSet=rs0&ssl=false"
+        host: "{{ .Release.Name }}-psmdb-db-rs0.{{ .Release.Namespace }}.svc.cluster.local"
         dbName: hono
+        username: hono
+        password: ${MONGODB_PASSWORD}
 
     tlsKeysSecret: "dt4mob-device-registry-cert"
     tlsTrustStoreConfigMap: "none"
@@ -328,39 +335,11 @@ ditto:
       cpu: 0.05
       memoryMi: 32
 
-  # TODO: Use replicated mongo
   mongodb:
-    enabled: true
-    architecture: "replicaset"
-    replicaCount: 2
-    persistence:
-      enabled: true
-      storageClass: "local-path"
-    resources:
-      requests:
-        cpu: 150m
-        memory: "256Mi"
-      limits:
-        cpu: 1.0
-        memory: "1024Mi"
-    livenessProbe:
-      initialDelaySeconds: 40
-      periodSeconds: 30
-      timeoutSeconds: 15
-    readinessProbe:
-      initialDelaySeconds: 30
-      periodSeconds: 15
-      timeoutSeconds: 13
+    enabled: false
 
   dbconfig:
-    policies:
-      uri: "mongodb://dt4mob-mongodb-headless:27017/ditto?replicaSet=rs0"
-    things:
-      uri: "mongodb://dt4mob-mongodb-headless:27017/ditto?replicaSet=rs0"
-    connectivity:
-      uri: "mongodb://dt4mob-mongodb-headless:27017/ditto?replicaSet=rs0"
-    thingsSearch:
-      uri: "mongodb://dt4mob-mongodb-headless:27017/ditto?replicaSet=rs0"
+    uriSecret: "dt4mob-mongodb-ditto-secret"
 
 controller:
   image:
@@ -397,6 +376,37 @@ kafka:
     transaction.state.log.min.isr: 2
     default.replication.factor: 3
     min.insync.replicas: 2
+
+psmdb-db:
+  replsets:
+    rs0:
+      size: 3
+      volumeSpec:
+        pvc:
+          storageClassName: "local-path"
+          accessModes: [ "ReadWriteOnce" ]
+          resources:
+            requests:
+              storage: 10Gi
+  sharding:
+    enabled: false
+  users:
+  - name: ditto
+    db: ditto
+    passwordSecretRef:
+      name: "dt4mob-mongodb-ditto-secret"
+      key: "password"
+    roles:
+    - name: dbOwner
+      db: ditto
+  - name: hono
+    db: hono
+    passwordSecretRef:
+      name: "dt4mob-mongodb-hono-secret"
+      key: "password"
+    roles:
+    - name: dbOwner
+      db: hono
 
 reloader:
   watchGlobally: false

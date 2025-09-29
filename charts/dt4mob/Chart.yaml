@@ -9,8 +9,11 @@ dependencies:
     # repository: "https://ATNoG.github.io/ditto-helm-chart/"
     repository: "file://../../../eclipse-packages/charts/hono"
   - name: ditto
-    version: 3.7.6
+    version: ~3.7.6
     repository: "oci://registry-1.docker.io/eclipse"
   - name: reloader
     version: ~2.2.3
     repository: "https://stakater.github.io/stakater-charts"
+  - name: psmdb-db
+    version: 1.20.1
+    repository: "https://percona.github.io/percona-helm-charts/"
