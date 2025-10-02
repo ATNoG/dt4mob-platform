@@ -1,6 +1,6 @@
 dependencies:
 - name: hono
-  repository: file://../../../eclipse-packages/charts/hono
+  repository: oci://atnog-harbor.av.it.pt/capucho
   version: 2.6.4
 - name: ditto
   repository: oci://registry-1.docker.io/eclipse
@@ -11,5 +11,5 @@ dependencies:
 - name: psmdb-db
   repository: https://percona.github.io/percona-helm-charts/
   version: 1.20.1
-digest: sha256:28f4afb6ae290b7f2842b96b82f343fa5b456e4982ce803d9f083be6675b01e3
-generated: "2025-09-25T14:56:48.482960032+01:00"
+digest: sha256:a900b290486eb56ab4ec1285f3d81d94cf5c42d500c03358473999b6ec46327c
+generated: "2025-10-02T15:00:10.391239592+01:00"

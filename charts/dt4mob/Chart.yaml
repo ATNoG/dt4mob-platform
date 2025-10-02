@@ -6,8 +6,8 @@ version: 0.1.0
 dependencies:
   - name: hono
     version: ~2.6.4
-    # repository: "https://ATNoG.github.io/ditto-helm-chart/"
-    repository: "file://../../../eclipse-packages/charts/hono"
+    # TODO: Switch to ATNoG eclipse-packages when everything is upstreamed
+    repository: "oci://atnog-harbor.av.it.pt/capucho"
   - name: ditto
     version: ~3.7.6
     repository: "oci://registry-1.docker.io/eclipse"
