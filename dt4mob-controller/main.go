@@ -115,6 +115,7 @@ func update(config *config.Config, state *state.State) bool {
 		slog.Error("Failed to get existing connection, skipping update", "error", err)
 		return true
 	}
+	//nolint:errcheck
 	defer res.Body.Close()
 
 	var connectionBytes []byte

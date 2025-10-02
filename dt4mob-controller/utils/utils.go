@@ -119,6 +119,7 @@ func PemPrivateKey(key crypto.PrivateKey) ([]byte, error) {
 func PemCertificateChain(chain [][]byte) []byte {
 	chainPem := new(bytes.Buffer)
 	for _, cert := range chain {
+		//nolint:errcheck
 		pem.Encode(chainPem, &pem.Block{
 			Type:  "CERTIFICATE",
 			Bytes: cert,
