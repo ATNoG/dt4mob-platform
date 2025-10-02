@@ -409,4 +409,5 @@ psmdb-db:
       db: hono
 
 reloader:
-  watchGlobally: false
+  reloader:
+    watchGlobally: false
