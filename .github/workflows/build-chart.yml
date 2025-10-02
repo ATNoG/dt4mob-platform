@@ -1,0 +1,31 @@
+name: Build dt4mob Helm Chart
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/build-chart.yml"
+      - "charts/dt4mob/**"
+
+jobs:
+  helm:
+    name: Build Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4.3.0
+
+      - name: Build and Publish Helm Chart
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+        run: |
+          echo -n "$HARBOR_PASSWORD" | helm registry login atnog-harbor.av.it.pt -u "$HARBOR_USERNAME" --password-stdin
+          helm package -u charts/dt4mob/
+          helm push dt4mob-*.tgz oci://atnog-harbor.av.it.pt/${{ secrets.HARBOR_PROJECT }}
