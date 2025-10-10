@@ -9,7 +9,7 @@ dependencies:
     # TODO: Switch to ATNoG eclipse-packages when everything is upstreamed
     repository: "oci://atnog-harbor.av.it.pt/capucho"
   - name: ditto
-    version: ~3.7.6
+    version: ~3.8.0
     repository: "oci://registry-1.docker.io/eclipse"
   - name: reloader
     version: ~2.2.3

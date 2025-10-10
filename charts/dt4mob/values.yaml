@@ -279,10 +279,6 @@ ditto:
     resources:
       cpu: 0.2
       memoryMi: 1024
-    image:
-      repository: atnog-harbor.av.it.pt/capucho/ditto-connectivity
-      tag: 0-SNAPSHOT
-      pullPolicy: Always
 
   gateway:
     resources:
@@ -343,7 +339,7 @@ ditto:
 
 controller:
   image:
-    repository: atnog-harbor.av.it.pt/capucho/dt4mob-controller
+    repository: atnog-harbor.av.it.pt/dt4mob/dt4mob-controller
     pullPolicy: Always # IfNotPresent
     tag: "latest"
 

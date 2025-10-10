@@ -4,12 +4,12 @@ dependencies:
   version: 2.6.4
 - name: ditto
   repository: oci://registry-1.docker.io/eclipse
-  version: 3.7.6
+  version: 3.8.1
 - name: reloader
   repository: https://stakater.github.io/stakater-charts
   version: 2.2.3
 - name: psmdb-db
   repository: https://percona.github.io/percona-helm-charts/
   version: 1.20.1
-digest: sha256:a900b290486eb56ab4ec1285f3d81d94cf5c42d500c03358473999b6ec46327c
-generated: "2025-10-02T15:00:10.391239592+01:00"
+digest: sha256:a1b62f6128ca9bc561e8e6baebe1a216942433d4bc8938f56153fe56f7073bec
+generated: "2025-10-10T17:51:42.7497099+01:00"
