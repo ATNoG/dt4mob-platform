@@ -52,4 +52,4 @@ MongoDB Operator](https://docs.percona.com/percona-operator-for-mongodb/).
 #### Backups
 
 To configure backups see the [Operator documentation on
-backups](https://docs.percona.com/percona-operator-for-mongodb/backups.html)
+backups](https://docs.percona.com/percona-operator-for-mongodb/backups.html).

@@ -374,6 +374,8 @@ kafka:
     min.insync.replicas: 2
 
 psmdb-db:
+  image:
+    tag: 7.0.24-13
   replsets:
     rs0:
       size: 3
