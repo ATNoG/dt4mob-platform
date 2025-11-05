@@ -1,0 +1,9 @@
+{{- $name := printf "%s-cloudnative-pg-timescaledb" (include "dt4mob.fullname" .) }}
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  name: {{ $name }}
+spec:
+  images:
+    - major: 18
+      image: timescale/timescaledb-ha:pg18.0-ts2.23.0

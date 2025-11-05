@@ -1,0 +1,28 @@
+{{- $clusterName := printf "%s-timescale-cluster" (include "dt4mob.fullname" .) }}
+{{- $imgcatalog := printf "%s-cloudnative-pg-timescaledb" (include "dt4mob.fullname" .) }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ $clusterName }}
+spec:
+  instances: {{ .Values.timescale.instances }}
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
+    name: {{ $imgcatalog }}
+    major: 18
+  postgresUID: {{ .Values.timescale.securityContext.postgresUID }}
+  postgresGID: {{ .Values.timescale.securityContext.postgresGID }}
+
+  postgresql:
+    shared_preload_libraries:
+    - 'timescaledb'
+
+  bootstrap:
+    initdb:
+      postInitSQL:
+       - CREATE EXTENSION IF NOT EXISTS timescaledb;
+
+  storage:
+    size: {{ .Values.timescale.storage.size }}
+    storageClass: {{ .Values.timescale.storage.storageClass | quote }}
