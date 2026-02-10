@@ -123,6 +123,14 @@ hono:
       - name: kafka-trust
         mountPath: "/opt/hono/tls/kafka-trust"
         readOnly: true
+
+      hono:
+        mqtt:
+          bindAddress: "0.0.0.0"
+          insecurePortEnabled: false
+          keyPath: "/opt/hono/tls/keys/tls.key"
+          certPath: "/opt/hono/tls/keys/tls.crt"
+        
     http:
       resources:
         requests:
@@ -165,6 +173,7 @@ hono:
           insecurePortEnabled: false
           keyPath: "/opt/hono/tls/keys/tls.key"
           certPath: "/opt/hono/tls/keys/tls.crt"
+
     amqp:
       resources:
         requests:
@@ -200,6 +209,13 @@ hono:
       - name: kafka-trust
         mountPath: "/opt/hono/tls/kafka-trust"
         readOnly: true
+
+      hono:
+        amqp:
+          bindAddress: "0.0.0.0"
+          insecurePortEnabled: false
+          keyPath: "/opt/hono/tls/keys/tls.key"
+          certPath: "/opt/hono/tls/keys/tls.crt"
 
   authServer:
     containerRegistry: "atnog-harbor.av.it.pt"
