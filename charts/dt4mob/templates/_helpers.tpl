@@ -57,6 +57,10 @@ metadata:
     {{- include "dt4mob.labels" .dot | nindent 4 }}
 spec:
   commonName: {{ .component }}
+  dnsNames:
+  - dt4mob-staging.av.it.pt
+  ipAddresses:
+  - 193.136.93.66
   subject:
     organizationalUnits: ["DT4MOB;Hono"]
   secretName: {{ include "dt4mob.fullname" .dot }}-{{ .component }}-cert
