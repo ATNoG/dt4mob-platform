@@ -16,6 +16,9 @@ type Config struct {
 	TenantConfigMapName     string `env:"TENANT_CONFIG_MAP_NAME,required"`
 	TenantConfigMapSelector string `env:"TENANT_CONFIG_MAP_SELECTOR" envDefault:"tenant"`
 
+	TenantTLSTrustSecretName     string `env:"TENANT_TLS_TRUST_SECRET_NAME,required"`
+	TenantTLSTrustSecretSelector string `env:"TENANT_TLS_TRUST_SECRET_SELECTOR" envDefault:"ca.crt"`
+
 	RegistryService string `env:"REGISTRY_SERVICE,required"`
 	RegistryHost    string `env:"REGISTRY_HOST"`
 	DittoService    string `env:"DITTO_SERVICE,required"`

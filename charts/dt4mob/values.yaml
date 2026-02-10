@@ -158,6 +158,13 @@ hono:
       - name: kafka-trust
         mountPath: "/opt/hono/tls/kafka-trust"
         readOnly: true
+
+      hono:
+        http:
+          bindAddress: "0.0.0.0"
+          insecurePortEnabled: false
+          keyPath: "/opt/hono/tls/keys/tls.key"
+          certPath: "/opt/hono/tls/keys/tls.crt"
     amqp:
       resources:
         requests:

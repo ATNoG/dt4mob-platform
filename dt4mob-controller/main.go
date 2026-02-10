@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/tls"
 	_ "embed"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -32,7 +33,16 @@ const MAX_RETRIES int = 5
 func updateHonoTenant(config *config.Config, state *state.State) bool {
 	tenantUrl := state.HonoTenantUrl(config)
 
-	body := map[string]any{}
+	body := map[string]any{
+		"trusted-ca": []any{
+			map[string]any{
+				"id":                                   "operator-managed-ca",
+				"cert":                                 base64.StdEncoding.EncodeToString([]byte(state.TrustCrt)),
+				"auto-provisioning-enabled":            true,
+				"auto-provisioning-device-id-template": "{{subject-cn}}",
+			},
+		},
+	}
 	createReq := state.JsonRequest("POST", tenantUrl, body)
 	res, err := state.Client.Do(createReq)
 
@@ -224,6 +234,7 @@ func main() {
 
 	tlsWatch := utils.WatchSecret(ctx, clientset, &config, config.TLSSecretName)
 	caWatch := utils.WatchSecret(ctx, clientset, &config, config.CASecretName)
+	tenantTrustWatch := utils.WatchSecret(ctx, clientset, &config, config.TenantTLSTrustSecretName)
 	devopsWatch := utils.WatchSecret(ctx, clientset, &config, config.DevopsSecretName)
 	tenantWatch := utils.WatchConfigMap(ctx, clientset, &config, config.TenantConfigMapName)
 
@@ -259,6 +270,13 @@ func main() {
 				continue
 			}
 			state.CaCrt = string(caCrt)
+		case tenantTrustSecret := <-tenantTrustWatch:
+			caCrt := tenantTrustSecret.Data[config.TenantTLSTrustSecretSelector]
+			if caCrt == nil {
+				slog.Error("CA certificate key not found in secret, skipping update")
+				continue
+			}
+			state.TrustCrt = string(caCrt)
 		case devopsSecret := <-devopsWatch:
 			devopsPassword := devopsSecret.Data[config.DevopsSecretSelector]
 			if devopsPassword == nil {

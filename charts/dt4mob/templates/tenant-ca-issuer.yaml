@@ -1,0 +1,32 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-tenant-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-tenant-ca
+spec:
+  isCA: true
+  duration: "87660h" # 10 years
+  commonName: {{ .Values.tenant }}
+  secretName: {{ include "dt4mob.fullname" . }}-tenant-ca-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
+  issuerRef:
+    name: {{ include "dt4mob.fullname" . }}-tenant-issuer
+    kind: Issuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-tenant-ca-issuer
+spec:
+  ca:
+    secretName: {{ include "dt4mob.fullname" . }}-tenant-ca-secret

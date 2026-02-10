@@ -53,6 +53,9 @@ spec:
             - name: CA_SECRET_NAME
               value: "{{ include "dt4mob.fullname" . }}-kafka-cluster-cluster-ca-cert"
 
+            - name: TENANT_TLS_TRUST_SECRET_NAME
+              value: "{{ include "dt4mob.fullname" . }}-tenant-ca-secret"
+
             - name: DEVOPS_SECRET_NAME
               value: "{{ include "ditto.fullname" .Subcharts.ditto }}-gateway-secret"
 

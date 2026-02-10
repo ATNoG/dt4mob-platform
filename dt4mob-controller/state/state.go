@@ -16,9 +16,10 @@ type State struct {
 
 	KafkaHost string
 
-	Tenant  string
-	KeyPair *tls.Certificate
-	CaCrt   string
+	Tenant   string
+	KeyPair  *tls.Certificate
+	CaCrt    string
+	TrustCrt string
 
 	DevopsPassword string
 }
@@ -33,7 +34,7 @@ func NewState(config *config.Config, kafkaHost string) State {
 }
 
 func (state *State) IsInitialized() bool {
-	return state.Tenant != "" && state.KeyPair != nil && state.CaCrt != "" && state.DevopsPassword != ""
+	return state.Tenant != "" && state.KeyPair != nil && state.CaCrt != "" && state.TrustCrt != "" && state.DevopsPassword != ""
 }
 
 func (state *State) AuthHeader() string {
