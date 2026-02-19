@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  # This name is used by Openslice to identify the issuer and as such should
+  # not be changed
+  name: ca-issuer
+spec:
+  ca:
+    # This value will be patched by Openslice
+    secretName: root-secret

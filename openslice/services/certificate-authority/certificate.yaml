@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  # This name is used by Openslice to identify the certificate and as such
+  # should not be changed
+  name: root-ca
+spec:
+  isCA: true
+  # This value will be patched by Openslice
+  commonName: root-ca
+  # This value will be patched by Openslice
+  secretName: root-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
