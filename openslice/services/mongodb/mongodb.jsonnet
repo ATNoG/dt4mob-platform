@@ -1,4 +1,4 @@
-function(name, discriminator="") [
+function(name) [
   {
     apiVersion: 'psmdb.percona.com/v1',
     kind: 'PerconaServerMongoDB',

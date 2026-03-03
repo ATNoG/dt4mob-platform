@@ -1,4 +1,4 @@
-function(name, discriminator="") [
+function(name) [
   {
     apiVersion: 'cert-manager.io/v1',
     kind: 'Certificate',
