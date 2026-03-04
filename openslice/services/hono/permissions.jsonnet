@@ -1,0 +1,134 @@
+function(name) [
+  {
+    apiVersion: 'v1',
+    kind: 'ConfigMap',
+    metadata: {
+      name: name + '-permissions',
+      namespace: std.extVar('namespace'),
+    },
+    data: {
+      'permissions.json': |||
+        {
+          "roles": {
+            "protocol-adapter": [
+              {
+                "resource": "telemetry/*",
+                "activities": [ "WRITE" ]
+              },
+              {
+                "resource": "event/*",
+                "activities": [ "WRITE" ]
+              },
+              {
+                "resource": "registration/*",
+                "activities": [ "READ", "WRITE" ]
+              },
+              {
+                "operation": "registration/*:assert",
+                "activities": [ "EXECUTE" ]
+              },
+              {
+                "operation": "registration/*:get",
+                "activities": [ "EXECUTE" ]
+              },
+              {
+                "resource": "credentials/*",
+                "activities": [ "READ", "WRITE" ]
+              },
+              {
+                "operation": "credentials/*:get",
+                "activities": [ "EXECUTE" ]
+              },
+              {
+                "resource": "tenant",
+                "activities": [ "READ", "WRITE" ]
+              },
+              {
+                "operation": "tenant/*:*",
+                "activities": [ "EXECUTE" ]
+              },
+              {
+                "resource": "cmd_router/*",
+                "activities": [ "READ", "WRITE" ]
+              },
+              {
+                "operation": "cmd_router/*:*",
+                "activities": [ "EXECUTE" ]
+              },
+              {
+                "resource": "device_con/*",
+                "activities": [ "READ", "WRITE" ]
+              },
+              {
+                "operation": "device_con/*:*",
+                "activities": [ "EXECUTE" ]
+              }
+            ],
+            "command-router": [
+              {
+                "resource": "tenant",
+                "activities": [ "READ", "WRITE" ]
+              },
+              {
+                "operation": "tenant/*:*",
+                "activities": [ "EXECUTE" ]
+              },
+              {
+                "resource": "registration/*",
+                "activities": [ "READ", "WRITE" ]
+              },
+              {
+                "operation": "registration/*:*",
+                "activities": [ "EXECUTE" ]
+              }
+            ],
+            "device-manager": [
+              {
+                "resource": "registration/*",
+                "activities": [ "READ", "WRITE" ]
+              },
+              {
+                "operation": "registration/*:*",
+                "activities": [ "EXECUTE" ]
+              }
+            ]
+          },
+          "users": {
+            "coap-adapter": {
+              "mechanism": "EXTERNAL",
+              "authorities": [ "hono-component", "protocol-adapter" ]
+            },
+            "http-adapter": {
+              "mechanism": "EXTERNAL",
+              "authorities": [ "hono-component", "protocol-adapter" ]
+            },
+            "lora-adapter": {
+              "mechanism": "EXTERNAL",
+              "authorities": [ "hono-component", "protocol-adapter" ]
+            },
+            "mqtt-adapter": {
+              "mechanism": "EXTERNAL",
+              "authorities": [ "hono-component", "protocol-adapter" ]
+            },
+            "amqp-adapter": {
+              "mechanism": "EXTERNAL",
+              "authorities": [ "hono-component", "protocol-adapter" ]
+            },
+            "kura-adapter": {
+              "mechanism": "EXTERNAL",
+              "authorities": [ "hono-component", "protocol-adapter" ]
+            },
+            "command-router": {
+              "mechanism": "EXTERNAL",
+              "authorities": [ "hono-component", "command-router" ]
+            },
+            "device-registry": {
+              "mechanism": "EXTERNAL",
+              "authorities": ["hono-component"]
+            }
+          }
+        }
+      |||,
+    },
+  },
+]
