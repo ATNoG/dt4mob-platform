@@ -14,19 +14,19 @@ fullnameOverride: ""
 
 config:
   kafka:
-    host: ""
+    serviceName: ""
     tls:
       CASecretName: ""
       userSecretName: ""
       keySelector: "user.key"
       crtSelector: "user.crt"
   hono:
-    registryHost: ""
+    deviceRegistryServiceName: ""
     tenant:
       tlsCASecretName: ""
       configMapName: ""
   ditto:
-    host: ""
+    gatewayServiceName: ""
     devopsSecretName: ""
 
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/

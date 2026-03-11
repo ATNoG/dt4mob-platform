@@ -61,13 +61,13 @@ spec:
               value: "{{ .Values.config.hono.tenant.configMapName }}"
 
             - name: REGISTRY_SERVICE
-              value: "{{ .Values.config.hono.registryHost }}"
+              value: "{{ .Values.config.hono.deviceRegistryServiceName }}"
 
             - name: DITTO_SERVICE
-              value: "{{ .Values.config.ditto.host }}"
+              value: "{{ .Values.config.ditto.gatewayServiceName }}"
 
             - name: KAFKA_SERVICE
-              value: "{{ .Values.config.kafka.host }}"
+              value: "{{ .Values.config.kafka.serviceName }}"
 
           {{- with .Values.resources }}
           resources:

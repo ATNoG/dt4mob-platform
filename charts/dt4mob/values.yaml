@@ -8,19 +8,17 @@ tenant: "test-tenant"
 dt4mob-controller:
   config:
     kafka:
-      host: "dt4mob-kafka-cluster-kafka-bootstrap"
+      serviceName: "dt4mob-kafka-cluster-kafka-bootstrap"
       tls:
         CASecretName: "dt4mob-kafka-cluster-cluster-ca-cert"
         userSecretName: "dt4mob-application-kafka-user"
-        keySelector: "user.key"
-        crtSelector: "user.crt"
     hono:
-      registryHost: "dt4mob-hono-service-device-registry"
+      deviceRegistryServiceName: "dt4mob-hono-service-device-registry"
       tenant:
         tlsCASecretName: "dt4mob-tenant-ca-secret"
         configMapName: "dt4mob-config"
     ditto:
-      host: "dt4mob-ditto-gateway"
+      gatewayServiceName: "dt4mob-ditto-gateway"
       devopsSecretName: "dt4mob-gateway-secret"
   
 hono:
