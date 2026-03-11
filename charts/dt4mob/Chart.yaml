@@ -17,3 +17,6 @@ dependencies:
   - name: psmdb-db
     version: 1.20.1
     repository: "https://percona.github.io/percona-helm-charts/"
+  - name: dt4mob-controller
+    version: "0.1.0"
+    repository: file://../dt4mob-controller

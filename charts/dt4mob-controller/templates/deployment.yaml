@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dt4mob-controller.fullname" . }}-controller
+  labels:
+    {{- include "dt4mob-controller.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "dt4mob-controller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dt4mob-controller.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dt4mob-controller.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: dt4mob-controller
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: TLS_SECRET_NAME
+              value: "{{ .Values.config.kafka.tls.userSecretName }}"
+
+            - name: TLS_SECRET_KEY_SELECTOR
+              value: "{{ .Values.config.kafka.tls.keySelector }}"
+
+            - name: TLS_SECRET_CRT_SELECTOR
+              value: "{{ .Values.config.kafka.tls.crtSelector }}"
+
+            - name: CA_SECRET_NAME
+              value: "{{ .Values.config.kafka.tls.CASecretName }}"
+
+            - name: TENANT_TLS_TRUST_SECRET_NAME
+              value: "{{ .Values.config.hono.tenant.tlsCASecretName }}"
+
+            - name: DEVOPS_SECRET_NAME
+              value: "{{ .Values.config.ditto.devopsSecretName }}"
+
+            - name: TENANT_CONFIG_MAP_NAME
+              value: "{{ .Values.config.hono.tenant.configMapName }}"
+
+            - name: REGISTRY_SERVICE
+              value: "{{ .Values.config.hono.registryHost }}"
+
+            - name: DITTO_SERVICE
+              value: "{{ .Values.config.ditto.host }}"
+
+            - name: KAFKA_SERVICE
+              value: "{{ .Values.config.kafka.host }}"
+
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

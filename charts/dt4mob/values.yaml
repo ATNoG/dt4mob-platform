@@ -5,6 +5,24 @@ fullnameOverride: ""
 
 tenant: "test-tenant"
 
+dt4mob-controller:
+  config:
+    kafka:
+      host: "dt4mob-kafka-cluster-kafka-bootstrap"
+      tls:
+        CASecretName: "dt4mob-kafka-cluster-cluster-ca-cert"
+        userSecretName: "dt4mob-application-kafka-user"
+        keySelector: "user.key"
+        crtSelector: "user.crt"
+    hono:
+      registryHost: "dt4mob-hono-service-device-registry"
+      tenant:
+        tlsCASecretName: "dt4mob-tenant-ca-secret"
+        configMapName: "dt4mob-config"
+    ditto:
+      host: "dt4mob-ditto-gateway"
+      devopsSecretName: "dt4mob-gateway-secret"
+  
 hono:
   messagingNetworkTypes:
     - kafka
@@ -359,30 +377,6 @@ ditto:
 
   dbconfig:
     uriSecret: "dt4mob-mongodb-ditto-secret"
-
-controller:
-  image:
-    repository: atnog-harbor.av.it.pt/dt4mob/dt4mob-controller
-    pullPolicy: Always # IfNotPresent
-    tag: "latest"
-
-  serviceAccount:
-    create: true
-    automount: true
-    annotations: {}
-    name: ""
-
-  extraVolumes: []
-  extraVolumeMounts: []
-
-  podAnnotations: {}
-  podLabels: {}
-  podSecurityContext: {}
-  securityContext: {}
-  resources: {}
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
 
 kafka:
   controller:
