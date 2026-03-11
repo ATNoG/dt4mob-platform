@@ -360,6 +360,12 @@ ditto:
         nginx.ingress.kubernetes.io/auth-type: basic
         nginx.ingress.kubernetes.io/auth-secret: {{ .Release.Name }}-auth-secret
         nginx.ingress.kubernetes.io/auth-realm: 'Authentication required to use HTTP API!'
+    ws:
+      annotations:
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+          # set ditto-specific forwarded headers
+          proxy_set_header X-Forwarded-User $remote_user;
+          proxy_set_header x-ditto-pre-authenticated "nginx:$remote_user";
 
   swaggerui:
     resources:
