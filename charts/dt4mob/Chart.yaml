@@ -20,3 +20,6 @@ dependencies:
   - name: dt4mob-controller
     version: "0.1.0"
     repository: file://../dt4mob-controller
+  - name: dt4mob-ingress
+    version: "0.1.0"
+    repository: file://../dt4mob-ingress

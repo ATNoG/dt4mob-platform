@@ -1,0 +1,27 @@
+{{- if .Values.mqtt.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "dt4mob-ingress.fullname" . }}-mqtt
+  labels:
+    {{- include "dt4mob-ingress.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  {{- with .Values.mqtt.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ .Values.mqtt.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.mqtt.serviceName }}
+                port:
+                  name: {{ .Values.mqtt.port }}
+{{- end }}

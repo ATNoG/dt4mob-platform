@@ -20,6 +20,14 @@ dt4mob-controller:
     ditto:
       gatewayServiceName: "dt4mob-ditto-gateway"
       devopsSecretName: "dt4mob-gateway-secret"
+
+dt4mob-ingress:
+    http:
+      serviceName: "dt4mob-hono-adapter-http"
+    amqp:
+      serviceName: "dt4mob-hono-adapter-amqp"
+    mqtt:
+      serviceName: "dt4mob-hono-adapter-mqtt"
   
 hono:
   messagingNetworkTypes:

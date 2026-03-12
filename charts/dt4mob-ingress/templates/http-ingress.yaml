@@ -1,0 +1,27 @@
+{{- if .Values.http.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "dt4mob-ingress.fullname" . }}-http
+  labels:
+    {{- include "dt4mob-ingress.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  {{- with .Values.http.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ .Values.http.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.http.serviceName }}
+                port:
+                  name: {{ .Values.http.port }}
+{{- end }}
