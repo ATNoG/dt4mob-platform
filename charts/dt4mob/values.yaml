@@ -446,4 +446,16 @@ timescale:
     storageClass: "local-path"
     size: 10Gi
   
+garbageCollector:
+  image:
+    repository: "atnog-harbor.av.it.pt/dt4mob/garbage-collector"
+    tag: "v1.0"
+  schedule: "*/5 * * * *" # every 5 minutes
+  logLevel: "INFO"
+  mqttUrl: "{{ .Release.Name }}-hono-adapter-mqtt:8883"
+  mqttTls: true
+  registryUrl: "{{ .Release.Name }}-hono-service-device-registry:8080"
+  dittoApiUrl: "{{ .Release.Name }}-ditto-gateway:8080"
+  dittoMainAuthUsername: "nginx:ditto"
+
   
