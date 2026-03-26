@@ -23,3 +23,6 @@ dependencies:
   - name: dt4mob-garbage-collector
     version: "0.1.0"
     repository: file://../dt4mob-garbage-collector
+  - name: dt4mob-ingress
+    version: "0.1.0"
+    repository: file://../dt4mob-ingress

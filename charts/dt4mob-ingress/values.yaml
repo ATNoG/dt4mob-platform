@@ -1,0 +1,24 @@
+http:
+    enabled: false
+
+    host: ""
+    serviceName: ""
+
+    port: https
+    annotations: {}
+amqp:
+    enabled: false
+
+    host: ""
+    serviceName: ""
+
+    port: amqps
+    annotations: {}
+mqtt:
+    enabled: false
+
+    host: ""
+    serviceName: ""
+
+    port: secure-mqtt
+    annotations: {}

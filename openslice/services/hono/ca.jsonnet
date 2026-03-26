@@ -32,6 +32,11 @@ function(name) [
         kind: 'Issuer',
         group: 'cert-manager.io'
       },
+      secretTemplate: {
+        annotations: {
+          'openslice.io/resource': std.extVar('resourceSelector'),
+	},
+      },
     },
   },
   {
