@@ -5,9 +5,11 @@ from pydantic import BaseModel, ConfigDict, Field
 
 RequestedAck = Annotated[str, Field(pattern=r"[a-zA-Z0-9-_:]{3,100}")]
 
+
 class SearchResponse(BaseModel):
     items: Optional[list[Any]] = None
     cursor: Optional[str] = None
+
 
 class Headers(BaseModel):
     model_config = ConfigDict(validate_by_name=True)
@@ -69,6 +71,7 @@ class BaseEmptyVehicle(BaseModel):
     policyId: str
     attributes: VehicleAttributes
     features: VehicleFeatures = VehicleFeatures()
+
 
 def getTimeStampClass(timestamp: datetime) -> Timestamp:
     return Timestamp(properties=TimestampProperties(value=timestamp))

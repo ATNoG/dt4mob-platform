@@ -5,10 +5,11 @@ from src.models.ditto import DittoProtocolEnvelope
 
 from datetime import datetime
 
+
 class GarbageCollector:
-    def __init__(self,client: DittoClient):
+    def __init__(self, client: DittoClient):
         self.client = client
-    
+
     def get_expired_envelops(self) -> list[DittoProtocolEnvelope]:
 
         current_time = datetime.now()
