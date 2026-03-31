@@ -20,8 +20,11 @@ dependencies:
 - name: dt4mob-historical-writer
   repository: file://../dt4mob-historical-writer
   version: 0.1.0
+- name: dt4mob-garbage-collector
+  repository: file://../dt4mob-garbage-collector
+  version: 0.1.0
 - name: dt4mob-ingress
   repository: file://../dt4mob-ingress
   version: 0.1.0
-digest: sha256:aa37014d4297196537a89bd4aabcc8167fac2a0534204d90be096c564c8979e5
-generated: "2026-03-31T17:53:42.683415121+01:00"
+digest: sha256:a71c0c57cdd6e9832d3471c401069c901d086a34b25cbc0cf6c4d27ccc9be04b
+generated: "2026-03-31T18:29:22.725207534+01:00"

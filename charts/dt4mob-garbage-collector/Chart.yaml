@@ -1,0 +1,7 @@
+apiVersion: v2
+name: dt4mob-garbage-collector
+description: A Helm chart for the garbage collector service of the dt4mob system.
+
+type: application
+version: 0.1.0
+appVersion: "0.2.0"

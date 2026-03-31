@@ -499,4 +499,10 @@ dt4mob-historical-writer:
     kafkaConsumerGroup: "{{ .Release.Name }}-historical-writer-group"
     kafkaAutoOffsetReset: latest
   
+dt4mob-garbage-collector:
+  config:
+    dittoApiUrl: "{{ .Release.Name }}-ditto-gateway:8080"
+    dittoUsername: "nginx"
+    dittoPassword: "ditto"
+
   
