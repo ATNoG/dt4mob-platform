@@ -7,5 +7,3 @@ config:
   dittoApiUrl: "{{ .Release.Name }}-ditto-gateway:8080"
   dittoBaseApiPath: "/api/2"
   dittoBaseWsPath: "/ws/2"
-  dittoUsername: "nginx"
-  dittoPassword: "ditto"
