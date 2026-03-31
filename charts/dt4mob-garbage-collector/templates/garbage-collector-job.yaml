@@ -1,0 +1,29 @@
+{{- $secretName := .Values.config.existingSecret | default (printf "%s-secret" (include "dt4mob-garbage-collector.fullname" .)) -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "dt4mob-garbage-collector.fullname" . }}-job
+  labels:
+    {{- include "dt4mob-garbage-collector.labels" . | nindent 6}}
+spec:
+  schedule: {{ .Values.config.schedule | quote }}
+  concurrencyPolicy: Forbid 
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ include "dt4mob-garbage-collector.fullname" . }}
+              image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+              imagePullPolicy: Always
+              env:
+              - name: PYTHONUNBUFFERED
+                value: "1"
+              envFrom:
+                - configMapRef:
+                  name: {{ include "dt4mob-garbage-collector.fullname" . }}
+                - secretRef:
+                    name: {{ $secretName }}
+          restartPolicy: OnFailure

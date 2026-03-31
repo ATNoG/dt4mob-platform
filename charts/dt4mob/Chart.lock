@@ -14,8 +14,11 @@ dependencies:
 - name: dt4mob-controller
   repository: file://../dt4mob-controller
   version: 0.1.0
+- name: dt4mob-garbage-collector
+  repository: file://../dt4mob-garbage-collector
+  version: 0.1.0
 - name: dt4mob-ingress
   repository: file://../dt4mob-ingress
   version: 0.1.0
-digest: sha256:32405d68f5e961a2c990a3c172c98715a7ee9c53ab683dddc1575f8f947eb30c
-generated: "2026-03-23T20:47:22.847789355Z"
+digest: sha256:1c38f869447e9a7ccd39a0612d6bec0d839702833bbf68438452dc002b82fc15
+generated: "2026-03-26T15:31:15.234255114Z"
