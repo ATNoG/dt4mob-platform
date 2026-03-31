@@ -17,5 +17,8 @@ dependencies:
 - name: dt4mob-historical-api
   repository: file://../dt4mob-historical-api
   version: 0.1.0
-digest: sha256:252a20fa958a26668050c23a6b2e8f8f311e2f480e23141d26404caae15412cd
-generated: "2026-03-31T15:08:23.705231861+01:00"
+- name: dt4mob-ingress
+  repository: file://../dt4mob-ingress
+  version: 0.1.0
+digest: sha256:f37abace37f0280a19ad4c2e41286498b7839e748410620dc072d725ce5cab7c
+generated: "2026-03-31T15:35:28.018397071+01:00"

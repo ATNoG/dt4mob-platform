@@ -16,9 +16,6 @@ function(name) [
     metadata: {
       name: name + '-root-ca',
       namespace: std.extVar('namespace'),
-      annotations: {
-        'openslice.io/resource': std.extVar('resourceSelector'),
-      },
     },
     spec: {
       isCA: true,
@@ -34,6 +31,11 @@ function(name) [
         name: name + '-selfsigned-issuer',
         kind: 'Issuer',
         group: 'cert-manager.io'
+      },
+      secretTemplate: {
+        annotations: {
+          'openslice.io/resource': std.extVar('resourceSelector'),
+	},
       },
     },
   },
