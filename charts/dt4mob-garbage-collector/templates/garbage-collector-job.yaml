@@ -23,7 +23,7 @@ spec:
                 value: "1"
               envFrom:
                 - configMapRef:
-                  name: {{ include "dt4mob-garbage-collector.fullname" . }}
+                    name: {{ include "dt4mob-garbage-collector.fullname" . }}
                 - secretRef:
                     name: {{ $secretName }}
           restartPolicy: OnFailure

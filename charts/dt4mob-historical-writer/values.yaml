@@ -4,9 +4,12 @@ image:
 config:
   instances: 1
   loglevel: INFO
-  kafkaBootstrapServers: "kafka-cluster-kafka-bootstrap:9092"
-  kafkaSecurityProtocol: SSL
-  kafkaConsumerGroup: "consumer-group"
-  kafkaTopic: Exports
-  kafkaAutoOffsetReset: latest
+  kafka:
+    bootstrapServers: "kafka-cluster-kafka-bootstrap:9092"
+    securityProtocol: SSL
+    consumerGroup: "consumer-group"
+    topic: Exports
+    autoOffsetReset: latest
+    # userSecretName: ""
+    # trustSecretName: ""
 # timescaleDatabaseTimezone: ""
