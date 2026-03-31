@@ -30,7 +30,7 @@ The service is configured via environment variables.
 
 | Variable | Description |
 | :--- | :--- |
-| `LOG_LEVEL` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
+| `LOG_LEVEL` | Logging verbosity (`DEBUG`, `INFO`, `WARN`, `ERROR`) |
 | `DITTO_API_URL` | The full URL for the Ditto API |
 | `DITTO_BASE_API_PATH` | Base path for REST API calls |
 | `DITTO_BASE_WS_PATH` | Base path for WebSocket connections |
