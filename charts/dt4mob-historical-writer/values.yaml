@@ -4,9 +4,9 @@ image:
 config:
   instances: 1
   loglevel: INFO
-  kafkaBootstrapServers: {{printf "%s-kafka-cluster-kafka-bootstrap:9092" .Release.Name}}
+  kafkaBootstrapServers: "kafka-cluster-kafka-bootstrap:9092"
   kafkaSecurityProtocol: SSL
-  kafkaConsumerGroup: {{ printf "%s-historical-writer-group" .Release.Name }}
+  kafkaConsumerGroup: "consumer-group"
   kafkaTopic: Exports
   kafkaAutoOffsetReset: latest
 # timescaleDatabaseTimezone: ""
