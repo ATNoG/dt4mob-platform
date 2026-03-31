@@ -10,11 +10,11 @@ spec:
   replicas: {{ .Values.config.instances | default 1 }}
   selector:
     matchLabels:
-      {{- include "dt4mob-historical-api.labels" . | nindent 6 }}
+      {{- include "dt4mob-historical-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "dt4mob-historical-api.selectorLabels" . | nindent 8 }}
+        {{- include "dt4mob-historical-api.labels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ include "dt4mob-historical-api.fullname" . }}

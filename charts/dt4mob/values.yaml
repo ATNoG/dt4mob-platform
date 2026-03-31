@@ -495,9 +495,12 @@ dt4mob-historical-api:
 dt4mob-historical-writer:
   config:
     instances: 1
-    kafkaBootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
-    kafkaConsumerGroup: "{{ .Release.Name }}-historical-writer-group"
-    kafkaAutoOffsetReset: latest
+    kafka:
+      bootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
+      consumerGroup: "{{ .Release.Name }}-historical-writer-group"
+      autoOffsetReset: latest
+      userSecretName: "{{ .Release.Name }}-historical-kafka-user"
+      trustSecretName: "{{ .Release.Name }}-kafka-cluster-cluster-ca-cert"
   
 dt4mob-garbage-collector:
   config:

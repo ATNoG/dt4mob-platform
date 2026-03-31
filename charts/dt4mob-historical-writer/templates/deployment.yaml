@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "dt4mob-historical-writer.selectorLabels" . | nindent 8 }}
+        {{- include "dt4mob-historical-writer.labels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ include "dt4mob-historical-writer.fullname" . }}
@@ -40,7 +40,7 @@ spec:
       volumes:
         - name: kafka-creds
           secret:
-            secretName: {{ printf "%s-kafka-cluster-user" .Release.Name }}
+            secretName: {{ tpl .Values.config.kafka.userSecretName . | quote }}
         - name: kafka-cluster-ca
           secret:
-            secretName: {{ printf "%s-kafka-cluster-cluster-ca-cert" .Release.Name }}
+            secretName: {{ tpl .Values.config.kafka.trustSecretName . | quote }}
