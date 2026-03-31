@@ -1,4 +1,4 @@
-{{- $secretName := printf "%s-secret" (include "dt4mob-garbage-collector.fullname" .) }}
+{{- $secretName := .Values.config.existingSecret | default (printf "%s-secret" (include "dt4mob-garbage-collector.fullname" .)) -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -22,6 +22,8 @@ spec:
               - name: PYTHONUNBUFFERED
                 value: "1"
               envFrom:
+                - configMapRef:
+                  name: {{ include "dt4mob-garbage-collector.fullname" . }}
                 - secretRef:
                     name: {{ $secretName }}
           restartPolicy: OnFailure
