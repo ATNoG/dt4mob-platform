@@ -495,8 +495,8 @@ dt4mob-historical-api:
 dt4mob-historical-writter:
   config:
     instances: 1
-    kafkaBootstrapServers: {{printf "%s-kafka-cluster-kafka-bootstrap:9092" .Release.Name}}
-    kafkaConsumerGroup: {{ printf "%s-historical-writer-group" .Release.Name }}
+    kafkaBootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
+    kafkaConsumerGroup: "{{ .Release.Name }}-historical-writer-group"
     kafkaAutoOffsetReset: latest
   
   
