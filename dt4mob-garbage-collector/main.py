@@ -21,7 +21,7 @@ async def main():
 
     for envelop in envelops:
         try:
-            success = await ditto_client.send_ws_message(envelop)
+             await ditto_client.send_ws_message(envelop)
 
         except Exception as e:
             logging.error(f"Failed to process {envelop.topic}: {type(e).__name__}: {e}")
