@@ -489,11 +489,14 @@ timescale:
     size: 10Gi
     
 dt4mob-historical-api:
-  image:
-    repository: atnog-harbor.av.it.pt/dt4mob/data-lake-api
-    tag: latest
   config:
     instances: 1
-    loglevel: INFO
+
+dt4mob-historical-writter:
+  config:
+    instances: 1
+    kafkaBootstrapServers: {{printf "%s-kafka-cluster-kafka-bootstrap:9092" .Release.Name}}
+    kafkaConsumerGroup: {{ printf "%s-historical-writer-group" .Release.Name }}
+    kafkaAutoOffsetReset: latest
   
   

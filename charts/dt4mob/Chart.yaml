@@ -23,6 +23,9 @@ dependencies:
   - name: dt4mob-historical-api
     version: "0.1.0"
     repository: file://../dt4mob-historical-api
+  - name: dt4mob-historical-writer
+    version: "0.1.0"
+    repository: file://../dt4mob-historical-writer
   - name: dt4mob-ingress
     version: "0.1.0"
     repository: file://../dt4mob-ingress
