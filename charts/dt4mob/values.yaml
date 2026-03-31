@@ -456,11 +456,7 @@ timescale:
   
 dt4mob-garbage-collector:
   config:
-    schedule: "*/5 * * * *"
-    logLevel: "INFO"
     dittoApiUrl: "{{ .Release.Name }}-ditto-gateway:8080"
-    dittoBaseApiPath: "/api/2"
-    dittoBaseWsPath: "/ws/2"
     dittoUsername: "nginx"
     dittoPassword: "ditto"
 
