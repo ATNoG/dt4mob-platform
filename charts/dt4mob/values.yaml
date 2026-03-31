@@ -454,4 +454,10 @@ timescale:
     storageClass: "local-path"
     size: 10Gi
   
+dt4mob-garbage-collector:
+  config:
+    dittoApiUrl: "{{ .Release.Name }}-ditto-gateway:8080"
+    dittoUsername: "nginx"
+    dittoPassword: "ditto"
+
   

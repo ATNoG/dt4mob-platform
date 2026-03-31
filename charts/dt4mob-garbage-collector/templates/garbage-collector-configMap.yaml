@@ -1,0 +1,12 @@
+{{- $configName := include "dt4mob-garbage-collector.fullname" . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $configName }}
+  labels:
+    {{- include "dt4mob-garbage-collector.labels" . | nindent 4 }}
+data:
+  log_level: {{ .Values.config.logLevel | quote }}
+  ditto_api_url: {{ tpl .Values.config.dittoApiUrl . | quote }}
+  ditto_base_api_path: {{ .Values.config.dittoBaseApiPath | quote }}
+  ditto_base_ws_path: {{ .Values.config.dittoBaseWsPath | quote }}
