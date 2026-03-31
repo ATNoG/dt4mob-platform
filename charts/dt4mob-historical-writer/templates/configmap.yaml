@@ -6,12 +6,12 @@ metadata:
 type: Opaque
 data:
   LOG_LEVEL: {{ .Values.config.logLevel | default "INFO" | quote }}
-  KAFKA_BOOTSTRAP_SERVERS: {{ .Values.config.kafkaBootstrapServers | quote }}
+  KAFKA_BOOTSTRAP_SERVERS: {{ tpl .Values.config.kafkaBootstrapServers . | quote }}
   KAFKA_SECURITY_PROTOCOL: {{ .Values.config.kafkaSecurityProtocol | default "SSL" | quote }}
   KAFKA_SSL_CA_LOCATION: "/cluster-ca/ca.crt"
   KAFKA_SSL_CERTIFICATE_LOCATION: "/certs/user.crt"
   KAFKA_SSL_KEY_LOCATION: "/certs/user.key"
-  KAFKA_CONSUMER_GROUP: {{ .Values.config.kafkaConsumerGroup | default (printf "%s-historical-writer-group" .Release.Name) | quote }}
+  KAFKA_CONSUMER_GROUP: {{ tpl .Values.config.kafkaConsumerGroup . | default (printf "%s-historical-writer-group" .Release.Name) | quote }}
   KAFKA_TOPIC: {{ .Values.config.kafkaTopic | quote }}
   KAFKA_AUTO_OFFSET_RESET: {{ .Values.config.kafkaAutoOffsetReset | quote }}
   TIMESCALE_DATABASE_TIMEZONE: {{ .Values.config.timescaleDatabaseTimezone | default "Europe/Lisbon" | quote }}

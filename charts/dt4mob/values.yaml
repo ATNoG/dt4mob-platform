@@ -492,7 +492,7 @@ dt4mob-historical-api:
   config:
     instances: 1
 
-dt4mob-historical-writter:
+dt4mob-historical-writer:
   config:
     instances: 1
     kafkaBootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
