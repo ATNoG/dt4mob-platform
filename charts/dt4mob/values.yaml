@@ -479,5 +479,13 @@ timescale:
   storage:
     storageClass: "local-path"
     size: 10Gi
+    
+dt4mob-historical-api:
+  image:
+    repository: atnog-harbor.av.it.pt/dt4mob/data-lake-api
+    tag: latest
+  config:
+    instances: 1
+    loglevel: INFO
   
   
