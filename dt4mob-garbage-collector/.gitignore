@@ -8,6 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
-
+.ruff_cache
 *.yaml
 deploy.sh
