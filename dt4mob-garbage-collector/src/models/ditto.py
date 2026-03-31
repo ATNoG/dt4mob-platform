@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, Any, Dict, Iterable, List, Optional
+from typing import Annotated, Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
