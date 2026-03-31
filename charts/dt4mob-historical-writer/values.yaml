@@ -1,0 +1,12 @@
+image:
+  repository: atnog-harbor.av.it.pt/dt4mob/data-gateway
+  tag: latest
+config:
+  instances: 1
+  loglevel: INFO
+  kafkaBootstrapServers: {{printf "%s-kafka-cluster-kafka-bootstrap:9092" .Release.Name}}
+  kafkaSecurityProtocol: SSL
+  kafkaConsumerGroup: {{ printf "%s-historical-writer-group" .Release.Name }}
+  kafkaTopic: Exports
+  kafkaAutoOffsetReset: latest
+# timescaleDatabaseTimezone: ""
