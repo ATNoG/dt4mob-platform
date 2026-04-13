@@ -1,7 +1,0 @@
-apiVersion: v2
-name: dt4mob-historical-writer
-description: A Helm chart for the dt4mob-historical-writer service of the DT4Mob project.
-
-type: application
-version: 0.1.0
-appVersion: "0.1.0"

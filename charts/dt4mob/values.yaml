@@ -488,13 +488,8 @@ timescale:
     storageClass: "local-path"
     size: 10Gi
     
-dt4mob-historical-api:
-  config:
-    instances: 1
-
-dt4mob-historical-writer:
-  config:
-    instances: 1
+dt4mob-historical:
+  writer:
     kafka:
       bootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
       consumerGroup: "{{ .Release.Name }}-historical-writer-group"

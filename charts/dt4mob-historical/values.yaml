@@ -1,0 +1,28 @@
+images:
+  api:
+    repository: atnog-harbor.av.it.pt/dt4mob/data-lake-api
+    tag: latest
+    imagePullPolicy: Always
+  writer:
+    repository: atnog-harbor.av.it.pt/dt4mob/data-gateway
+    tag: latest
+    imagePullPolicy: Always
+
+api:
+  replicas: 1
+  config:
+    logLevel: INFO
+
+writer:
+  replicas: 1
+  config:
+    logLevel: INFO
+    timescaleDatabaseTimezone: "Europe/Lisbon"
+  kafka:
+    bootstrapServers: "kafka-cluster-kafka-bootstrap:9092"
+    securityProtocol: SSL
+    consumerGroup: "consumer-group"
+    topic: Exports
+    autoOffsetReset: latest
+    # userSecretName: ""
+    # trustSecretName: ""

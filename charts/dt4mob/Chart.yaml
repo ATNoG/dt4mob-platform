@@ -20,12 +20,9 @@ dependencies:
   - name: dt4mob-controller
     version: "0.1.0"
     repository: file://../dt4mob-controller
-  - name: dt4mob-historical-api
+  - name: dt4mob-historical
     version: "0.1.0"
-    repository: file://../dt4mob-historical-api
-  - name: dt4mob-historical-writer
-    version: "0.1.0"
-    repository: file://../dt4mob-historical-writer
+    repository: file://../dt4mob-historical
   - name: dt4mob-garbage-collector
     version: "0.1.0"
     repository: file://../dt4mob-garbage-collector
