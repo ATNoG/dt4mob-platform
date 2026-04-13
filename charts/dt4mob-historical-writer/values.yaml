@@ -1,0 +1,12 @@
+image:
+  repository: atnog-harbor.av.it.pt/dt4mob/data-gateway
+  tag: latest
+config:
+  instances: 1
+  loglevel: INFO
+  kafkaBootstrapServers: "kafka-cluster-kafka-bootstrap:9092"
+  kafkaSecurityProtocol: SSL
+  kafkaConsumerGroup: "consumer-group"
+  kafkaTopic: Exports
+  kafkaAutoOffsetReset: latest
+# timescaleDatabaseTimezone: ""

@@ -366,6 +366,40 @@ ditto:
         nginx.ingress.kubernetes.io/auth-type: basic
         nginx.ingress.kubernetes.io/auth-secret: {{ .Release.Name }}-auth-secret
         nginx.ingress.kubernetes.io/auth-realm: 'Authentication required to use HTTP API!'
+      paths:
+        # Default Ditto Paths
+        - path: /api/2/(?!connections)
+          pathType: ImplementationSpecific
+          backendSuffix: gateway
+        - path: /stats
+          backendSuffix: gateway
+        - path: /overall
+          backendSuffix: gateway
+        # historical-api-service Path
+        - path: /historic(?!(/docs|/static))(/|$)(.*)
+          pathType: ImplementationSpecific
+          backendSuffix: historical-api-service
+    ui:
+      paths:
+        - path: /
+          pathType: Exact
+          backendSuffix: nginx
+        - path: /apidoc(/|$)(.*)
+          pathType: ImplementationSpecific
+          backendSuffix: swaggerui
+        - path: /ui(/|$)(.*)
+          pathType: ImplementationSpecific
+          backendSuffix: dittoui
+
+        # API DOCS historical-api-service
+        - path: /historic/docs(/|$)(.*)
+          pathType: ImplementationSpecific
+          backendSuffix: historical-api-service
+
+        - path: /()(historic/static/.*)
+          pathType: ImplementationSpecific
+          backendSuffix: historical-api-service
+          
     ws:
       annotations:
         nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -453,6 +487,17 @@ timescale:
   storage:
     storageClass: "local-path"
     size: 10Gi
+    
+dt4mob-historical-api:
+  config:
+    instances: 1
+
+dt4mob-historical-writer:
+  config:
+    instances: 1
+    kafkaBootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
+    kafkaConsumerGroup: "{{ .Release.Name }}-historical-writer-group"
+    kafkaAutoOffsetReset: latest
   
 dt4mob-garbage-collector:
   config:

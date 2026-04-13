@@ -14,11 +14,17 @@ dependencies:
 - name: dt4mob-controller
   repository: file://../dt4mob-controller
   version: 0.1.0
+- name: dt4mob-historical-api
+  repository: file://../dt4mob-historical-api
+  version: 0.1.0
+- name: dt4mob-historical-writer
+  repository: file://../dt4mob-historical-writer
+  version: 0.1.0
 - name: dt4mob-garbage-collector
   repository: file://../dt4mob-garbage-collector
   version: 0.1.0
 - name: dt4mob-ingress
   repository: file://../dt4mob-ingress
   version: 0.1.0
-digest: sha256:1c38f869447e9a7ccd39a0612d6bec0d839702833bbf68438452dc002b82fc15
-generated: "2026-03-26T15:31:15.234255114Z"
+digest: sha256:a71c0c57cdd6e9832d3471c401069c901d086a34b25cbc0cf6c4d27ccc9be04b
+generated: "2026-03-31T18:29:22.725207534+01:00"

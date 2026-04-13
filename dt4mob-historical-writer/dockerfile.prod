@@ -1,0 +1,22 @@
+FROM alpine:edge
+COPY --from=docker.io/astral/uv:latest /uv /uvx /bin/
+
+RUN apk add --no-cache \
+    build-base \
+    python3-dev \
+    librdkafka-dev \
+    python3 && \
+    ln -sf python3 /usr/bin/python
+
+WORKDIR /app
+
+COPY . .
+
+RUN mkdir -p /certs
+
+ENV UV_NO_DEV=1
+
+
+RUN uv sync --locked
+
+CMD ["uv","run","main.py"]

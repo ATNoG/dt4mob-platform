@@ -1,0 +1,4 @@
+from .ditto_events_manager import DittoEventsManager
+from src.database_engines import timescale_engine
+
+ditto_event_manager = DittoEventsManager(db_engine=timescale_engine)
