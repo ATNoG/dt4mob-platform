@@ -1,0 +1,34 @@
+{{- $secretName := .Values.api.config.dbSecretName | default (printf "%s-timescale-cluster-app" .Release.Name) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dt4mob-historical.fullname" . }}-api-deployment
+  labels:
+    {{- include "dt4mob-historical.api.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.api.config.replicas }}
+  selector:
+    matchLabels:
+      {{- include "dt4mob-historical.api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dt4mob-historical.api.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: api
+          image: {{ .Values.images.api.repository }}:{{ .Values.images.api.tag }}
+          imagePullPolicy: {{ .Values.images.api.imagePullPolicy }}
+          ports:
+          - name: http
+            containerPort: 8080
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: TIMESCALE_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: uri
+            - name: LOG_LEVEL
+              value: {{ .Values.api.config.logLevel | quote }}

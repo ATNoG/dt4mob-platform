@@ -1,0 +1,16 @@
+{{- $config := .Values.writer -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dt4mob-historical.fullname" . }}-writer-config
+data:
+  LOG_LEVEL: {{ $config.config.logLevel | quote }}
+  KAFKA_BOOTSTRAP_SERVERS: {{ tpl $config.kafka.bootstrapServers . | quote }}
+  KAFKA_SECURITY_PROTOCOL: {{ $config.kafka.securityProtocol | quote }}
+  KAFKA_SSL_CA_LOCATION: "/cluster-ca/ca.crt"
+  KAFKA_SSL_CERTIFICATE_LOCATION: "/certs/user.crt"
+  KAFKA_SSL_KEY_LOCATION: "/certs/user.key"
+  KAFKA_CONSUMER_GROUP: {{ tpl $config.kafka.consumerGroup . | quote }}
+  KAFKA_TOPIC: {{ $config.kafka.topic | quote }}
+  KAFKA_AUTO_OFFSET_RESET: {{ $config.kafka.autoOffsetReset | quote }}
+  TIMESCALE_DATABASE_TIMEZONE: {{ $config.config.timescaleDatabaseTimezone | quote }}

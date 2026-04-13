@@ -1,0 +1,46 @@
+{{- $dbsecretName := .Values.writer.config.dbSecretName | default (printf "%s-timescale-cluster-app" .Release.Name) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dt4mob-historical.fullname" . }}-writer-deployment
+  labels:
+    {{- include "dt4mob-historical.writer.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.writer.replicas }}
+  selector:
+    matchLabels:
+      {{- include "dt4mob-historical.writer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dt4mob-historical.writer.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: writer
+          image: {{ .Values.images.writer.repository }}:{{ .Values.images.writer.tag }}
+          imagePullPolicy: {{ .Values.images.writer.imagePullPolicy }}
+          volumeMounts:
+            - name: kafka-creds
+              mountPath: /certs
+              readOnly: true
+            - name: kafka-cluster-ca
+              mountPath: /cluster-ca
+              readOnly: true
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: TIMESCALE_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $dbsecretName }}
+                  key: uri
+          envFrom:
+            - configMapRef:
+                name: {{ include "dt4mob-historical.fullname" . }}-writer-config
+      volumes:
+        - name: kafka-creds
+          secret:
+            secretName: {{ tpl .Values.writer.kafka.userSecretName . | quote }}
+        - name: kafka-cluster-ca
+          secret:
+            secretName: {{ tpl .Values.writer.kafka.trustSecretName . | quote }}
