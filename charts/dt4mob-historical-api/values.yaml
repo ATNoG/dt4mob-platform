@@ -1,0 +1,8 @@
+image:
+  repository: atnog-harbor.av.it.pt/dt4mob/data-lake-api
+  tag: latest
+config:
+  instances: 1
+  loglevel: INFO
+# dbSecretName: ""
+  
