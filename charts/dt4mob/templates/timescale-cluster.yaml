@@ -20,7 +20,7 @@ spec:
 
   bootstrap:
     initdb:
-      postInitSQL:
+      postInitApplicationSQL:
        - CREATE EXTENSION IF NOT EXISTS timescaledb;
 
   storage:
