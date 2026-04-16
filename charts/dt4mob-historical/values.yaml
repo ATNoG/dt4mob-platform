@@ -26,3 +26,14 @@ writer:
     autoOffsetReset: latest
     # userSecretName: ""
     # trustSecretName: ""
+
+timescale:
+  instances: 1
+
+  securityContext:
+    postgresUID: 1000
+    postgresGID: 1000
+
+  storage:
+    storageClass: "local-path"
+    size: 10Gi

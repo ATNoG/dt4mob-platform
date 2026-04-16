@@ -1,0 +1,8 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  name: {{ include "dt4mob-historical.fullname" . }}-timescale
+spec:
+  images:
+    - major: 18
+      image: timescale/timescaledb-ha:pg18.0-ts2.23.0

@@ -32,7 +32,7 @@ spec:
             - name: TIMESCALE_CONNECTION
               valueFrom:
                 secretKeyRef:
-                  name: {{ $dbsecretName }}
+                  name: {{ include "dt4mob-historical.fullname" . }}-cluster-app
                   key: uri
           envFrom:
             - configMapRef:
