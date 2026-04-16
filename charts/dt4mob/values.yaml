@@ -476,17 +476,6 @@ psmdb-db:
 reloader:
   reloader:
     watchGlobally: false
-
-timescale:
-  instances: 3
-
-  securityContext:
-    postgresUID: 1000
-    postgresGID: 1000
-
-  storage:
-    storageClass: "local-path"
-    size: 10Gi
     
 dt4mob-historical:
   writer:
@@ -496,6 +485,12 @@ dt4mob-historical:
       autoOffsetReset: latest
       userSecretName: "{{ .Release.Name }}-historical-kafka-user"
       trustSecretName: "{{ .Release.Name }}-kafka-cluster-cluster-ca-cert"
+
+  timescale:
+    instances: 3
+    storage:
+      storageClass: "local-path"
+      size: 10Gi
   
 dt4mob-garbage-collector:
   config:

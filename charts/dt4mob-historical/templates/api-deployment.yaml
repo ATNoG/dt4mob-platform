@@ -1,4 +1,3 @@
-{{- $secretName := .Values.api.config.dbSecretName | default (printf "%s-timescale-cluster-app" .Release.Name) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,7 +27,7 @@ spec:
             - name: TIMESCALE_CONNECTION
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secretName }}
+                  name: {{ include "dt4mob-historical.fullname" . }}-cluster-app
                   key: uri
             - name: LOG_LEVEL
               value: {{ .Values.api.config.logLevel | quote }}

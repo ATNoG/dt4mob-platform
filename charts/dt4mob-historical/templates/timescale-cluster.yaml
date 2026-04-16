@@ -1,15 +1,13 @@
-{{- $clusterName := printf "%s-timescale-cluster" (include "dt4mob.fullname" .) }}
-{{- $imgcatalog := printf "%s-cloudnative-pg-timescaledb" (include "dt4mob.fullname" .) }}
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: {{ $clusterName }}
+  name: {{ include "dt4mob-historical.fullname" . }}-cluster
 spec:
   instances: {{ .Values.timescale.instances }}
   imageCatalogRef:
     apiGroup: postgresql.cnpg.io
     kind: ImageCatalog
-    name: {{ $imgcatalog }}
+    name: {{ include "dt4mob-historical.fullname" . }}-timescale
     major: 18
   postgresUID: {{ .Values.timescale.securityContext.postgresUID }}
   postgresGID: {{ .Values.timescale.securityContext.postgresGID }}
