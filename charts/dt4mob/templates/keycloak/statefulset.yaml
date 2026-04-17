@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-keycloak
+  labels:
+    {{- include "dt4mob.keycloak.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "dt4mob.fullname" . }}-keycloak-discovery
+  replicas: {{ .Values.keycloak.replicas }}
+  selector:
+    matchLabels:
+      {{- include "dt4mob.keycloak.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dt4mob.keycloak.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:26.6.1
+          args: ["start"]
+          env:
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              value: "admin"
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dt4mob.fullname" . }}-keycloak-admin
+                  key: "password"
+
+            - name: KC_PROXY_HEADERS
+              value: "xforwarded"
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_HTTP_RELATIVE_PATH
+              value: "/auth"
+            - name: KC_HOSTNAME
+              value: {{ .Values.ditto.ingress.host | quote }}
+
+            - name: KC_HTTP_MANAGEMENT_RELATIVE_PATH
+              value: "/"
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+
+            - name: 'KC_CACHE'
+              value: 'ispn'
+            # Passing the Pod's IP primary address to the JGroups clustering as this is required in IPv6 only setups
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            # Instruct JGroups which DNS hostname to use to discover other Keycloak nodes
+            # Needs to be unique for each Keycloak cluster
+            - name: KC_CACHE_EMBEDDED_NETWORK_BIND_ADDRESS
+              value: '$(POD_IP)'
+
+            - name: 'KC_DB_URL_DATABASE'
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dt4mob.fullname" . }}-keycloak-cluster-app
+                  key: "dbname"
+            - name: 'KC_DB_URL_HOST'
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dt4mob.fullname" . }}-keycloak-cluster-app
+                  key: "host"
+            - name: 'KC_DB'
+              value: "postgres"
+            # In a production environment, use a secret to store username and password to the database
+            - name: 'KC_DB_PASSWORD'
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dt4mob.fullname" . }}-keycloak-cluster-app
+                  key: "password"
+            - name: 'KC_DB_USERNAME'
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dt4mob.fullname" . }}-keycloak-cluster-app
+                  key: "user"
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: jgroups
+              containerPort: 7800
+            - name: jgroups-fd
+              containerPort: 57800
+          startupProbe:
+            httpGet:
+              path: /health/started
+              port: 9000
+            periodSeconds: 1
+            failureThreshold: 600              
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 9000
+            periodSeconds: 10
+            failureThreshold: 3              
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 9000
+            periodSeconds: 10
+            failureThreshold: 3              
+          # TODO: Make configurable
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2000Mi
+            requests:
+              cpu: 500m
+              memory: 1700Mi
