@@ -22,12 +22,12 @@ dt4mob-controller:
       devopsSecretName: "dt4mob-ditto-gateway-secret"
 
 dt4mob-ingress:
-    http:
-      serviceName: "dt4mob-hono-adapter-http"
-    amqp:
-      serviceName: "dt4mob-hono-adapter-amqp"
-    mqtt:
-      serviceName: "dt4mob-hono-adapter-mqtt"
+  http:
+    serviceName: "dt4mob-hono-adapter-http"
+  amqp:
+    serviceName: "dt4mob-hono-adapter-amqp"
+  mqtt:
+    serviceName: "dt4mob-hono-adapter-mqtt"
 
 dt4mob-historical:
   kafkaTopic:
@@ -406,9 +406,6 @@ ditto:
           backendSuffix: gateway
     ui:
       paths:
-        - path: /
-          pathType: Exact
-          backendSuffix: nginx
         - path: /apidoc(/|$)(.*)
           pathType: ImplementationSpecific
           backendSuffix: swaggerui

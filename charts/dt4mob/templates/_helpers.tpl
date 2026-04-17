@@ -58,9 +58,20 @@ metadata:
 spec:
   commonName: {{ .component }}
   dnsNames:
-  - dt4mob-staging.av.it.pt
+  - {{ .dot.Values.ditto.ingress.host }}
+  {{- if (get .dot.Values "dt4mob-ingress").http.enabled }}
+  - {{ (get .dot.Values "dt4mob-ingress").http.host }}
+  {{- end }}
+  {{- if (get .dot.Values "dt4mob-ingress").mqtt.enabled }}
+  - {{ (get .dot.Values "dt4mob-ingress").mqtt.host }}
+  {{- end }}
+  {{- if (get .dot.Values "dt4mob-ingress").amqp.enabled }}
+  - {{ (get .dot.Values "dt4mob-ingress").amqp.host }}
+  {{- end }}
+  {{- with (get .dot.Values "dt4mob-ingress").addresses }}
   ipAddresses:
-  - 193.136.93.66
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
   subject:
     organizationalUnits: ["DT4MOB;Hono"]
   secretName: {{ include "dt4mob.fullname" .dot }}-{{ .component }}-cert
