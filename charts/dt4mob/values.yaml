@@ -460,3 +460,15 @@ psmdb-db:
     roles:
     - name: dbOwner
       db: hono
+ 
+keycloak:
+  replicas: 1
+  db:
+    instances: 3
+    storage:
+      size: "10Gi"
+      storageClass: "local-path"
+  config:
+    repository: "atnog-harbor.av.it.pt/dt4mob/keycloak-config"
+    tag: "latest"
+    imagePullPolicy: "Always"

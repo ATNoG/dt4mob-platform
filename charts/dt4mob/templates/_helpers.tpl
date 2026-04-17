@@ -29,18 +29,37 @@ Create chart name and version as used by the chart label.
 {{/*
 Common labels
 */}}
-{{- define "dt4mob.labels" -}}
+{{- define "dt4mob.base.labels" -}}
 helm.sh/chart: {{ include "dt4mob.chart" . }}
-{{ include "dt4mob.selectorLabels" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "dt4mob.labels" -}}
+{{ include "dt4mob.base.labels" . }}
+{{ include "dt4mob.selectorLabels" . }}
+{{- end }}
+
+{{- define "dt4mob.keycloak.labels" -}}
+{{ include "dt4mob.base.labels" . }}
+{{ include "dt4mob.keycloak.selectorLabels" . }}
+{{- end }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
-{{- define "dt4mob.selectorLabels" -}}
+{{- define "dt4mob.base.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "dt4mob.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "dt4mob.selectorLabels" -}}
+{{ include "dt4mob.base.selectorLabels" . }}
+{{- end }}
+
+{{- define "dt4mob.keycloak.selectorLabels" -}}
+{{ include "dt4mob.base.selectorLabels" . }}
+app.kubernetes.io/component: "keycloak"
 {{- end }}
 
 {{/*

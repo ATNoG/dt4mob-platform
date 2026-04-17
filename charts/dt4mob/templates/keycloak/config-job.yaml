@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-keycloak-config
+  labels:
+    {{- include "dt4mob.keycloak.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": "hook-succeeded"
+spec:
+  template:
+    metadata:
+      name: {{ include "dt4mob.fullname" . }}-keycloak-config
+      labels:
+        {{- include "dt4mob.keycloak.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ include "dt4mob.fullname" . }}-keycloak-config-service-account
+      containers:
+      - name: keycloak-config
+        image: "{{ .Values.keycloak.config.repository }}:{{ .Values.keycloak.config.tag }}"
+        imagePullPolicy: {{ .Values.keycloak.config.pullPolicy }}
+        env:
+        - name: "KC_CLI_PASSWORD"
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "dt4mob.fullname" . }}-keycloak-admin
+              key: "password"
+        - name: "KEYCLOAK_STATEFUL_SET"
+          value: "{{ include "dt4mob.fullname" . }}-keycloak"
+        - name: "KEYCLOAK_ENDPOINT"
+          value: "http://{{ include "dt4mob.fullname" . }}-keycloak:8080/auth"
+        - name: "KEYCLOAK_REALM"
+          value: "dt4mob"
+        - name: "KEYCLOAK_CLIENT"
+          value: "ditto"
+        - name: "KEYCLOAK_CLIENT_REDIRECTS"
+          value: {{ tpl "https://{{ .Values.ditto.ingress.host }}/ui" . | list  | toRawJson | quote }}
+        - name: "KEYCLOAK_CLIENT_ORIGINS"
+          value: {{ tpl "https://{{ .Values.ditto.ingress.host }}" . | list  | toRawJson | quote }}
