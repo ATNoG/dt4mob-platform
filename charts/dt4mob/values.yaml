@@ -323,6 +323,9 @@ hono:
       readOnly: true
 
 ditto:
+  global:
+    jwtOnly: true
+
   connectivity:
     resources:
       cpu: 0.2
@@ -334,6 +337,16 @@ ditto:
       memoryMi: 768
     config:
       authentication:
+        oauth:
+          openidConnectIssuers:
+            keycloak:
+              issuer: ""
+              authSubjects:
+              - "{{ jwt:sub }}"
+              - "{{ jwt:groups }}"
+              injectClaimsIntoHeaders:
+                user_email: "{{ jwt:email }}"
+                user_name: "{{ jwt:name }}"
         devops:
           existingSecret: "dt4mob-ditto-gateway-secret"
 
@@ -357,16 +370,14 @@ ditto:
       cpu: 0.05
       memoryMi: 32
 
+  nginx:
+    enabled: false
+
   ingress:
     enabled: true
     className: nginx
-    # Use this instead of setting existingSecret because otherwise the secret
-    # needs to exist before the chart is rendered.
     api:
-      kubernetesAuthAnnotations: |
-        nginx.ingress.kubernetes.io/auth-type: basic
-        nginx.ingress.kubernetes.io/auth-secret: {{ .Release.Name }}-auth-secret
-        nginx.ingress.kubernetes.io/auth-realm: 'Authentication required to use HTTP API!'
+      kubernetesAuthAnnotations: ""
       paths:
         # Default Ditto Paths
         - path: /api/2/(?!connections)
@@ -378,9 +389,6 @@ ditto:
           backendSuffix: gateway
     ui:
       paths:
-        - path: /
-          pathType: Exact
-          backendSuffix: nginx
         - path: /apidoc(/|$)(.*)
           pathType: ImplementationSpecific
           backendSuffix: swaggerui
@@ -388,23 +396,9 @@ ditto:
           pathType: ImplementationSpecific
           backendSuffix: dittoui
           
-    ws:
-      annotations:
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-          # set ditto-specific forwarded headers
-          proxy_set_header X-Forwarded-User $remote_user;
-          proxy_set_header x-ditto-pre-authenticated "nginx:$remote_user";
-
   swaggerui:
     resources:
       memoryMi: 64
-
-  nginx:
-    service:
-      type: ClusterIP
-    resources:
-      cpu: 0.05
-      memoryMi: 32
 
   mongodb:
     enabled: false

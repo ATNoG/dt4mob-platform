@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "dt4mob.ditto-static.labels" . | nindent 4 }}
+  name: {{ include "dt4mob.fullname" . }}-ditto-static
+spec:
+  selector:
+	{{- include "dt4mob.ditto-static.selectorLabels" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http
+      name: http
+  type: ClusterIP

@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-ditto-static-resources
+  labels:
+    {{- include "dt4mob.ditto-static.labels" . | nindent 4 }}
+data:
+  ui-environments.json: |
+    {
+      "dt4mob": {
+        "api_uri": "https://{{ .Values.ditto.ingress.host }}",
+        "ditto_version": 3,
+        "disablePolicies": false,
+        "disableConnections": false,
+        "disableOperations": false,
+        "authSettings": {
+          "main": {
+            "method": "oidc",
+            "oidc": {
+              "enabled": true,
+              "defaultProvider": "keycloak",
+              "autoSso": true
+            },
+            "basic": {
+              "enabled": false,
+              "defaultUsernamePassword": null
+            },
+            "bearer": {
+              "enabled": true
+            },
+            "pre": {
+              "enabled": false,
+              "defaultDittoPreAuthenticatedUsername": null
+            }
+          },
+          "devops": {
+            "method": "oidc",
+            "oidc": {
+              "enabled": true,
+              "defaultProvider": "keycloak",
+              "autoSso": true
+            },
+            "basic": {
+              "enabled": false,
+              "defaultUsernamePassword": null
+            },
+            "bearer": {
+              "enabled": true
+            }
+          },
+          "oidc": {
+            "providers": {
+              "keycloak": {
+                "displayName": "Keycloak", 
+                "extractBearerTokenFrom": "access_token",
+                "authority": "https://{{ .Values.ditto.gateway.config.authentication.oauth.openidConnectIssuers.keycloak.issuer }}",
+                "client_id": "ditto",
+                "redirect_uri": "https://{{ .Values.ditto.ingress.host }}/ui",
+                "post_logout_redirect_uri": "https://{{ .Values.ditto.ingress.host }}/ui",
+                "response_type": "code",
+                "scope": "openid"
+              }
+            }
+          }
+        }
+      }
+    }
