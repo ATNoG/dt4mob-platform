@@ -351,10 +351,6 @@ ditto:
           backendSuffix: gateway
         - path: /overall
           backendSuffix: gateway
-        # historical-api-service Path
-        - path: /historic(?!(/docs|/static))(/|$)(.*)
-          pathType: ImplementationSpecific
-          backendSuffix: historical-api-service
     ui:
       paths:
         - path: /
@@ -366,15 +362,6 @@ ditto:
         - path: /ui(/|$)(.*)
           pathType: ImplementationSpecific
           backendSuffix: dittoui
-
-        # API DOCS historical-api-service
-        - path: /historic/docs(/|$)(.*)
-          pathType: ImplementationSpecific
-          backendSuffix: historical-api-service
-
-        - path: /()(historic/static/.*)
-          pathType: ImplementationSpecific
-          backendSuffix: historical-api-service
           
     ws:
       annotations:
