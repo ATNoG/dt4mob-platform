@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-keycloak-cluster
+spec:
+  instances: {{ .Values.keycloak.db.instances }}
+
+  storage:
+    size: {{ .Values.keycloak.db.storage.size }}
+    storageClass: {{ .Values.keycloak.db.storage.storageClass }}
