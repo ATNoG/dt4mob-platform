@@ -46,6 +46,10 @@ func (state *State) DittoConnectionUrl(config *config.Config) string {
 	return fmt.Sprintf("%s/api/2/connections/hono-kafka-connection-for-%s", config.DittoHost, state.Tenant)
 }
 
+func (state *State) DittoExportConnectionUrl(config *config.Config) string {
+	return fmt.Sprintf("%s/api/2/connections/export-kafka-connection-for-%s", config.DittoHost, state.Tenant)
+}
+
 func (state *State) HonoTenantUrl(config *config.Config) string {
 	return fmt.Sprintf("%s/v1/tenants/%s", config.RegistryHost, state.Tenant)
 }
