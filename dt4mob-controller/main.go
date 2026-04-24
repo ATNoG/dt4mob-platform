@@ -28,6 +28,9 @@ import (
 //go:embed connection.tpl
 var rawConnectionTemplate string
 
+//go:embed export_connection.tpl
+var rawExportConnectionTemplate string
+
 const MAX_RETRIES int = 5
 
 func updateHonoTenant(config *config.Config, state *state.State) bool {
@@ -97,22 +100,40 @@ func updateConnection(config *config.Config, state *state.State, connectionUrl s
 	} else if res.StatusCode < 200 || res.StatusCode > 299 {
 		utils.LogHttpError("Failed to update connection", res)
 	} else {
-		slog.Info("Connection updated")
+		slog.Info(fmt.Sprintf("connection %s, updated", connectionUrl))
 		return false
 	}
 
 	return true
 }
 
-func update(config *config.Config, state *state.State) bool {
-	if !state.IsInitialized() {
-		slog.Warn("State is not yet initialized, skipping update")
+func update(config *config.Config, state *state.State, rawTemplate string, connectionUrl string) bool {
+	if state.Tenant == "" {
+		slog.Warn("Tenant is not yet initialized, skipping update")
+		return false
+	}
+
+	if state.KeyPair == nil {
+		slog.Warn("Key pair is not yet initialized, skipping update")
+		return false
+	}
+
+	if state.CaCrt == "" {
+		slog.Warn("CA certificate is not yet initialized, skipping update")
+		return false
+	}
+
+	if state.TrustCrt == "" {
+		slog.Warn("Kafka trust certificate is not yet initialized, skipping update")
+		return false
+	}
+
+	if state.DevopsPassword == "" {
+		slog.Warn("Devops password is not yet initialized, skipping update")
 		return false
 	}
 
 	retry := updateHonoTenant(config, state)
-
-	connectionUrl := state.DittoConnectionUrl(config)
 
 	getConnectionReq, err := http.NewRequest("GET", connectionUrl, nil)
 	if err != nil {
@@ -131,13 +152,12 @@ func update(config *config.Config, state *state.State) bool {
 	var connectionBytes []byte
 	switch res.StatusCode {
 	case http.StatusNotFound:
-		slog.Info("Connection does not yet exist")
-
+		slog.Info(fmt.Sprintf("Connection %s does not yet exist", connectionUrl))
 		tmpl, err := template.New("connection").Funcs(template.FuncMap{
 			"quote": func(val string) string {
 				return fmt.Sprintf("\"%s\"", val)
 			},
-		}).Parse(rawConnectionTemplate)
+		}).Parse(rawTemplate)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -296,7 +316,10 @@ func main() {
 				slog.Info("Retrying update")
 
 				retries--
-				retry = update(&config, &state)
+				retry1 := update(&config, &state, rawConnectionTemplate, state.DittoConnectionUrl(&config))
+				retry2 := update(&config, &state, rawExportConnectionTemplate, state.DittoExportConnectionUrl(&config))
+
+				retry = retry1 || retry2
 
 				if retries == 0 && retry {
 					panic("Too many retries")
@@ -307,6 +330,9 @@ func main() {
 		}
 
 		retries = MAX_RETRIES
-		retry = update(&config, &state)
+		retry1 := update(&config, &state, rawConnectionTemplate, state.DittoConnectionUrl(&config))
+		retry2 := update(&config, &state, rawExportConnectionTemplate, state.DittoExportConnectionUrl(&config))
+
+		retry = retry1 || retry2
 	}
 }

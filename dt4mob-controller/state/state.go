@@ -33,10 +33,6 @@ func NewState(config *config.Config, kafkaHost string) State {
 	}
 }
 
-func (state *State) IsInitialized() bool {
-	return state.Tenant != "" && state.KeyPair != nil && state.CaCrt != "" && state.TrustCrt != "" && state.DevopsPassword != ""
-}
-
 func (state *State) AuthHeader() string {
 	auth := fmt.Sprintf("devops:%s", state.DevopsPassword)
 	return "Basic " + base64.StdEncoding.EncodeToString([]byte(auth))
@@ -44,6 +40,10 @@ func (state *State) AuthHeader() string {
 
 func (state *State) DittoConnectionUrl(config *config.Config) string {
 	return fmt.Sprintf("%s/api/2/connections/hono-kafka-connection-for-%s", config.DittoHost, state.Tenant)
+}
+
+func (state *State) DittoExportConnectionUrl(config *config.Config) string {
+	return fmt.Sprintf("%s/api/2/connections/export-kafka-connection-for-%s", config.DittoHost, state.Tenant)
 }
 
 func (state *State) HonoTenantUrl(config *config.Config) string {

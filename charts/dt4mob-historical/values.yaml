@@ -8,6 +8,11 @@ images:
     tag: latest
     imagePullPolicy: Always
 
+kakfaTopic:
+  create: true
+  name: "exports-test-tenant"
+  cluster: "dt4mob-kafka-cluster"
+
 api:
   replicas: 1
   config:
@@ -22,7 +27,6 @@ writer:
     bootstrapServers: "kafka-cluster-kafka-bootstrap:9092"
     securityProtocol: SSL
     consumerGroup: "consumer-group"
-    topic: Exports
     autoOffsetReset: latest
     # userSecretName: ""
     # trustSecretName: ""

@@ -11,6 +11,6 @@ data:
   KAFKA_SSL_CERTIFICATE_LOCATION: "/certs/user.crt"
   KAFKA_SSL_KEY_LOCATION: "/certs/user.key"
   KAFKA_CONSUMER_GROUP: {{ tpl $config.kafka.consumerGroup . | quote }}
-  KAFKA_TOPIC: {{ $config.kafka.topic | quote }}
+  KAFKA_TOPIC: {{ .Values.kafkaTopic.name | quote }}
   KAFKA_AUTO_OFFSET_RESET: {{ $config.kafka.autoOffsetReset | quote }}
   TIMESCALE_DATABASE_TIMEZONE: {{ $config.config.timescaleDatabaseTimezone | quote }}
