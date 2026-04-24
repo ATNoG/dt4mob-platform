@@ -54,6 +54,10 @@ dt4mob-garbage-collector:
     dittoUsername: "nginx"
     dittoPassword: "ditto"
 
+reloader:
+  reloader:
+    watchGlobally: false
+
 hono:
   messagingNetworkTypes:
     - kafka
@@ -76,6 +80,10 @@ hono:
       containerRegistry: "atnog-harbor.av.it.pt"
       imageName: "capucho/hono-service-device-registry-mongodb"
       imageTag: "2.7.0-SNAPSHOT"
+
+      deployment:
+        annotations:
+          reloader.stakater.com/auto: "true"
 
       extraEnv:
       - name: KEY_STORE_PASSWORD
@@ -138,6 +146,10 @@ hono:
         requests:
           cpu: 200m
 
+      deployment:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
       tlsKeysSecret: "dt4mob-mqtt-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
@@ -176,6 +188,10 @@ hono:
       resources:
         requests:
           cpu: 200m
+
+      deployment:
+        annotations:
+          reloader.stakater.com/auto: "true"
 
       tlsKeysSecret: "dt4mob-http-adapter-cert"
       tlsTrustStoreConfigMap: "none"
@@ -216,6 +232,10 @@ hono:
         requests:
           cpu: 200m
 
+      deployment:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
       tlsKeysSecret: "dt4mob-amqp-adapter-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
@@ -255,6 +275,10 @@ hono:
     imageName: "capucho/hono-service-auth"
     imageTag: "2.7.0-SNAPSHOT"
 
+    deployment:
+      annotations:
+        reloader.stakater.com/auto: "true"
+
     tlsKeysSecret: "dt4mob-auth-server-cert"
     tlsTrustStoreSecret:
       secretName: "dt4mob-auth-server-cert"
@@ -289,6 +313,10 @@ hono:
     containerRegistry: "atnog-harbor.av.it.pt"
     imageName: "capucho/hono-service-command-router-infinispan"
     imageTag: "2.7.0-SNAPSHOT"
+
+    deployment:
+      annotations:
+        reloader.stakater.com/auto: "true"
 
     tlsKeysSecret: "dt4mob-command-router-cert"
     tlsTrustStoreConfigMap: "none"

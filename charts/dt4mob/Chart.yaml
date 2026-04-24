@@ -11,10 +11,12 @@ dependencies:
   - name: ditto
     version: ~3.8.0
     repository: "oci://registry-1.docker.io/eclipse"
+  - name: reloader
+    version: ~2.2.3
+    repository: "https://stakater.github.io/stakater-charts"
   - name: psmdb-db
     version: 1.20.1
     repository: "https://percona.github.io/percona-helm-charts/"
-
   - name: dt4mob-controller
     version: "0.1.0"
     repository: file://../dt4mob-controller
