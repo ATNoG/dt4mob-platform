@@ -6,12 +6,12 @@
   "sources": [],
   "targets": [
     {
-      "address": "Exports",
+      "address": "exports-{{ .Tenant }}",
       "topics": [
         "_/_/things/twin/events"
       ],
       "authorizationContext": [
-        "pre-authenticated:hono-connection-{{ .Tenant }}"
+        "pre-authenticated:kafka-export-connection-{{ .Tenant }}"
       ],
       "headerMapping": {
         "device_id": {{ "{{ thing:id }}" | quote }},

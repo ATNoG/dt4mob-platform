@@ -19,7 +19,7 @@ dt4mob-controller:
         configMapName: "dt4mob-config"
     ditto:
       gatewayServiceName: "dt4mob-ditto-gateway"
-      devopsSecretName: "dt4mob-gateway-secret"
+      devopsSecretName: "dt4mob-ditto-gateway-secret"
 
 dt4mob-ingress:
     http:
@@ -28,7 +28,32 @@ dt4mob-ingress:
       serviceName: "dt4mob-hono-adapter-amqp"
     mqtt:
       serviceName: "dt4mob-hono-adapter-mqtt"
+
+dt4mob-historical:
+  kafkaTopic:
+    create: true
+    name: "exports-test-tenant"
+    cluster: "dt4mob-kafka-cluster"
+  writer:
+    kafka:
+      bootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
+      consumerGroup: "{{ .Release.Name }}-historical-writer-group"
+      autoOffsetReset: latest
+      userSecretName: "{{ .Release.Name }}-historical-kafka-user"
+      trustSecretName: "{{ .Release.Name }}-kafka-cluster-cluster-ca-cert"
+
+  timescale:
+    instances: 3
+    storage:
+      storageClass: "local-path"
+      size: 10Gi
   
+dt4mob-garbage-collector:
+  config:
+    dittoApiUrl: "{{ .Release.Name }}-ditto-gateway:8080"
+    dittoUsername: "nginx"
+    dittoPassword: "ditto"
+
 hono:
   messagingNetworkTypes:
     - kafka
@@ -435,27 +460,3 @@ psmdb-db:
     roles:
     - name: dbOwner
       db: hono
-
-    
-dt4mob-historical:
-  writer:
-    kafka:
-      bootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
-      consumerGroup: "{{ .Release.Name }}-historical-writer-group"
-      autoOffsetReset: latest
-      userSecretName: "{{ .Release.Name }}-historical-kafka-user"
-      trustSecretName: "{{ .Release.Name }}-kafka-cluster-cluster-ca-cert"
-
-  timescale:
-    instances: 3
-    storage:
-      storageClass: "local-path"
-      size: 10Gi
-  
-dt4mob-garbage-collector:
-  config:
-    dittoApiUrl: "{{ .Release.Name }}-ditto-gateway:8080"
-    dittoUsername: "nginx"
-    dittoPassword: "ditto"
-
-  

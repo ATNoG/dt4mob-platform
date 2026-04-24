@@ -33,10 +33,6 @@ func NewState(config *config.Config, kafkaHost string) State {
 	}
 }
 
-func (state *State) IsInitialized() bool {
-	return state.Tenant != "" && state.KeyPair != nil && state.CaCrt != "" && state.TrustCrt != "" && state.DevopsPassword != ""
-}
-
 func (state *State) AuthHeader() string {
 	auth := fmt.Sprintf("devops:%s", state.DevopsPassword)
 	return "Basic " + base64.StdEncoding.EncodeToString([]byte(auth))

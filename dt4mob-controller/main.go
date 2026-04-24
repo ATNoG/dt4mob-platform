@@ -108,8 +108,28 @@ func updateConnection(config *config.Config, state *state.State, connectionUrl s
 }
 
 func update(config *config.Config, state *state.State, rawTemplate string, connectionUrl string) bool {
-	if !state.IsInitialized() {
-		slog.Warn("State is not yet initialized, skipping update")
+	if state.Tenant == "" {
+		slog.Warn("Tenant is not yet initialized, skipping update")
+		return false
+	}
+
+	if state.KeyPair == nil {
+		slog.Warn("Key pair is not yet initialized, skipping update")
+		return false
+	}
+
+	if state.CaCrt == "" {
+		slog.Warn("CA certificate is not yet initialized, skipping update")
+		return false
+	}
+
+	if state.TrustCrt == "" {
+		slog.Warn("Kafka trust certificate is not yet initialized, skipping update")
+		return false
+	}
+
+	if state.DevopsPassword == "" {
+		slog.Warn("Devops password is not yet initialized, skipping update")
 		return false
 	}
 
