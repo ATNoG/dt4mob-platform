@@ -1,0 +1,45 @@
+{{- range .Values.jobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: level-ams-loader-{{ .name }}
+spec:
+  schedule: {{ .cronSchedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: config-volume
+              secret:
+                secretName: level-ams-loader-config
+          containers:
+            - name: level-ams-loader
+              image: docker.io/library/test
+              imagePullPolicy: Never
+              command:
+                - "/bin/uv"
+                - "run"
+                - "main.py"
+                {{- if .geoAssetId }}
+                - "--geo-asset-id"
+                - {{ .geoAssetId | quote }}
+                  {{- if .instrumentIds }}
+                - "--instrument-ids"
+                    {{- range .instrumentIds }}
+                - {{ . | quote }}
+                    {{- end }}
+                  {{- end }}
+                {{- end }}
+              volumeMounts:
+                - name: config-volume
+                  readOnly: true
+                  mountPath: "/app/config.toml"
+                  subPath: "config.toml"
+                - name: config-volume
+                  readOnly: true
+                  mountPath: "/app/ca.crt"
+                  subPath: "ca.crt"
+          restartPolicy: Never
+{{- end }}
