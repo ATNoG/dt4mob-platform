@@ -16,8 +16,8 @@ spec:
                 secretName: level-ams-loader-config
           containers:
             - name: level-ams-loader
-              image: docker.io/library/test
-              imagePullPolicy: Never
+              image: atnog-harbor.av.it.pt/dt4mob/level-ams-loader:latest
+              imagePullPolicy: Always
               command:
                 - "/bin/uv"
                 - "run"
