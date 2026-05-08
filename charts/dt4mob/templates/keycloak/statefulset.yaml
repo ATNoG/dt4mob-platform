@@ -34,11 +34,20 @@ spec:
               value: "true"
             - name: KC_HTTP_RELATIVE_PATH
               value: "/auth"
-            - name: KC_HOSTNAME
-              value: {{ .Values.ditto.ingress.host | quote }}
+            # We don't set KC_HOSTNAME because internal services access
+            # keycloak trough its service directly.
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+
+            - name: KC_HTTPS_CERTIFICATE_FILE
+              value: /opt/keycloak/tls/tls.crt
+            - name: KC_HTTPS_CERTIFICATE_KEY_FILE
+              value: /opt/keycloak/tls/tls.key
 
             - name: KC_HTTP_MANAGEMENT_RELATIVE_PATH
               value: "/"
+            - name: KC_HTTP_MANAGEMENT_SCHEME
+              value: "http"
             - name: KC_HEALTH_ENABLED
               value: "true"
 
@@ -80,6 +89,8 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+            - name: https
+              containerPort: 8443
             - name: jgroups
               containerPort: 7800
             - name: jgroups-fd
@@ -110,3 +121,11 @@ spec:
             requests:
               cpu: 500m
               memory: 1700Mi
+          volumeMounts:
+          - name: keycloak-tls
+            mountPath: /opt/keycloak/tls
+            readOnly: true
+      volumes:
+      - name: keycloak-tls
+        secret:
+          secretName: {{ include "dt4mob.fullname" . }}-internal-keycloak-tls

@@ -373,20 +373,61 @@ ditto:
     resources:
       cpu: 0.2
       memoryMi: 768
+    systemProps:
+      - "-Dditto.protocol.blocklist.0=raw-request-uri"
+      - "-Dditto.protocol.blocklist.1=cache-control"
+      - "-Dditto.protocol.blocklist.2=connection"
+      - "-Dditto.protocol.blocklist.3=timeout-access"
+      - "-Dditto.protocol.blocklist.4=accept-encoding"
+      - "-Dditto.protocol.blocklist.5=x-forwarded-scheme"
+      - "-Dditto.protocol.blocklist.6=x-forwarded-port"
+      - "-Dditto.protocol.blocklist.7=x-forwarded-for"
+      - "-Dditto.protocol.blocklist.8=forwarded=for"
+      - "-Dditto.protocol.blocklist.9=sec-fetch-mode"
+      - "-Dditto.protocol.blocklist.10=sec-fetch-site"
+      - "-Dditto.protocol.blocklist.11=accept-language"
+      - "-Dditto.protocol.blocklist.12=host"
+      - "-Dditto.protocol.blocklist.13=via"
+      - "-Dditto.protocol.blocklist.14=sec-ch-ua"
+      - "-Dditto.protocol.blocklist.15=sec-ch-ua-mobile"
+      - "-Dditto.protocol.blocklist.16=sec-ch-ua-platform"
+      - "-Dditto.protocol.blocklist.17=sec-fetch-dest"
+      - "-Dditto.protocol.blocklist.18=user-agent"
+      - "-Dssl-config.trustManager.stores.0.type=PEM"
+      - "-Dssl-config.trustManager.stores.0.path=/opt/ditto/tls/ingress/tls.crt"
+      - "-Dssl-config.trustManager.stores.1.type=PEM"
+      - "-Dssl-config.trustManager.stores.1.path=/opt/ditto/tls/internal-keycloak/tls.crt"
     config:
       authentication:
         oauth:
           openidConnectIssuers:
             keycloak:
               issuer: ""
+              issuers:
+              - "dt4mob-keycloak:8443/auth/realms/dt4mob"
               authSubjects:
-              - "{{ jwt:sub }}"
-              - "{{ jwt:groups }}"
+              - "sub:{{ jwt:sub }}"
+              - "user:{{ jwt:preferred_username }}"
+              - "role:{{ jwt:resource_access/ditto/roles }}"
               injectClaimsIntoHeaders:
                 user_email: "{{ jwt:email }}"
                 user_name: "{{ jwt:name }}"
         devops:
           existingSecret: "dt4mob-ditto-gateway-secret"
+    extraVolumeMounts:
+    - name: ingress-tls
+      mountPath: /opt/ditto/tls/ingress
+      readOnly: true
+    - name: internal-keycloak-tls
+      mountPath: /opt/ditto/tls/internal-keycloak
+      readOnly: true
+    extraVolumes:
+    - name: ingress-tls
+      secret:
+        secretName: dt4mob-ingress-tls
+    - name: internal-keycloak-tls
+      secret:
+        secretName: dt4mob-internal-keycloak-tls
 
   policies:
     resources:
