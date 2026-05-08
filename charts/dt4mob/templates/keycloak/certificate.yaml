@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-internal-keycloak-certificate
+  labels:
+    {{- include "dt4mob.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "dt4mob.fullname" . }}-internal-keycloak-tls
+  commonName: {{ include "dt4mob.fullname" . }}-keycloak
+  dnsNames:
+    - {{ include "dt4mob.fullname" . }}-keycloak
+
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+  privateKey:
+    rotationPolicy: Always
+
+  issuerRef:
+    name: {{ include "dt4mob.fullname" . }}-internal-keycloak-issuer
+    kind: Issuer
+    group: cert-manager.io

@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-internal-keycloak-issuer
+  labels:
+    {{- include "dt4mob.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
