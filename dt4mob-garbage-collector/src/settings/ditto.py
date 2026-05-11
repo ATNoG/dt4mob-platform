@@ -1,33 +1,21 @@
-from pydantic import Field
+from pydantic import BaseModel
 
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from urllib.parse import urlsplit, urljoin
 
 
-class DittoSettings(BaseSettings):
-    api_url: str = Field(default="localhost:8080", validation_alias="ditto_api_url")
-    base_api_path: str = Field(default="/api/2", validation_alias="ditto_base_api_path")
-    base_ws_path: str = Field(default="/ws/2", validation_alias="ditto_base_ws_path")
+class DittoSettings(BaseModel):
+    api_url: str = "http://localhost:8080"
+    base_api_path: str = "/api/2"
+    base_ws_path: str = "/ws/2"
 
-    username: str = Field(default=None, validation_alias="ditto_username")
-    password: str | None = Field(default=None, validation_alias="ditto_password")
-
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="ignore",
-    )
-
-    def get_auth(self) -> str:
-        return f"{self.username}:{self.password}"
+    search_size: int = 200
 
     def get_base_url(self) -> str:
-        base_url = "http://" + self.api_url
-        stripped_url = str(base_url).rstrip("/")
+        stripped_url = str(self.api_url).rstrip("/")
         stripped_base_path = self.base_api_path.strip("/")
         return f"{stripped_url}/{stripped_base_path}"
 
     def get_base_ws(self) -> str:
-        base_url = "ws://" + self.api_url
-        stripped_url = str(base_url).rstrip("/")
-        stripped_base_path = self.base_ws_path.strip("/")
-        return f"{stripped_url}/{stripped_base_path}"
+        url = urlsplit(self.api_url)
+        url = url._replace(scheme="wss" if url.scheme == "https" else "ws").geturl()
+        return urljoin(url, self.base_ws_path).rstrip("/")

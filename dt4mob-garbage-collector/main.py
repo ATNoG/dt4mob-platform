@@ -1,17 +1,14 @@
 from src.services.garbage_collector import garbage_collector
 from src.services.ditto_api import ditto_client
-from src.settings import settings
 
 import logging
 import asyncio
-
-BATCH_SIZE = settings.batch_size
 
 
 async def main():
     await ditto_client.connect()
 
-    envelops = garbage_collector.get_expired_envelops()
+    envelops = await garbage_collector.get_expired_envelops()
 
     if not envelops:
         logging.info("No expired Things to Delete.")

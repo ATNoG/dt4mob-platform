@@ -1,25 +1,28 @@
 import logging
 
-from pydantic import Field
 from typing import Literal
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
 )
 from src.settings.ditto import DittoSettings
+from src.settings.auth import AuthSettings
 
 
 LogLevel = Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
 
 
 class Settings(BaseSettings):
-    log_level: LogLevel = Field(validation_alias="LOG_LEVEL", default="INFO")
+    log_level: LogLevel = "INFO"
 
-    batch_size: int = Field(validation_alias="batch_size", default=500)
-    ditto: DittoSettings = DittoSettings()
+    ditto: DittoSettings = DittoSettings.model_construct()
+    auth: AuthSettings = AuthSettings.model_construct()
 
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+        env_nested_delimiter="__",
     )
 
 
