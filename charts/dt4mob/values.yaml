@@ -21,6 +21,15 @@ dt4mob-controller:
       gatewayServiceName: "dt4mob-ditto-gateway"
       devopsSecretName: "dt4mob-ditto-gateway-secret"
 
+dt4mob-site:
+  repository: "atnog-harbor.av.it.pt/dt4mob/website"
+  tag: "latest"
+  imagePullPolicy: "Always"
+  htpasswdSecretName: "dt4mob-site-htpasswd"
+  # resources:
+  #   requests:
+  #     cpu: 200m
+
 dt4mob-ingress:
   http:
     serviceName: "dt4mob-hono-adapter-http"
@@ -406,6 +415,12 @@ ditto:
           backendSuffix: gateway
         - path: /overall
           backendSuffix: gateway
+    # We don't use Ditto's landing page
+    root:
+      paths:
+      - path: /ditto-root
+        pathType: Prefix
+        backendSuffix: nginx
     ui:
       paths:
         - path: /apidoc(/|$)(.*)
@@ -414,7 +429,6 @@ ditto:
         - path: /ui(/|$)(.*)
           pathType: ImplementationSpecific
           backendSuffix: dittoui
-          
     ws:
       annotations:
         nginx.ingress.kubernetes.io/configuration-snippet: |

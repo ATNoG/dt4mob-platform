@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-dt4mob-site
+  labels:
+    {{- include "dt4mob.dt4mob-site.labels" . | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.ditto.ingress.className }}
+  tls:
+  - secretName: {{ include "dt4mob.fullname" . }}-ingress-tls
+  rules:
+  - host: {{ .Values.ditto.ingress.host | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "dt4mob.fullname" . }}-dt4mob-site
+            port:
+              name: http
+

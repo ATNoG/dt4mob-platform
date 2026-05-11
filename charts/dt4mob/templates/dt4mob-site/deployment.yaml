@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-dt4mob-site
+  labels:
+    {{- include "dt4mob.dt4mob-site.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "dt4mob.dt4mob-site.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dt4mob.dt4mob-site.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: dt4mob-site
+          image: {{ (get .Values "dt4mob-site").repository }}:{{ (get .Values "dt4mob-site").tag }}
+          imagePullPolicy: {{ (get .Values "dt4mob-site").imagePullPolicy }}
+          ports:
+          - name: http
+            containerPort: 80
+          volumeMounts:
+          - name: htpasswd
+            mountPath: "/run/secrets/dt4mob/"
+            readOnly: true
+          {{- with (get .Values "dt4mob-site").resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+      - name: htpasswd
+        secret:
+          secretName: {{ (get .Values "dt4mob-site").htpasswdSecretName }}
