@@ -60,9 +60,11 @@ dt4mob-historical:
   
 dt4mob-garbage-collector:
   config:
-    dittoApiUrl: "{{ .Release.Name }}-ditto-gateway:8080"
-    dittoUsername: "nginx"
-    dittoPassword: "ditto"
+    ditto:
+      apiUrl: "http://{{ .Release.Name }}-ditto-gateway:8080"
+    auth:
+      existingSecret: "{{ .Release.Name }}-garbage-collector-credentials"
+      caSecret: "{{ .Release.Name }}-internal-keycloak-tls"
 
 reloader:
   reloader:

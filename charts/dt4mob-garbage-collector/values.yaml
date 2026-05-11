@@ -1,11 +1,18 @@
 image:
   repository: "atnog-harbor.av.it.pt/dt4mob/garbage-collector"
-  tag: "v2.0"
+  tag: "latest"
+  imagePullPolicy: "Always" 
+
 config:
   schedule: "*/5 * * * *"
   logLevel: "INFO"
-  dittoApiUrl: "ditto-gateway:8080"
-  dittoBaseApiPath: "/api/2"
-  dittoBaseWsPath: "/ws/2"
-#  dittoUsername: ""
-#  dittoPassword: ""
+  ditto:
+    apiUrl: "ditto-gateway:8080"
+    baseApiPath: "/api/2"
+    baseWsPath: "/ws/2"
+  auth:
+    tokenEndpoint: "https://dt4mob-keycloak:8443/auth/realms/dt4mob/protocol/openid-connect/token"
+    # username: ""
+    # password: ""
+    existingSecret: ""
+    caSecret: ""

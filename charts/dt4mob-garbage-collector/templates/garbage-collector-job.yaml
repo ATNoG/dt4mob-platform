@@ -1,4 +1,4 @@
-{{- $secretName := .Values.config.existingSecret | default (printf "%s-secret" (include "dt4mob-garbage-collector.fullname" .)) -}}
+{{- $secretName := tpl .Values.config.auth.existingSecret . | default (printf "%s-secret" (include "dt4mob-garbage-collector.fullname" .)) -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -14,16 +14,47 @@ spec:
     spec:
       template:
         spec:
+          restartPolicy: OnFailure
           containers:
             - name: {{ include "dt4mob-garbage-collector.fullname" . }}
               image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-              imagePullPolicy: Always
+              imagePullPolicy: {{ .Values.image.imagePullPolicy }}
               env:
               - name: PYTHONUNBUFFERED
                 value: "1"
-              envFrom:
-                - configMapRef:
-                    name: {{ include "dt4mob-garbage-collector.fullname" . }}
-                - secretRef:
-                    name: {{ $secretName }}
-          restartPolicy: OnFailure
+              - name: LOG_LEVEL
+                value: {{ .Values.config.logLevel | quote }}
+              - name: DITTO__API_URL
+                value: {{ tpl .Values.config.ditto.apiUrl . | quote }}
+              - name: DITTO__BASE_API_PATH
+                value: {{ .Values.config.ditto.baseApiPath | quote }}
+              - name: DITTO__BASE_WS_PATH
+                value: {{ .Values.config.ditto.baseWsPath | quote }}
+              - name: AUTH__TOKEN_ENDPOINT
+                value: {{ tpl .Values.config.auth.tokenEndpoint . | quote }}
+              - name: AUTH__USERNAME_FILE
+                value: "/run/secrets/dt4mob/creds/username"
+              - name: AUTH__PASSWORD_FILE
+                value: "/run/secrets/dt4mob/creds/password"
+              {{- if .Values.config.auth.caSecret }}
+              - name: AUTH__CA_CRT_FILE
+                value: "/run/secrets/dt4mob/tls/ca.crt"
+              {{- end }}
+              volumeMounts:
+              - name: credentials
+                readOnly: true
+                mountPath: "/run/secrets/dt4mob/creds"
+              {{- if .Values.config.auth.caSecret }}
+              - name: tls
+                readOnly: true
+                mountPath: "/run/secrets/dt4mob/tls"
+              {{- end }}
+          volumes:
+          - name: credentials
+            secret:
+              secretName: {{ $secretName | quote }}
+          {{- if .Values.config.auth.caSecret }}
+          - name: tls
+            secret:
+              secretName: {{ tpl .Values.config.auth.caSecret . | quote }}
+          {{- end }}

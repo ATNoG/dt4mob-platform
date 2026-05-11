@@ -1,7 +1,9 @@
 
 # DT4MOB Garbage Collector
 
-A specialized microservice designed to handle data cleanup and resource management within the **DT4MOB** digital twin. It interacts with the Ditto API to monitor and remove unused entities.
+A specialized microservice designed to handle data cleanup and resource
+management within the **DT4MOB** digital twin. It interacts with the Ditto API
+to monitor and remove unused entities.
 
 ## 🚀 Getting Started
 
@@ -31,11 +33,14 @@ The service is configured via environment variables.
 | Variable | Description |
 | :--- | :--- |
 | `LOG_LEVEL` | Logging verbosity (`DEBUG`, `INFO`, `WARN`, `ERROR`) |
-| `DITTO_API_URL` | The full URL for the Ditto API |
-| `DITTO_BASE_API_PATH` | Base path for REST API calls |
-| `DITTO_BASE_WS_PATH` | Base path for WebSocket connections |
-| `DITTO_USERNAME` | Authentication username | 
-| `DITTO_PASSWORD` | Authentication password | 
+| `DITTO__API_URL` | The full URL for the Ditto API |
+| `DITTO__BASE_API_PATH` | Base path for REST API calls |
+| `DITTO__BASE_WS_PATH` | Base path for WebSocket connections |
+| `AUTH__TOKEN_ENDPOINT` | OIDC token endpoint | 
+| `AUTH__USERNAME` or `AUTH_USERNAME_FILE` | Authentication username | 
+| `AUTH__PASSWORD` or `AUTH_PASSWORD_FILE` | Authentication password | 
+| `AUTH__CLIENT_ID` | OIDC Client ID | 
+| `AUTH__CA_CRT_FILE` | CA certificate of the OIDC server | 
 
 ### Running Locally with Docker
 You can test the container locally by passing an `.env` file or individual flags:
