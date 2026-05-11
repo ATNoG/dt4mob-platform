@@ -4,7 +4,7 @@ dependencies:
   version: 2.6.4
 - name: ditto
   repository: oci://registry-1.docker.io/eclipse
-  version: 3.8.12
+  version: 4.1.0
 - name: reloader
   repository: https://stakater.github.io/stakater-charts
   version: 2.2.12
@@ -23,5 +23,5 @@ dependencies:
 - name: dt4mob-ingress
   repository: file://../dt4mob-ingress
   version: 0.1.0
-digest: sha256:54c5eb62b72da619781bca58930b75979d08b96256d90794dbd7fd7f54e278f8
-generated: "2026-05-25T12:51:16.180879358+01:00"
+digest: sha256:c1abae95b9f1616067e021653d37ac79adc5190a5ef0b4c0ebbba2b0d22d10fe
+generated: "2026-05-25T12:55:30.645921507+01:00"
