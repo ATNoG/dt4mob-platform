@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-ditto-static
+  labels:
+    {{- include "dt4mob.ditto-static.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "dt4mob.ditto-static.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dt4mob.ditto-static.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: ditto-static 
+          image: "nginx:stable-alpine"
+          # imagePullPolicy: Always
+          args: ["nginx", "-c", "/opt/nginx/nginx.conf", "-g", "daemon off;"]
+          ports:
+          - name: http
+            containerPort: 80
+          volumeMounts:
+          - name: ditto-static-config
+            mountPath: "/opt/nginx"
+            readOnly: true
+          - name: ditto-static-resources
+            mountPath: "/usr/share/nginx/html"
+            readOnly: true
+          # {{- with .Values.resources }}
+          # resources:
+          #   {{- toYaml . | nindent 12 }}
+          # {{- end }}
+      volumes:
+      - name: ditto-static-config
+        configMap:
+          name: {{ include "dt4mob.fullname" . }}-ditto-static-config
+      - name: ditto-static-resources
+        configMap:
+          name: {{ include "dt4mob.fullname" . }}-ditto-static-resources

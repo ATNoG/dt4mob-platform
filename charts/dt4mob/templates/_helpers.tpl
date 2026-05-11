@@ -49,6 +49,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{ include "dt4mob.keycloak.selectorLabels" . }}
 {{- end }}
 
+{{- define "dt4mob.ditto-static.labels" -}}
+{{ include "dt4mob.base.labels" . }}
+{{ include "dt4mob.ditto-static.selectorLabels" . }}
+{{- end }}
+
 {{/*
 Selector labels
 */}}
@@ -69,6 +74,11 @@ app.kubernetes.io/component: "dt4mob-site"
 {{- define "dt4mob.keycloak.selectorLabels" -}}
 {{ include "dt4mob.base.selectorLabels" . }}
 app.kubernetes.io/component: "keycloak"
+{{- end }}
+
+{{- define "dt4mob.ditto-static.selectorLabels" -}}
+{{ include "dt4mob.base.selectorLabels" . }}
+app.kubernetes.io/component: "ditto-static"
 {{- end }}
 
 {{/*

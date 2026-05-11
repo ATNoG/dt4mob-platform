@@ -361,6 +361,9 @@ hono:
       readOnly: true
 
 ditto:
+  global:
+    jwtOnly: true
+
   connectivity:
     resources:
       cpu: 0.2
@@ -372,6 +375,16 @@ ditto:
       memoryMi: 768
     config:
       authentication:
+        oauth:
+          openidConnectIssuers:
+            keycloak:
+              issuer: ""
+              authSubjects:
+              - "{{ jwt:sub }}"
+              - "{{ jwt:groups }}"
+              injectClaimsIntoHeaders:
+                user_email: "{{ jwt:email }}"
+                user_name: "{{ jwt:name }}"
         devops:
           existingSecret: "dt4mob-ditto-gateway-secret"
 
@@ -395,58 +408,40 @@ ditto:
       cpu: 0.05
       memoryMi: 32
 
+  nginx:
+    enabled: false
+
   ingress:
     enabled: true
     className: nginx
     tls:
     - secretName: dt4mob-ingress-tls
-    # Use this instead of setting existingSecret because otherwise the secret
-    # needs to exist before the chart is rendered.
     api:
-      kubernetesAuthAnnotations: |
-        nginx.ingress.kubernetes.io/auth-type: basic
-        nginx.ingress.kubernetes.io/auth-secret: {{ .Release.Name }}-auth-secret
-        nginx.ingress.kubernetes.io/auth-realm: 'Authentication required to use HTTP API!'
-      paths:
-        # Default Ditto Paths
-        - path: /api/2/(?!connections)
-          pathType: ImplementationSpecific
-          backendSuffix: gateway
-        - path: /stats
-          backendSuffix: gateway
-        - path: /overall
-          backendSuffix: gateway
-    # We don't use Ditto's landing page
-    root:
-      paths:
-      - path: /ditto-root
-        pathType: Prefix
-        backendSuffix: nginx
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "70"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "70"
+    ws:
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "86400"
+        nginx.ingress.kubernetes.io/proxy-buffering: "off"
     ui:
+      annotations:
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
       paths:
         - path: /apidoc(/|$)(.*)
           pathType: ImplementationSpecific
-          backendSuffix: swaggerui
-        - path: /ui(/|$)(.*)
+          service:
+            name: swaggerui
+        - path: /ui(/)(.*)
           pathType: ImplementationSpecific
-          backendSuffix: dittoui
-    ws:
-      annotations:
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-          # set ditto-specific forwarded headers
-          proxy_set_header X-Forwarded-User $remote_user;
-          proxy_set_header x-ditto-pre-authenticated "nginx:$remote_user";
+          service:
+            name: dittoui
 
   swaggerui:
     resources:
       memoryMi: 64
-
-  nginx:
-    service:
-      type: ClusterIP
-    resources:
-      cpu: 0.05
-      memoryMi: 32
 
   mongodb:
     enabled: false
