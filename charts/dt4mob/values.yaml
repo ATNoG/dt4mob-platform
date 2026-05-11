@@ -388,6 +388,8 @@ ditto:
   ingress:
     enabled: true
     className: nginx
+    tls:
+    - secretName: dt4mob-ingress-tls
     # Use this instead of setting existingSecret because otherwise the secret
     # needs to exist before the chart is rendered.
     api:
@@ -485,3 +487,16 @@ psmdb-db:
     roles:
     - name: dbOwner
       db: hono
+
+ingressTLS:
+  issuer:
+    # Spec of the generated issuer if `existingIssuer` is not defined
+    spec:
+      selfSigned: {}
+    # existingIssuer:
+    #   name: ""
+    #   kind: Issuer
+    #   group: cert-manager.io
+  certificate:
+    additionalDnsNames: []
+    ipAddresses: []

@@ -1,0 +1,35 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-ingress-certificate
+  labels:
+    {{- include "dt4mob.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "dt4mob.fullname" . }}-ingress-tls
+  commonName: {{ .Values.ditto.ingress.host }}
+  dnsNames:
+    - {{ .Values.ditto.ingress.host }}
+    {{- with .Values.ingressTLS.certificate.additionalDnsNames }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+  {{- with .Values.ingressTLS.certificate.ipAddresses }}
+  ipAddresses:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+  privateKey:
+    rotationPolicy: Always
+
+  issuerRef:
+  {{- if hasKey .Values.ingressTLS.issuer "existingIssuer" -}}
+    {{- toYaml .Values.ingressTLS.issuer.existingIssuer | nindent 4 }}
+  {{- else }}
+    name: {{ include "dt4mob.fullname" . }}-ingress-issuer
+    kind: Issuer
+    group: cert-manager.io
+  {{- end }}

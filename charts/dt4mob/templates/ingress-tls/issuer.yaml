@@ -1,0 +1,10 @@
+{{- if not (hasKey .Values.ingressTLS.issuer "existingIssuer") -}}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-ingress-issuer
+  labels:
+    {{- include "dt4mob.labels" . | nindent 4 }}
+spec:
+  {{ .Values.ingressTLS.issuer.spec | toYaml | nindent 2 }}
+{{- end }}
