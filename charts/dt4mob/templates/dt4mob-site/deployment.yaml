@@ -1,3 +1,4 @@
+{{- if (get .Values "dt4mob-site").enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,3 +34,4 @@ spec:
       - name: htpasswd
         secret:
           secretName: {{ (get .Values "dt4mob-site").htpasswdSecretName }}
+{{- end }}

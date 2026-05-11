@@ -22,6 +22,7 @@ dt4mob-controller:
       devopsSecretName: "dt4mob-ditto-gateway-secret"
 
 dt4mob-site:
+  enabled: true
   repository: "atnog-harbor.av.it.pt/dt4mob/website"
   tag: "latest"
   imagePullPolicy: "Always"
