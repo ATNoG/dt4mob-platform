@@ -17,6 +17,15 @@ api:
   replicas: 1
   config:
     logLevel: INFO
+    auth:
+      clientId: "ditto"
+      serverUri: "https://dt4mob-keycloak:8443/auth/realms/dt4mob"
+      issuers:
+      - "dt4mob-keycloak:8443/auth/realms/dt4mob"
+  # extraEnv: []
+  # volumeMounts: []
+  # volumes: []
+
 
 writer:
   replicas: 1

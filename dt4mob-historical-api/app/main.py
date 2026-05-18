@@ -1,15 +1,24 @@
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import ORJSONResponse, HTMLResponse
 from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
 from .routers import events
 
 
 root_path = "/historic"
 
-app = FastAPI(root_path=root_path, docs_url=None, redoc_url=None,default_response_class=ORJSONResponse,title="Ditto Events API", description="API to manage historical events from Eclipse Ditto")
+app = FastAPI(
+    root_path=root_path,
+    docs_url=None,
+    redoc_url=None,
+    default_response_class=ORJSONResponse,
+    title="Ditto Events API",
+    description="API to manage historical events from Eclipse Ditto",
+)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(router=events.router)
+
 
 @app.get("/", include_in_schema=False)
 def custom_swagger_ui_html():

@@ -64,3 +64,24 @@ if ! kubectl get secrets "$GARBAGE_COLLECTOR_SECRET_NAME"; then
     --from-literal=password="$GARBAGE_COLLECTOR_PASSWORD"
   kcadm set-password -r "$KEYCLOAK_REALM" --userid "$GARBAGE_COLLECTOR_ID" --new-password "$GARBAGE_COLLECTOR_PASSWORD"
 fi
+
+# Create/Update the historical API roles 
+HISTORICAL_READ_ROLE_NAME="${HISTORICAL_READ_ROLE_NAME:-"historical-read"}"
+ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$HISTORICAL_READ_ROLE_NAME" -F id --format csv --noquotes || true)
+if [ -z "$ROLEID" ]; then
+  # The `-i` option returns the role name instead of the ID
+  ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
+    -r "$KEYCLOAK_REALM" \
+    -s name="$HISTORICAL_READ_ROLE_NAME" \
+    -s description="Historical API read access" | jq -r ".id")
+fi
+
+HISTORICAL_WRITE_ROLE_NAME="${HISTORICAL_WRITE_ROLE_NAME:-"historical-write"}"
+ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$HISTORICAL_WRITE_ROLE_NAME" -F id --format csv --noquotes || true)
+if [ -z "$ROLEID" ]; then
+  # The `-i` option returns the role name instead of the ID
+  ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
+    -r "$KEYCLOAK_REALM" \
+    -s name="$HISTORICAL_WRITE_ROLE_NAME" \
+    -s description="Historical API write access" | jq -r ".id")
+fi

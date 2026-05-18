@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "fastapi-oidc>=0.0.11",
     "fastapi[standard]>=0.128.0",
     "orjson>=3.11.7",
     "psycopg[binary]>=3.3.2",

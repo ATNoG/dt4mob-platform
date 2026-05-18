@@ -44,6 +44,26 @@ dt4mob-historical:
     create: true
     name: "exports-test-tenant"
     cluster: "dt4mob-kafka-cluster"
+
+  api:
+    config:
+      auth:
+        clientId: "ditto"
+        serverUri: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
+        issuers:
+        - "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
+    extraEnv:
+    - name: REQUESTS_CA_BUNDLE
+      value: "/opt/tls/ca.crt"
+    volumeMounts:
+    - name: internal-keycloak-tls
+      mountPath: /opt/tls
+      readOnly: true
+    volumes:
+    - name: internal-keycloak-tls
+      secret:
+        secretName: dt4mob-internal-keycloak-tls
+
   writer:
     kafka:
       bootstrapServers: "{{ .Release.Name }}-kafka-cluster-kafka-bootstrap:9092"
