@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dt4mob-historical.fullname" . }}-writer-deployment
+  name: {{ include "dt4mob-historical.fullname" . }}-writer
   labels:
     {{- include "dt4mob-historical.writer.labels" . | nindent 4 }}
 spec:
@@ -36,7 +36,7 @@ spec:
                   key: uri
           envFrom:
             - configMapRef:
-                name: {{ include "dt4mob-historical.fullname" . }}-writer-config
+                name: {{ include "dt4mob-historical.fullname" . }}-writer
       volumes:
         - name: kafka-creds
           secret:

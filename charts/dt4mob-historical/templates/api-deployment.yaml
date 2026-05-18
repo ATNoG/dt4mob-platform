@@ -1,7 +1,8 @@
+{{- $root := .}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dt4mob-historical.fullname" . }}-api-deployment
+  name: {{ include "dt4mob-historical.fullname" . }}-api
   labels:
     {{- include "dt4mob-historical.api.labels" . | nindent 4 }}
 spec:
@@ -24,10 +25,31 @@ spec:
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
-            - name: TIMESCALE_CONNECTION
+            - name: AUTH__CLIENT_ID
+              value: {{ .Values.api.config.auth.clientId | quote }}
+            - name: AUTH__SERVER_URI
+              value: {{ tpl .Values.api.config.auth.serverUri . | quote }}
+            - name: AUTH__ISSUER
+              {{ $tplIssuers := list }}
+              {{- range $i, $issuer := .Values.api.config.auth.issuers }}
+              {{- $tplIssuers = append $tplIssuers (tpl $issuer $root) }}
+              {{- end }}
+              value: {{ $tplIssuers | toJson | quote }}
+            - name: TIMESCALE__CONNECTION
               valueFrom:
                 secretKeyRef:
                   name: {{ include "dt4mob-historical.fullname" . }}-cluster-app
                   key: uri
             - name: LOG_LEVEL
               value: {{ .Values.api.config.logLevel | quote }}
+            {{- if .Values.api.extraEnv }}
+              {{- toYaml .Values.api.extraEnv | nindent 12 }}
+            {{- end }}
+          {{- with .Values.api.volumeMounts }}
+          volumeMounts:
+              {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.api.volumes }}
+      volumes:
+          {{- toYaml . | nindent 8 }}
+      {{- end }}
