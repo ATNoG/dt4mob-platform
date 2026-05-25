@@ -1,6 +1,8 @@
 package config
 
 type Config struct {
+	LogLevel string `env:"LOG_LEVEL" envDefault:"info"`
+
 	Namespace string `env:"TARGET_NAMESPACE"`
 
 	TLSSecretName        string `env:"TLS_SECRET_NAME,required"`
@@ -12,6 +14,7 @@ type Config struct {
 
 	DevopsSecretName     string `env:"DEVOPS_SECRET_NAME,required"`
 	DevopsSecretSelector string `env:"DEVOPS_SECRET_SELECTOR" envDefault:"devops-password"`
+	PiggyBackTimeout     uint   `env:"DEVOPS_PIGGYBACK_TIMEOUT" envDefault:"10"`
 
 	TenantConfigMapName     string `env:"TENANT_CONFIG_MAP_NAME,required"`
 	TenantConfigMapSelector string `env:"TENANT_CONFIG_MAP_SELECTOR" envDefault:"tenant"`
@@ -24,4 +27,6 @@ type Config struct {
 	DittoService    string `env:"DITTO_SERVICE,required"`
 	DittoHost       string `env:"DITTO_HOST"`
 	KafkaService    string `env:"KAFKA_SERVICE,required"`
+
+	SystemServicePolicy string `env:"DITTO_SYSTEM_SERVICE_POLICY_NAME" envDefault:"dt4mob.av.it.pt:system-service"`
 }
