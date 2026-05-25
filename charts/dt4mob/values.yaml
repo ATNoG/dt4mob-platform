@@ -385,6 +385,8 @@ hono:
 ditto:
   global:
     jwtOnly: true
+    namespacePolicies:
+      "*": ["dt4mob.av.it.pt:system-service"]
 
   connectivity:
     resources:
