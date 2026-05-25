@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3-creds
+type: Opaque
+stringData:
+  Access-Key: "N39HG6R905AV2FYB2QXXF"
+  Secret-Key: "PffyDZkP7FGsNO9TOVz4SjinIKV6MoGx7fPBnOYGOR"
+  Brisa-Url: "https://levelamswebapilinux-ghbccqanfsgdf9br.westeurope-01.azurewebsites.net"
+  Brisa-Username: "iavcoelho@av.it.pt"
+  Brisa-Password: "DT4MOB"
+  Muro-Bucket: "texturemap"
+  Muro-Key: "MURO.ply"

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "data-bridge.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "data-bridge.labels" . | nindent 4 }}
+  {{- with include "data-bridge.annotations" . }}
+  annotations:
+    {{- . | nindent 4 }}
+  {{- end }}
+data:
+  ENV: {{ .Values.env | quote }}
+  POLLING_INTERVAL: {{ .Values.pollingInterval | toString | quote }}
+  HONO__DEVICE_REGISTRY: {{ .Values.hono.deviceRegistry | quote }}
+  HONO__HTTP_ADAPTER: {{ .Values.hono.httpAdapter | quote }}
+  HONO__TENANT_ID: {{ .Values.hono.tenantId | quote }}
+  {{- if .Values.hono.serverCertPath }}
+  HONO__SERVER_CERT_PATH: {{ .Values.hono.serverCertPath | quote }}
+  {{- end }}
+  SIGNS__DIR: {{ .Values.signs.dir | quote }}
+  BARRIERS__DIR: {{ .Values.barriers.dir | quote }}
+  EQUIVIA__DIR: {{ .Values.equivia.dir | quote }}
+  LIGHTS__FILE: {{ .Values.lights.file | quote }}
+  TOLLS: {{ .Values.tolls | toJson | quote }}
