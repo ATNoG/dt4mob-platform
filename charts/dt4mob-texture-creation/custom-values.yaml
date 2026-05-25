@@ -1,0 +1,80 @@
+image:
+  repository: texture-creation
+  pullPolicy: Always 
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+env:
+  - name: S3_ENDPOINT
+    value: "http://seaweedfs-s3.storage:8333"
+  - name: S3_BUCKET
+    value: "texturemap"
+  - name: S3_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: s3-creds
+        key: Access-Key
+  - name: S3_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: s3-creds
+        key: Secret-Key
+
+  - name: S3_INPUT_BUCKET
+    valueFrom:
+      secretKeyRef:
+        name: s3-creds
+        key: Muro-Bucket
+  - name: S3_INPUT_KEY
+    valueFrom:
+      secretKeyRef:
+        name: s3-creds
+        key: Muro-Key
+
+  - name: TENANT
+    value: "brisa"
+  - name: ID
+    value: "e27a9388-84c5-4081-8c85-b7e8abc2b09a"
+  - name: BASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: s3-creds
+        key: Brisa-Url
+  - name: USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: s3-creds
+        key: Brisa-Username
+  - name: PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: s3-creds
+        key: Brisa-Password
+
+# CronJob configuration
+cronjob:
+  schedule: "@daily"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
+  activeDeadlineSeconds: 3600
+
+podSecurityContext: {}
+securityContext: {}
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
