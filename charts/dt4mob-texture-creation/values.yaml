@@ -1,0 +1,58 @@
+image:
+  repository: texture-creation
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Each env var can be set via plain `value` or pulled from a secret key via `valueFrom.secretKeyRef`
+env:
+  - name: S3_ENDPOINT
+    value: ""
+  - name: S3_BUCKET
+    value: ""
+  - name: S3_ACCESS_KEY
+    value: ""
+  - name: S3_SECRET_KEY
+    value: ""
+  - name: S3_INPUT_BUCKET
+    value: ""
+  - name: S3_INPUT_KEY
+    value: ""
+  - name: TENANT
+    value: ""
+  - name: ID
+    value: ""
+  - name: BASE_URL
+    value: ""
+  - name: USERNAME
+    value: ""
+  - name: PASSWORD
+    value: ""
+
+# CronJob configuration
+cronjob:
+  schedule: "@daily"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
+  activeDeadlineSeconds: 3600
+
+podSecurityContext: {}
+securityContext: {}
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
