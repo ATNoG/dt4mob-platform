@@ -1,0 +1,32 @@
+{
+  "PLATFORM_OPERATOR": {
+    "subjects": {
+      "keycloak:role:platform-operator": {
+        "type": "DT4Mob Platform Operator Role"
+      }
+    },
+    "resources": {
+      "policy:/": {
+        "grant": [ "READ", "WRITE" ],
+        "revoke": []
+      }
+    }
+  },
+  "SYSTEM_SERVICE": {
+    "subjects": {
+      "keycloak:role:system-service": {
+        "type": "DT4Mob System Service Role"
+      }
+    },
+    "resources": {
+      "policy:/": {
+        "grant": [ "READ" ],
+        "revoke": []
+      },
+      "thing:/": {
+        "grant": [ "READ", "WRITE" ],
+        "revoke": []
+      }
+    }
+  }
+}

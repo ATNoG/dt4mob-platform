@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"context"
 	"crypto/tls"
-	_ "embed"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -24,12 +24,6 @@ import (
 	"github.com/ATNoG/dt4mob/dt4mob-controller/state"
 	"github.com/ATNoG/dt4mob/dt4mob-controller/utils"
 )
-
-//go:embed connection.tpl
-var rawConnectionTemplate string
-
-//go:embed export_connection.tpl
-var rawExportConnectionTemplate string
 
 const MAX_RETRIES int = 5
 
@@ -75,11 +69,55 @@ func updateHonoTenant(config *config.Config, state *state.State) bool {
 	return true
 }
 
-func updateConnection(config *config.Config, state *state.State, connectionUrl string, connection map[string]any) bool {
+func getConnection(config *config.Config, state *state.State, connectionUrl string, templateFallback *template.Template) (map[string]any, error) {
+	getConnectionReq, err := http.NewRequest("GET", connectionUrl, nil)
+	if err != nil {
+		panic(err.Error())
+	}
+	getConnectionReq.Header.Set("Authorization", state.AuthHeader())
+
+	res, err := state.Client.Do(getConnectionReq)
+	if err != nil {
+		return nil, err
+	}
+	//nolint:errcheck
+	defer res.Body.Close()
+
+	var connectionBytes []byte
+	switch res.StatusCode {
+	case http.StatusNotFound:
+		writer := new(bytes.Buffer)
+		err = templateFallback.Execute(writer, map[string]any{
+			"Tenant":    state.Tenant,
+			"KafkaHost": state.KafkaHost,
+		})
+		if err != nil {
+			panic(err.Error())
+		}
+		connectionBytes = writer.Bytes()
+	case http.StatusOK:
+		connectionBytes, err = io.ReadAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
+	default:
+		utils.LogHttpError("Unexpected response to get connection request", res)
+		return nil, errors.New("bad status code")
+	}
+
+	var connection map[string]any
+	err = json.Unmarshal(connectionBytes, &connection)
+	if err != nil {
+		return nil, err
+	}
+
+	return connection, nil
+}
+
+func updateConnection(config *config.Config, state *state.State, connectionUrl string, connection map[string]any) error {
 	pemKey, err := utils.PemPrivateKey(state.KeyPair.PrivateKey)
 	if err != nil {
-		slog.Error("Failed to marshal private key, skipping update", "error", err)
-		return false
+		return err
 	}
 
 	connection["ca"] = state.CaCrt
@@ -96,101 +134,92 @@ func updateConnection(config *config.Config, state *state.State, connectionUrl s
 
 	res, err := state.Client.Do(updateReq)
 	if err != nil {
-		slog.Error("Failed to update connection", "error", err)
+		return err
 	} else if res.StatusCode < 200 || res.StatusCode > 299 {
-		utils.LogHttpError("Failed to update connection", res)
-	} else {
-		slog.Info(fmt.Sprintf("connection %s, updated", connectionUrl))
-		return false
+		utils.LogHttpError("Error when updating connection", res)
+		return errors.New("bad status code")
 	}
 
-	return true
+	slog.Info("Connection updated", "connection", connectionUrl)
+	return nil
 }
 
-func update(config *config.Config, state *state.State, rawTemplate string, connectionUrl string) bool {
-	if state.Tenant == "" {
-		slog.Warn("Tenant is not yet initialized, skipping update")
-		return false
-	}
-
-	if state.KeyPair == nil {
-		slog.Warn("Key pair is not yet initialized, skipping update")
-		return false
-	}
-
-	if state.CaCrt == "" {
-		slog.Warn("CA certificate is not yet initialized, skipping update")
-		return false
-	}
-
-	if state.TrustCrt == "" {
-		slog.Warn("Kafka trust certificate is not yet initialized, skipping update")
-		return false
-	}
-
-	if state.DevopsPassword == "" {
-		slog.Warn("Devops password is not yet initialized, skipping update")
-		return false
-	}
-
-	retry := updateHonoTenant(config, state)
-
-	getConnectionReq, err := http.NewRequest("GET", connectionUrl, nil)
-	if err != nil {
-		panic(err.Error())
-	}
-	getConnectionReq.Header.Set("Authorization", state.AuthHeader())
-
-	res, err := state.Client.Do(getConnectionReq)
-	if err != nil {
-		slog.Error("Failed to get existing connection, skipping update", "error", err)
-		return true
-	}
-	//nolint:errcheck
-	defer res.Body.Close()
-
-	var connectionBytes []byte
-	switch res.StatusCode {
-	case http.StatusNotFound:
-		slog.Info(fmt.Sprintf("Connection %s does not yet exist", connectionUrl))
-		tmpl, err := template.New("connection").Funcs(template.FuncMap{
-			"quote": func(val string) string {
-				return fmt.Sprintf("\"%s\"", val)
+func updatePolicy(config *config.Config, state *state.State, policyId string, policy map[string]any) error {
+	updateReq := state.JsonRequest("POST", state.DittoPiggyBackUrl(config, "policies"), map[string]any{
+		"targetActorSelection": "/system/sharding/policy",
+		"headers": map[string]any{
+			"aggregate":      false,
+			"is-group-topic": true,
+			"ditto-sudo":     true,
+		},
+		"piggybackCommand": map[string]any{
+			"type": "policies.commands:modifyPolicy",
+			"policy": map[string]any{
+				"policyId": policyId,
+				"entries":  policy,
 			},
-		}).Parse(rawTemplate)
-		if err != nil {
-			panic(err.Error())
-		}
+		},
+	})
+	updateReq.Header.Set("Authorization", state.AuthHeader())
 
-		writer := new(bytes.Buffer)
-		err = tmpl.Execute(writer, map[string]any{
-			"Tenant":    state.Tenant,
-			"KafkaHost": state.KafkaHost,
-		})
-		if err != nil {
-			panic(err.Error())
-		}
-		connectionBytes = writer.Bytes()
-	case http.StatusOK:
-		connectionBytes, err = io.ReadAll(res.Body)
-		if err != nil {
-			slog.Error("Failed to get existing connection, skipping update", "error", err)
-			return true
-		}
-	default:
-		utils.LogHttpError("Failed to get existing connection, skipping update", res)
-		return true
-	}
-
-	var connection map[string]any
-	err = json.Unmarshal(connectionBytes, &connection)
+	res, err := state.Client.Do(updateReq)
 	if err != nil {
-		slog.Error("Failed to unmarshal connection, skipping update", "error", err)
-		return true
+		return err
+	} else if res.StatusCode < 200 || res.StatusCode > 299 {
+		utils.LogHttpError("Error when updating policy", res)
+		return errors.New("bad status code")
 	}
 
-	retry = retry || updateConnection(config, state, connectionUrl, connection)
-	return retry
+	slog.Info("Policy updated", "policy", policyId)
+	return nil
+}
+
+func update(config *config.Config, state *state.State) bool {
+	missing := state.MissingInitialization()
+	if missing != "" {
+		slog.Warn("State is not yet initialized, skipping update", "missing", missing)
+		return false
+	}
+
+	shouldRetry := updateHonoTenant(config, state)
+
+	honoConnectionUrl := state.DittoHonoConnectionUrl(config)
+	honoConnection, err := getConnection(config, state, honoConnectionUrl, state.HonoConnectionTemplate)
+	if err != nil {
+		slog.Error("Failed to get hono connection", "error", err)
+		shouldRetry = true
+	} else {
+		err = updateConnection(config, state, honoConnectionUrl, honoConnection)
+		if err != nil {
+			slog.Error("Failed to update hono connection", "error", err)
+			shouldRetry = true
+		}
+	}
+
+	exportConnectionUrl := state.DittoExportConnectionUrl(config)
+	exportConnection, err := getConnection(config, state, exportConnectionUrl, state.ExportConnectionTemplate)
+	if err != nil {
+		slog.Error("Failed to get export connection", "error", err)
+		shouldRetry = true
+	} else {
+		err = updateConnection(config, state, exportConnectionUrl, exportConnection)
+		if err != nil {
+			slog.Error("Failed to update export connection", "error", err)
+			shouldRetry = true
+		}
+	}
+
+	err = updatePolicy(config, state, config.SystemServicePolicy, state.SystemServicePolicy)
+	if err != nil {
+		slog.Error("Failed to update system service policy", "error", err)
+		shouldRetry = true
+	}
+
+	if shouldRetry {
+		slog.Error("The update didn't complete and will be retried")
+	}
+
+	return shouldRetry
 }
 
 func main() {
@@ -199,6 +228,18 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+
+	var level slog.Level
+	err = level.UnmarshalText([]byte(config.LogLevel))
+	if err != nil {
+		panic(err.Error())
+	}
+
+	handler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: level,
+	})
+	logger := slog.New(handler)
+	slog.SetDefault(logger)
 
 	if config.CASecretName == "" {
 		config.CASecretName = config.TLSSecretName
@@ -283,6 +324,7 @@ func main() {
 				continue
 			}
 			state.KeyPair = &keypair
+			slog.Debug("Loaded TLS key pair")
 		case caSecret := <-caWatch:
 			caCrt := caSecret.Data[config.CASecretSelector]
 			if caCrt == nil {
@@ -290,6 +332,7 @@ func main() {
 				continue
 			}
 			state.CaCrt = string(caCrt)
+			slog.Debug("Loaded CA certificate")
 		case tenantTrustSecret := <-tenantTrustWatch:
 			caCrt := tenantTrustSecret.Data[config.TenantTLSTrustSecretSelector]
 			if caCrt == nil {
@@ -297,6 +340,7 @@ func main() {
 				continue
 			}
 			state.TrustCrt = string(caCrt)
+			slog.Debug("Loaded Tenant trust certificate")
 		case devopsSecret := <-devopsWatch:
 			devopsPassword := devopsSecret.Data[config.DevopsSecretSelector]
 			if devopsPassword == nil {
@@ -304,6 +348,7 @@ func main() {
 				continue
 			}
 			state.DevopsPassword = string(devopsPassword)
+			slog.Debug("Loaded Devops password")
 		case tenantConfigMap := <-tenantWatch:
 			tenant, ok := tenantConfigMap.Data[config.TenantConfigMapSelector]
 			if !ok {
@@ -311,17 +356,12 @@ func main() {
 				continue
 			}
 			state.Tenant = tenant
+			slog.Debug("Loaded Tenant config name")
 		case <-retryTimer.C:
 			if retry {
 				slog.Info("Retrying update")
-
 				retries--
-				retry1 := update(&config, &state, rawConnectionTemplate, state.DittoConnectionUrl(&config))
-				retry2 := update(&config, &state, rawExportConnectionTemplate, state.DittoExportConnectionUrl(&config))
-
-				retry = retry1 || retry2
-
-				if retries == 0 && retry {
+				if update(&config, &state) && retries == 0 {
 					panic("Too many retries")
 				}
 			}
@@ -330,9 +370,6 @@ func main() {
 		}
 
 		retries = MAX_RETRIES
-		retry1 := update(&config, &state, rawConnectionTemplate, state.DittoConnectionUrl(&config))
-		retry2 := update(&config, &state, rawExportConnectionTemplate, state.DittoExportConnectionUrl(&config))
-
-		retry = retry1 || retry2
+		retry = update(&config, &state)
 	}
 }
