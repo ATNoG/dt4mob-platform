@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - ".github/workflows/build-controller.yml"
-      - "dt4mob-controller/**"
+      - "services/dt4mob-controller/**"
 
 jobs:
   backend:
@@ -27,5 +27,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: "{{defaultContext}}:dt4mob-controller"
+          context: "{{defaultContext}}:services/dt4mob-controller"
           tags: "atnog-harbor.av.it.pt/${{ secrets.HARBOR_PROJECT }}/dt4mob-controller"
