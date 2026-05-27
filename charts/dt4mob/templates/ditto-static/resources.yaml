@@ -26,7 +26,7 @@ data:
               "defaultUsernamePassword": null
             },
             "bearer": {
-              "enabled": true
+              "enabled": false
             },
             "pre": {
               "enabled": false,
@@ -42,10 +42,10 @@ data:
             },
             "basic": {
               "enabled": true,
-              "defaultUsernamePassword": null
+              "defaultUsernamePassword": "devops:devops"
             },
             "bearer": {
-              "enabled": true
+              "enabled": false
             }
           },
           "oidc": {
