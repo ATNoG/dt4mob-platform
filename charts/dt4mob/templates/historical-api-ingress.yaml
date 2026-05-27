@@ -14,6 +14,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ include "dt4mob-historical.fullname" (get .Subcharts "dt4mob-historical") }}-historical-api
+            name: {{ include "dt4mob-historical.fullname" (get .Subcharts "dt4mob-historical") }}-api
             port:
               name: http
