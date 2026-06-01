@@ -1,0 +1,45 @@
+name: Lint & Test certificate service
+
+permissions:
+  contents: read
+  pull-requests: read
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "services/dt4mob-certificate-service/**"
+      - ".github/workflows/lint-certificate-service.yml"
+  pull_request:
+    paths:
+      - "services/dt4mob-certificate-service/**"
+      - ".github/workflows/lint-certificate-service.yml"
+
+jobs:
+  build:
+    name: Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./services/dt4mob-certificate-service
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: 'services/dt4mob-certificate-service/go.mod'
+          cache-dependency-path: 'services/dt4mob-certificate-service/go.sum'
+
+      - name: Run lints
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.5
+          working-directory: ./services/dt4mob-certificate-service
+
+      - name: Run tests
+        run: go test -race -vet=off
+        if: always()
