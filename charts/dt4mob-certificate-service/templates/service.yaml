@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dt4mob-certificate-service.fullname" . }}
+  labels:
+    {{- include "dt4mob-certificate-service.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dt4mob-certificate-service.selectorLabels" . | nindent 4 }}

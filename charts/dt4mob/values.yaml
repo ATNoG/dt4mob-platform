@@ -86,7 +86,7 @@ dt4mob-historical:
     storage:
       storageClass: "local-path"
       size: 10Gi
-  
+
 dt4mob-garbage-collector:
   config:
     ditto:
@@ -107,6 +107,22 @@ dt4mob-level-ams-loader:
     ditto:
       subject: "brisa"
       baseUrl: "http://{{ .Release.Name }}-ditto-gateway:8080/api/2"
+
+dt4mob-certificate-service:
+  config:
+    pathPrefix: "/certificates"
+    requiredRoles:
+      - "certificate-issuer"
+      - "admin"
+    secret:
+      name: "{{ .Release.Name }}-tenant-ca-secret"
+    oidc:
+      issuerURI: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
+      clientID: "ditto"
+      caCert:
+        existingSecret:
+          name: "{{ .Release.Name }}-internal-keycloak-tls"
+          key: "tls.crt"
 
 reloader:
   reloader:
