@@ -1,0 +1,156 @@
+{{- $root := .}}
+{{- $hasOidcCert := and .Values.config.oidc.caCert.existingSecret.name .Values.config.oidc.caCert.existingSecret.key -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dt4mob-certificate-service.fullname" . }}
+  labels:
+    {{- include "dt4mob-certificate-service.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "dt4mob-certificate-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dt4mob-certificate-service.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dt4mob-certificate-service.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: certificate-service
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            - containerPort: 9090
+              name: mgmt
+              protocol: TCP
+          {{- if .Values.probes.liveness.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: mgmt
+          {{- end }}
+          {{- if .Values.probes.readiness.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: mgmt
+          {{- end }}
+          {{- if .Values.probes.startup.enabled }}
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: mgmt
+            failureThreshold: {{ .Values.probes.startup.failureThreshold }}
+            periodSeconds: {{ .Values.probes.startup.periodSeconds }}
+          {{- end }}
+          env:
+            - name: LOG_LEVEL
+              value: {{ .Values.config.logLevel | quote }}
+
+            - name: PATH_PREFIX 
+              value: {{ .Values.config.pathPrefix | quote }}
+
+            - name: SECRET_NAME
+              value: {{ tpl .Values.config.secret.name $root | quote }}
+
+            - name: SECRET_CERT_SELECTOR
+              value: {{ .Values.config.secret.certSelector | quote }}
+
+            - name: SECRET_KEY_SELECTOR
+              value: {{ .Values.config.secret.keySelector | quote }}
+
+            - name: OIDC_ISSUER_URI
+              value: {{ tpl .Values.config.oidc.issuerURI $root | quote }}
+
+            {{- with .Values.config.oidc.trustedIssuers }}
+            - name: OIDC_TRUSTED_ISSUERS
+              {{ $tplIssuers := list }}
+              {{- range $i, $issuer := . }}
+              {{- $tplIssuers = append $tplIssuers (tpl $issuer $root) }}
+              {{- end }}
+              value: {{ join "," $tplIssuers | quote }}
+            {{- end }}
+
+            - name: OIDC_CLIENT_ID
+              value: {{ .Values.config.oidc.clientID | quote }}
+
+            {{- if .Values.config.oidc.caCert.containerPath }}
+            - name: OIDC_CA_CERT_FILE
+              value: {{ .Values.config.oidc.caCert.containerPath | quote }}
+            {{- else if .Values.config.oidc.caCert.existingSecret.name }}
+            - name: OIDC_CA_CERT_FILE
+              value: "/run/secrets/issuer/{{ .Values.config.oidc.caCert.existingSecret.key }}"
+            {{- end }}
+
+            - name: ADMIN_ROLE
+              value: {{ .Values.config.adminRole | quote }}
+            - name: PERMITTED_ROLES
+              value: {{ join "," .Values.config.permittedRoles | quote }}
+
+            - name: DEFAULT_CERTIFICATE_TTL
+              value: {{ .Values.config.defaultCertificateTTL | quote }}
+            - name: MAX_CERTIFICATE_TTL
+              value: {{ .Values.config.maxCertificateTTL | quote }}
+
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if or $hasOidcCert .Values.extraVolumeMounts }}
+          volumeMounts:
+            {{- if $hasOidcCert }}
+            - name: oidc-issuer-ca
+              mountPath: "/run/secrets/issuer"
+              readOnly: true
+            {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- end }}
+      {{- if or $hasOidcCert .Values.extraVolumes }}
+      volumes:
+        {{- if $hasOidcCert }}
+        - name: oidc-issuer-ca
+          secret:
+            secretName: {{ tpl .Values.config.oidc.caCert.existingSecret.name $root | quote }}
+        {{- end }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
