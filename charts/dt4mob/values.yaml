@@ -23,6 +23,18 @@ dt4mob-controller:
       gatewayServiceName: "dt4mob-ditto-gateway"
       devopsSecretName: "dt4mob-ditto-gateway-secret"
 
+dt4mob-certificate-service:
+  config:
+    pathPrefix: "/certificates"
+    adminRole: "admin"
+    permittedRoles:
+      - "certificate-issuer"
+    secret:
+      name: "{{ .Release.Name }}-tenant-ca-secret"
+    oidc:
+      issuerURI: "https://{{ .Values.global.host }}/auth/realms/dt4mob"
+      clientID: "ditto"
+
 dt4mob-site:
   enabled: true
   repository: "atnog-harbor.av.it.pt/dt4mob/website"
@@ -88,7 +100,7 @@ dt4mob-historical:
     storage:
       storageClass: "local-path"
       size: 10Gi
-  
+
 dt4mob-garbage-collector:
   enabled: false
   config:
@@ -137,7 +149,6 @@ dt4mob-meteo-populator:
   - name: internal-keycloak-tls
     secret:
       secretName: dt4mob-internal-keycloak-tls
-
 
 reloader:
   reloader:

@@ -14,6 +14,9 @@ dependencies:
 - name: dt4mob-controller
   repository: file://../dt4mob-controller
   version: 0.1.0
+- name: dt4mob-certificate-service
+  repository: file://../dt4mob-certificate-service
+  version: 0.1.0
 - name: dt4mob-historical
   repository: file://../dt4mob-historical
   version: 0.1.0
@@ -32,5 +35,5 @@ dependencies:
 - name: dt4mob-meteo-populator
   repository: file://../dt4mob-meteo-populator
   version: 0.1.0
-digest: sha256:5cc9cf24d35db7b0d860ffd89c7d2a8316223245a6b09e531b068c7954930f89
-generated: "2026-07-13T15:21:20.682376255+01:00"
+digest: sha256:8ef160bd36361923fb345fa65b5da1aef5fed3ccbbc85695c5c7ed055c80433d
+generated: "2026-07-13T19:36:22.552005356+01:00"
