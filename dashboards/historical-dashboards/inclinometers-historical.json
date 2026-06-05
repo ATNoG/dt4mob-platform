@@ -1,0 +1,1331 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 10,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "afknrpdt1uvi8d"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 13,
+      "options": {
+        "baidu": {
+          "callback": "bmapReady",
+          "key": ""
+        },
+        "editor": {
+          "format": "auto"
+        },
+        "editorMode": "code",
+        "gaode": {
+          "key": "",
+          "plugin": "AMap.Scale,AMap.ToolBar"
+        },
+        "getOption": "const instrumentId = context.grafana.replaceVariables('${instrument_id}');\n\nreturn {\n  grid: {\n    left: 0,\n    right: 0,\n    top: 0,\n    bottom: 0\n  },\n\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: 1 },\n\n  series: [\n    // background image\n    {\n      type: 'custom',\n      renderItem: function (params, api) {\n        return {\n          type: 'image',\n          style: {\n            image: 'https://i.imgur.com/M6fMB9N.jpeg',\n            x: api.coord([0, 1])[0],\n            y: api.coord([0, 1])[1],\n            width: api.coord([1, 0])[0] - api.coord([0, 0])[0],\n            height: api.coord([0, 0])[1] - api.coord([0, 1])[1]\n          }\n        };\n      },\n      data: [0]\n    },\n    // CCs\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2')\n        ? [[0.120, 0.172]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A19`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7')\n        ? [[0.465, 0.320]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.1`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786')\n        ? [[0.467, 0.402]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.2`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6')\n        ? [[0.871, 0.409]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A35`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    // inclinometros\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.058512f0-5bea-445d-a35b-56bcb6a9ddb4')\n        ? [[0.874, 0.435]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I1C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.c072ef5f-3d0f-4c84-95cf-f39165dd60f9')\n        ? [[0.468, 0.455]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I2C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.844def33-8a04-49c9-9fce-5d701a9a7a3c')\n        ? [[0.485, 0.658]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I4`,\n        color: 'yellow',\n        offset: [14, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.eaa688b0-58a4-416c-a6e9-31d5bdd7f1f9')\n        ? [[0.340, 0.650]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3MEEC`,\n        color: 'yellow',\n        offset: [29, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.2fd3c6d1-81b3-4bf6-86b0-9860071aa447')\n        ? [[0.119, 0.208]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    }\n  ]\n};\n",
+        "google": {
+          "callback": "gmapReady",
+          "key": ""
+        },
+        "map": "none",
+        "renderer": "canvas",
+        "themeEditor": {
+          "config": "{}",
+          "name": "default"
+        },
+        "visualEditor": {
+          "code": "return {\n  dataset: context.editor.dataset,\n  series: context.editor.series,\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n}\n",
+          "dataset": [],
+          "series": []
+        }
+      },
+      "pluginVersion": "7.2.5",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  {\n    \"instrument_id\": \"${instrument_id}\"\n  }\n]",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "afknrpdt1uvi8d"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "Refresh Query",
+          "root_selector": "",
+          "source": "inline",
+          "type": "json",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "",
+      "type": "volkovlabs-echarts-panel"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "afknrpdt1uvi8d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 0,
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 10
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "points+lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": -2
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) threshold"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    15
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) threshold2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    15
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) threshold_alarme"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) threshold2_alarme"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "mapping": "auto",
+        "series": [
+          {
+            "x": {
+              "matcher": {
+                "id": "byName",
+                "options": "Deflection (mm)"
+              }
+            },
+            "y": {
+              "matcher": {
+                "id": "byName",
+                "options": "Elev. (m)"
+              }
+            }
+          }
+        ],
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.1",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "time",
+              "text": "time",
+              "type": "string"
+            },
+            {
+              "selector": "valor",
+              "text": "Deflection (mm)",
+              "type": "number"
+            },
+            {
+              "selector": "path",
+              "text": "path",
+              "type": "string"
+            },
+            {
+              "selector": "disp_num",
+              "text": "disp_num",
+              "type": "number"
+            }
+          ],
+          "computed_columns": [
+            {
+              "selector": "(disp_num * -0.5)",
+              "text": "Elev. (m)",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "afknrpdt1uvi8d"
+          },
+          "filterExpression": "",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "$map(\n  $filter($, function($v) {\n    $contains($v.path, \"/properties/latestValue\") and\n    $contains($v.path, \"DispX\")\n  }),\n  function($v) {\n    {\n      \"time\": $substringBefore($v.time, \"T\"),\n      \"valor\": $v.value.valor,\n      \"path\": $v.path,\n      \"disp_num\": $number(\n        $substringBefore(\n          $substringAfter($v.path, \"DispX\"),\n          \"/\"\n        )\n      )\n    }\n  }\n)",
+          "source": "url",
+          "type": "json",
+          "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Cumulative Deflection - Direction A",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "Elev. (m)"
+              }
+            ]
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "time"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": true
+            }
+          }
+        }
+      ],
+      "type": "xychart"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "afknrpdt1uvi8d"
+      },
+      "description": "keep title for now, and give the option to hide or select alarm and alert lines\nFazer varias linhas de displ, a subtrair a data mais recente por cada uma das campanhas anteriores",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 10
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "points+lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": -2
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) Alert 1"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    15
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) Alert 2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    15
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) Alarm 1"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) Alarm 2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              }
+            ]
+          },
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Elev. (m) Displacement (mm)"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "mapping": "auto",
+        "series": [
+          {
+            "x": {
+              "matcher": {
+                "id": "byName",
+                "options": "Displacement (mm)"
+              }
+            },
+            "y": {
+              "matcher": {
+                "id": "byName",
+                "options": "Elev. (m)"
+              }
+            }
+          }
+        ],
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.1",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "time_recente",
+              "text": "time_recente",
+              "type": "string"
+            },
+            {
+              "selector": "time_antigo",
+              "text": "time_antigo",
+              "type": "string"
+            },
+            {
+              "selector": "valor_recente",
+              "text": "valor_recente",
+              "type": "number"
+            },
+            {
+              "selector": "valor_antigo",
+              "text": "valor_antigo",
+              "type": "number"
+            },
+            {
+              "selector": "disp_num",
+              "text": "disp_num",
+              "type": "number"
+            },
+            {
+              "selector": "valor",
+              "text": "Displacement (mm)",
+              "type": "number"
+            },
+            {
+              "selector": "path",
+              "text": "path",
+              "type": "string"
+            }
+          ],
+          "computed_columns": [
+            {
+              "selector": "(disp_num * -0.5)",
+              "text": "Elev. (m)",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "afknrpdt1uvi8d"
+          },
+          "filterExpression": "",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispX\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispX\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n\n  $datas := $sort($distinct($dados.time));\n  $data_antiga  := $datas[0];\n  $data_recente := $datas[-1];\n\n  $append(\n    $map(\n      $distinct($dados.disp_num),\n      function($d) {\n        (\n          $reg_recente := $filter($dados, function($r) { $r.time = $data_recente and $r.disp_num = $d })[0];\n          $reg_antigo  := $filter($dados, function($r) { $r.time = $data_antiga  and $r.disp_num = $d })[0];\n      {\n          \"disp_num\":       $d,\n          \"time_recente\":   $reg_recente.time,\n          \"valor_recente\":  $reg_recente.valor,\n          \"time_antigo\":    $reg_antigo.time,\n          \"valor_antigo\":   $reg_antigo.valor,\n          \"valor\": $number($reg_recente.valor) - $number($reg_antigo.valor),\n          \"path\": \"Displacement (mm)\"\n        }\n        )\n      }\n  ),\n    [\n      { \"valor\": -15, \"path\": \"Alert 1\",         \"disp_num\": 0  },\n      { \"valor\": -15, \"path\": \"Alert 1\",         \"disp_num\": 40 },\n      { \"valor\":  15, \"path\": \"Alert 2\",        \"disp_num\": 0  },\n      { \"valor\":  15, \"path\": \"Alert 2\",        \"disp_num\": 40 },\n      { \"valor\": -20, \"path\": \"Alarm 1\",  \"disp_num\": 0  },\n      { \"valor\": -20, \"path\": \"Alarm 1\",  \"disp_num\": 40 },\n      { \"valor\":  20, \"path\": \"Alarm 2\", \"disp_num\": 0  },\n      { \"valor\":  20, \"path\": \"Alarm 2\", \"disp_num\": 40 }\n    ]\n)\n)",
+          "source": "url",
+          "type": "json",
+          "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Displacement - Direction A",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "Elev. (m)"
+              }
+            ]
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "path"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": true
+            }
+          }
+        }
+      ],
+      "type": "xychart"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "afknrpdt1uvi8d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 10
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "points+lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": ""
+            },
+            "properties": []
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 4,
+        "x": 16,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "mapping": "auto",
+        "series": [
+          {
+            "x": {
+              "matcher": {
+                "id": "byName",
+                "options": "Deflection (mm)"
+              }
+            },
+            "y": {
+              "matcher": {
+                "id": "byName",
+                "options": "Elev. (m)"
+              }
+            }
+          }
+        ],
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.1",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "time",
+              "text": "time",
+              "type": "string"
+            },
+            {
+              "selector": "valor",
+              "text": "Deflection (mm)",
+              "type": "number"
+            },
+            {
+              "selector": "path",
+              "text": "path",
+              "type": "string"
+            },
+            {
+              "selector": "disp_num",
+              "text": "disp_num",
+              "type": "number"
+            }
+          ],
+          "computed_columns": [
+            {
+              "selector": "(disp_num * -0.5)",
+              "text": "Elev. (m)",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "afknrpdt1uvi8d"
+          },
+          "filterExpression": "",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "$map(\n  $filter($, function($v) {\n    $contains($v.path, \"/properties/latestValue\") and\n    $contains($v.path, \"DispY\")\n  }),\n  function($v) {\n    {\n      \"time\": $substringBefore($v.time, \"T\"),\n      \"valor\": $v.value.valor,\n      \"path\": $v.path,\n      \"disp_num\": $number(\n        $substringBefore(\n          $substringAfter($v.path, \"DispY\"),\n          \"/\"\n        )\n      )\n    }\n  }\n)",
+          "source": "url",
+          "type": "json",
+          "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Cumulative Deflection - Direction B",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "Elev. (m)"
+              }
+            ]
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "time"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": true
+            }
+          }
+        }
+      ],
+      "type": "xychart"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "afknrpdt1uvi8d"
+      },
+      "description": "keep title for now, and give the option to hide or select alarm and alert lines",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 10
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "points+lines"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": -2
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) Alert 1"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    15
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) Alert 2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    15
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) Alarm 1"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elev. (m) Alarm 2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.show",
+                "value": "lines"
+              }
+            ]
+          },
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Elev. (m) Displacement (mm)"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "mapping": "auto",
+        "series": [
+          {
+            "x": {
+              "matcher": {
+                "id": "byName",
+                "options": "Displacement (mm)"
+              }
+            },
+            "y": {
+              "matcher": {
+                "id": "byName",
+                "options": "Elev. (m)"
+              }
+            }
+          }
+        ],
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.1",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "time_recente",
+              "text": "time_recente",
+              "type": "string"
+            },
+            {
+              "selector": "time_antigo",
+              "text": "time_antigo",
+              "type": "string"
+            },
+            {
+              "selector": "valor_recente",
+              "text": "valor_recente",
+              "type": "number"
+            },
+            {
+              "selector": "valor_antigo",
+              "text": "valor_antigo",
+              "type": "number"
+            },
+            {
+              "selector": "disp_num",
+              "text": "disp_num",
+              "type": "number"
+            },
+            {
+              "selector": "valor",
+              "text": "Displacement (mm)",
+              "type": "number"
+            },
+            {
+              "selector": "path",
+              "text": "path",
+              "type": "string"
+            }
+          ],
+          "computed_columns": [
+            {
+              "selector": "(disp_num * -0.5)",
+              "text": "Elev. (m)",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "afknrpdt1uvi8d"
+          },
+          "filterExpression": "",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispY\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispY\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n\n  $datas := $sort($distinct($dados.time));\n  $data_antiga  := $datas[0];\n  $data_recente := $datas[-1];\n\n  $append(\n    $map(\n      $distinct($dados.disp_num),\n      function($d) {\n        (\n          $reg_recente := $filter($dados, function($r) { $r.time = $data_recente and $r.disp_num = $d })[0];\n          $reg_antigo  := $filter($dados, function($r) { $r.time = $data_antiga  and $r.disp_num = $d })[0];\n      {\n          \"disp_num\":       $d,\n          \"time_recente\":   $reg_recente.time,\n          \"valor_recente\":  $reg_recente.valor,\n          \"time_antigo\":    $reg_antigo.time,\n          \"valor_antigo\":   $reg_antigo.valor,\n          \"valor\": $number($reg_recente.valor) - $number($reg_antigo.valor),\n          \"path\": \"Displacement (mm)\"\n        }\n        )\n      }\n  ),\n    [\n      { \"valor\": -15, \"path\": \"Alert 1\",         \"disp_num\": 0  },\n      { \"valor\": -15, \"path\": \"Alert 1\",         \"disp_num\": 40 },\n      { \"valor\":  15, \"path\": \"Alert 2\",        \"disp_num\": 0  },\n      { \"valor\":  15, \"path\": \"Alert 2\",        \"disp_num\": 40 },\n      { \"valor\": -20, \"path\": \"Alarm 1\",  \"disp_num\": 0  },\n      { \"valor\": -20, \"path\": \"Alarm 1\",  \"disp_num\": 40 },\n      { \"valor\":  20, \"path\": \"Alarm 2\", \"disp_num\": 0  },\n      { \"valor\":  20, \"path\": \"Alarm 2\", \"disp_num\": 40 }\n    ]\n)\n)",
+          "source": "url",
+          "type": "json",
+          "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Displacement - Direction B",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "Elev. (m)"
+              }
+            ]
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "path"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": true
+            }
+          }
+        }
+      ],
+      "type": "xychart"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "A25.2",
+          "value": "geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786"
+        },
+        "datasource": {
+          "type": "yesoreyeram-infinity-datasource",
+          "uid": "aflc3bfm914w0d"
+        },
+        "definition": "",
+        "name": "instrument_id",
+        "options": [],
+        "query": {
+          "infinityQuery": {
+            "columns": [
+              {
+                "selector": "attributes.matricula",
+                "text": "matricula",
+                "type": "string"
+              },
+              {
+                "selector": "thingId",
+                "text": "thingId",
+                "type": "string"
+              }
+            ],
+            "computed_columns": [
+              {
+                "selector": "",
+                "text": "",
+                "type": "string"
+              }
+            ],
+            "data": "values\nfoo\nbar\nbaz",
+            "filters": [],
+            "format": "table",
+            "parser": "backend",
+            "refId": "",
+            "root_selector": "$filter($, function($v) { $startsWith($v.attributes.matricula, \"I\") })",
+            "source": "url",
+            "type": "json",
+            "url": "/search/things?fields=thingId,attributes&filter=like(thingId,%22geo-asset%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
+            "url_options": {
+              "data": "",
+              "method": "GET"
+            }
+          },
+          "meta": {
+            "textField": "matricula",
+            "valueField": "thingId"
+          },
+          "queryType": "infinity",
+          "refId": "variable"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "2025-09-01T00:00:00.000Z",
+    "to": "2026-03-23T12:00:00.000Z"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Inclinómetros",
+  "uid": "adzn6fn",
+  "version": 23
+}
