@@ -35,6 +35,10 @@ spec:
               {{- $tplIssuers = append $tplIssuers (tpl $issuer $root) }}
               {{- end }}
               value: {{ $tplIssuers | toJson | quote }}
+            - name: AUTH__READ_ROLE
+              value: {{ .Values.api.config.auth.readRole | toJson | quote }}
+            - name: AUTH__WRITE_ROLE
+              value: {{ .Values.api.config.auth.writeRole | toJson | quote }}
             - name: TIMESCALE__CONNECTION
               valueFrom:
                 secretKeyRef:

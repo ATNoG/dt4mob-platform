@@ -52,6 +52,12 @@ dt4mob-historical:
         serverUri: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
         issuers:
         - "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
+        readRole:
+        - "historical-read"
+        - "admin"
+        writeRole:
+        - "historical-write"
+        - "admin"
     extraEnv:
     - name: REQUESTS_CA_BUNDLE
       value: "/opt/tls/ca.crt"

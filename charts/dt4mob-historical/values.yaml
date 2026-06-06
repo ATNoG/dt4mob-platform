@@ -22,6 +22,10 @@ api:
       serverUri: "https://dt4mob-keycloak:8443/auth/realms/dt4mob"
       issuers:
       - "dt4mob-keycloak:8443/auth/realms/dt4mob"
+      readRole:
+      - "historical-read"
+      writeRole:
+      - "historical-write"
   # extraEnv: []
   # volumeMounts: []
   # volumes: []

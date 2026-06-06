@@ -38,14 +38,15 @@ def get_events_service(session: Annotated[Session, Depends(get_session)]):
     return EventsService(session)
 
 
-def check_role(role: str):
+def check_role(roles: list[str]):
     def check_role_inner(token: Annotated[KeycloakToken, Depends(auth)]):
         if settings.auth.client_id not in token.resource_access:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN, detail="Missing role"
             )
 
-        if role not in token.resource_access[settings.auth.client_id].roles:
+        token_roles = token.resource_access[settings.auth.client_id].roles
+        if not any(role in token_roles for role in roles):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN, detail="Missing role"
             )

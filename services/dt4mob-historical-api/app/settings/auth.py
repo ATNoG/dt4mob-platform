@@ -8,5 +8,5 @@ class AuthSettings(BaseModel):
     issuer: str | list[str]
     signature_cache_ttl: PositiveInt = 3600
 
-    read_role: str = "historical-read"
-    write_role: str = "historical-write"
+    read_role: list[str] = ["historical-read"]
+    write_role: list[str] = ["historical-write"]
