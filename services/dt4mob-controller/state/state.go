@@ -38,7 +38,7 @@ func NewState(config *config.Config, kafkaHost string) State {
 	if err != nil {
 		panic(err.Error())
 	}
-	exportConnTemplate, err := templates.CreateTemplate("Export connection", templates.HonoConnectionTemplate)
+	exportConnTemplate, err := templates.CreateTemplate("Export connection", templates.ExportConnectionTemplate)
 	if err != nil {
 		panic(err.Error())
 	}
