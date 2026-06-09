@@ -1,3 +1,4 @@
+from app.models.paths_response import PathResponseObject
 from typing import Annotated
 from datetime import datetime
 
@@ -64,6 +65,20 @@ def read_available_things(
     result = events_service.get_available_things(thing_id_prefix=thing_id_prefix)
     return result
 
+@router.get("/events/{thing_id}/paths", response_model=list[PathResponseObject])
+def read_event_paths(
+    _check_role: Annotated[None, Depends(check_role(settings.auth.read_role))],
+    events_service: Annotated[EventsService, Depends(get_events_service)],
+    thing_id: str,
+    since: datetime,
+    until: datetime | None = None,
+):
+    if until is None:
+        until = datetime.now()
+    result = events_service.get_event_paths_with_action(
+        thing_id=thing_id, since_iso_timestamp=since, until_iso_timestamp=until
+    )
+    return result
 
 @router.get("/events", response_model=list[DittoEvent])
 def read_events(
@@ -72,6 +87,7 @@ def read_events(
     since: datetime,
     until: datetime | None = None,
     thing_id_prefix: str | None = None,
+    path_prefix: str | None = None,
     action: Action | None = None,
 ):
     if until is None:
@@ -80,6 +96,7 @@ def read_events(
         since_iso_timestamp=since,
         until_iso_timestamp=until,
         thing_id_prefix=thing_id_prefix,
+        path_prefix=path_prefix,
         action=action,
     )
     return result
@@ -92,11 +109,13 @@ def read_events_by_thing(
     thing_id: str,
     since: datetime,
     until: datetime | None = None,
+    action: Action | None = None,
+    path_prefix: str | None = None,
 ):
     if until is None:
         until = datetime.now()
     result = events_service.get_events_by_thing(
-        thing_id=thing_id, since_iso_timestamp=since, until_iso_timestamp=until
+        thing_id=thing_id, since_iso_timestamp=since, until_iso_timestamp=until, path_prefix=path_prefix, action=action
     )
     return result
 

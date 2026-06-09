@@ -5,6 +5,7 @@ from sqlmodel import select
 
 
 from app.models.ditto_events import DittoEvent
+from app.models.paths_response import PathResponseObject
 
 
 class EventsService:
@@ -17,13 +18,27 @@ class EventsService:
             query = query.where(DittoEvent.thing_id.startswith(thing_id_prefix))
         result = self.session.exec(query)
 
-        return [row[0] for row in result.all()]
+        return list(result.all())
+
+    def get_event_paths_with_action(self, thing_id: str, since_iso_timestamp: datetime, until_iso_timestamp: datetime) -> list[PathResponseObject]:
+        query = (
+            select(DittoEvent.path, DittoEvent.action)
+            .where(
+                (col(DittoEvent.thing_id) == thing_id)
+                & (col(DittoEvent.time) >= since_iso_timestamp)
+                & (col(DittoEvent.time) <= until_iso_timestamp)
+            )
+            .distinct()
+        )
+        result = self.session.exec(query)
+        return [PathResponseObject(path=path, action=action) for path, action in result.all()]
 
     def get_events(
         self,
         since_iso_timestamp: datetime,
         until_iso_timestamp: datetime = datetime.now(),
         thing_id_prefix: str | None = None,
+        path_prefix: str | None = None,
         action: Action | None = None,
         limit: int | None = None,
     ) -> list[DittoEvent]:
@@ -36,6 +51,8 @@ class EventsService:
             query = query.where(DittoEvent.thing_id.startswith(thing_id_prefix))
         if action is not None:
             query = query.where(col(DittoEvent.action) == action)
+        if path_prefix is not None:
+            query = query.where(DittoEvent.path.startswith(path_prefix))
 
         query = query.order_by(col(DittoEvent.time).desc())
         result = self.session.exec(query)
@@ -47,6 +64,8 @@ class EventsService:
         thing_id: str,
         since_iso_timestamp: datetime,
         until_iso_timestamp: datetime = datetime.now(),
+        path_prefix: str | None = None,
+        action: Action | None = None,
     ) -> list[DittoEvent]:
         query = (
             select(DittoEvent)
@@ -57,6 +76,10 @@ class EventsService:
             )
             .order_by(col(DittoEvent.time).desc())
         )
+        if path_prefix is not None:
+            query = query.where(DittoEvent.path.startswith(path_prefix))
+        if action is not None:
+            query = query.where(col(DittoEvent.action) == action)
         result = self.session.exec(query).all()
         return list(result)
 
