@@ -517,8 +517,14 @@ ditto:
 kafka:
   controller:
     replicas: 3
+    # nodeSelector:
+    # affinity:
+    # tolerations:
   broker:
     replicas: 3
+    # nodeSelector:
+    # affinity:
+    # tolerations:
   config:
     offsets.topic.replication.factor: 3
     transaction.state.log.replication.factor: 3
@@ -570,6 +576,9 @@ keycloak:
     storage:
       size: "10Gi"
       storageClass: "local-path"
+    # nodeSelector:
+    # affinity:
+    # tolerations:
   config:
     repository: "atnog-harbor.av.it.pt/dt4mob/keycloak-config"
     tag: "latest"
