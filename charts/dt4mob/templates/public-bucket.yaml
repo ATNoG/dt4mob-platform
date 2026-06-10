@@ -1,0 +1,8 @@
+apiVersion: seaweed.seaweedfs.com/v1
+kind: Bucket
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-public
+spec:
+  clusterRef:
+    {{- toYaml .Values.bucketConfig.clusterRef | nindent 4 }}
+  {{- toYaml .Values.bucketConfig.extraConfig | nindent 2 }}

@@ -596,3 +596,10 @@ ingressTLS:
   certificate:
     additionalDnsNames: []
     ipAddresses: []
+
+bucketConfig:
+  clusterRef:
+    name: seaweed
+    namespace: seaweedfs
+  extraConfig:
+    anonymousRead: true
