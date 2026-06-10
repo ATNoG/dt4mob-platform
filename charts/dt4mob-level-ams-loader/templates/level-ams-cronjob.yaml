@@ -1,0 +1,90 @@
+{{- range .Values.jobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "dt4mob-level-ams-loader.fullname" . }}-level-ams-loader-{{ .name }}
+spec:
+  schedule: {{ .cronSchedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: config-volume
+              configMap:
+                name: {{ include "dt4mob-level-ams-loader.fullname" . }}-level-ams-loader-config
+            - name: ca-volume
+              secret:
+                secretName: {{ tpl $.Values.caCertSecretName . | quote }}
+          containers:
+            - name: level-ams-loader
+              image: atnog-harbor.av.it.pt/dt4mob/level-ams-loader:latest
+              imagePullPolicy: Always
+              command:
+                - "/bin/uv"
+                - "run"
+                - "main.py"
+                {{- if .geoAssetId }}
+                - "--geo-asset-id"
+                - {{ .geoAssetId | quote }}
+                  {{- if .instrumentIds }}
+                - "--instrument-ids"
+                    {{- range .instrumentIds }}
+                - {{ . | quote }}
+                    {{- end }}
+                  {{- end }}
+                {{- end }}
+              volumeMounts:
+                - name: config-volume
+                  readOnly: true
+                  mountPath: "/app/config.toml"
+                  subPath: "config.toml"
+                - name: config-volume
+                  readOnly: true
+                  mountPath: "/app/instrument_coords.csv"
+                  subPath: "instrument_coords.csv"
+                - name: ca-volume
+                  readOnly: true
+                  mountPath: "/app/ca.crt"
+                  subPath: "ca.crt"
+              env:
+                - name: LEVEL_AMS_LOADER_DITTO__USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl $.Values.dittoCredsSecretName . | quote }}
+                      key: username
+                - name: LEVEL_AMS_LOADER_DITTO__PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl $.Values.dittoCredsSecretName . | quote }}
+                      key: password
+
+                - name: LEVEL_AMS_LOADER_HONO__TENANT
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl $.Values.levelAMSCredsSecretName . | quote}}
+                      key: honoTenant
+                - name: LEVEL_AMS_LOADER_HONO__DEVICE
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl $.Values.levelAMSCredsSecretName . | quote }}
+                      key: honoDevice
+                - name: LEVEL_AMS_LOADER_HONO__PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl $.Values.levelAMSCredsSecretName . | quote }}
+                      key: honoPassword
+
+                - name: LEVEL_AMS_LOADER_LOADER__CREDENTIALS__USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl $.Values.levelAMSCredsSecretName . | quote }}
+                      key: apiUsername
+                - name: LEVEL_AMS_LOADER_LOADER__CREDENTIALS__PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl $.Values.levelAMSCredsSecretName . | quote }}
+                      key: apiPassword
+          restartPolicy: Never
+{{- end }}
