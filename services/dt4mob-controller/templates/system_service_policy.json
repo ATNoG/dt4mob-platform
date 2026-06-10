@@ -1,12 +1,16 @@
 {
   "PLATFORM_OPERATOR": {
     "subjects": {
-      "keycloak:role:platform-operator": {
+      "keycloak:role:admin": {
         "type": "DT4Mob Platform Operator Role"
       }
     },
     "resources": {
       "policy:/": {
+        "grant": [ "READ", "WRITE" ],
+        "revoke": []
+      },
+      "thing:/": {
         "grant": [ "READ", "WRITE" ],
         "revoke": []
       }
