@@ -16,12 +16,14 @@ spec:
         size: 10Gi
         kraftMetadata: shared
         deleteClaim: false
+
+  {{- with .Values.kafka.controller.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
   template:
     pod:
-      {{- with .Values.kafka.controller.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       {{- with .Values.kafka.controller.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
@@ -49,12 +51,14 @@ spec:
         size: 10Gi
         kraftMetadata: shared
         deleteClaim: false
+
+  {{- with .Values.kafka.broker.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
   template:
     pod:
-      {{- with .Values.kafka.broker.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       {{- with .Values.kafka.broker.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

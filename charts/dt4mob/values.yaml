@@ -517,12 +517,12 @@ ditto:
 kafka:
   controller:
     replicas: 3
-    # nodeSelector:
+    # resources:
     # affinity:
     # tolerations:
   broker:
     replicas: 3
-    # nodeSelector:
+    # resources:
     # affinity:
     # tolerations:
   config:
@@ -576,7 +576,7 @@ keycloak:
     storage:
       size: "10Gi"
       storageClass: "local-path"
-    # nodeSelector:
+    # resources:
     # affinity:
     # tolerations:
   config:

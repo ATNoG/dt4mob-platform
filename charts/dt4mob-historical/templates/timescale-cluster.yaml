@@ -25,16 +25,11 @@ spec:
     size: {{ .Values.timescale.storage.size }}
     storageClass: {{ .Values.timescale.storage.storageClass | quote }}
 
-  {{- with .Values.timescale.nodeSelector }}
-  nodeSelector:
-    {{- toYaml . | nindent 8 }}
+  {{- with .Values.timescale.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.timescale.affinity }}
   affinity:
-    {{- toYaml . | nindent 8 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.timescale.tolerations }}
-  tolerations:
-    {{- toYaml . | nindent 8 }}
-  {{- end }}
-

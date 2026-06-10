@@ -9,15 +9,11 @@ spec:
     size: {{ .Values.keycloak.db.storage.size }}
     storageClass: {{ .Values.keycloak.db.storage.storageClass }}
 
-  {{- with .Values.keycloak.db.nodeSelector }}
-  nodeSelector:
-    {{- toYaml . | nindent 8 }}
+  {{- with .Values.keycloak.db.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.keycloak.db.affinity }}
   affinity:
-    {{- toYaml . | nindent 8 }}
-  {{- end }}
-  {{- with .Values.keycloak.db.tolerations }}
-  tolerations:
-    {{- toYaml . | nindent 8 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
