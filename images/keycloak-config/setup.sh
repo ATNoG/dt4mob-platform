@@ -96,3 +96,23 @@ if [ -z "$ROLEID" ]; then
     -s name="$HISTORICAL_WRITE_ROLE_NAME" \
     -s description="Historical API write access" | jq -r ".id")
 fi
+
+
+LEVEL_AMS_LOADER_NAME="${LEVEL_AMS_LOADER_NAME:-"dt4mob-level-ams-loader"}"
+LEVEL_AMS_LOADER_ID=$(kcadm get users -r "$KEYCLOAK_REALM" -q "q=username:$LEVEL_AMS_LOADER_NAME" | jq -r ".[0].id")
+if [ "$LEVEL_AMS_LOADER_ID" = "null" ]; then
+  LEVEL_AMS_LOADER_ID=$(kcadm create users -i \
+    -r "$KEYCLOAK_REALM" \
+    -s username="$LEVEL_AMS_LOADER_NAME" \
+    -s enabled=true)
+fi
+
+kcadm add-roles -r "$KEYCLOAK_REALM" --uid "$LEVEL_AMS_LOADER_ID" --cid "$CID" --roleid "$ROLEID"
+
+if ! kubectl get secrets "$LEVEL_AMS_LOADER_SECRET_NAME"; then
+  LEVEL_AMS_LOADER_PASSWORD="$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 16)"
+  kubectl create secret generic "$LEVEL_AMS_LOADER_SECRET_NAME" \
+    --from-literal=username="$LEVEL_AMS_LOADER_NAME" \
+    --from-literal=password="$LEVEL_AMS_LOADER_PASSWORD"
+  kcadm set-password -r "$KEYCLOAK_REALM" --userid "$LEVEL_AMS_LOADER_ID" --new-password "$LEVEL_AMS_LOADER_PASSWORD"
+fi

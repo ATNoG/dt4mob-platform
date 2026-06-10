@@ -41,3 +41,5 @@ spec:
           value: {{ tpl "https://{{ .Values.ditto.ingress.host }}" . | list  | toRawJson | quote }}
         - name: "GARBAGE_COLLECTOR_SECRET_NAME"
           value: "{{ include "dt4mob.fullname" . }}-garbage-collector-credentials"
+        - name: "LEVEL_AMS_LOADER_SECRET_NAME"
+          value: "{{ include "dt4mob.fullname" . }}-level-ams-loader-credentials"

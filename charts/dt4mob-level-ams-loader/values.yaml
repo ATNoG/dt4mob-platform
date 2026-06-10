@@ -1,17 +1,7 @@
 levelAMSConfig:
   logLevel: "INFO"
-  history:
-    enabled: false
-    baseUrl: "http://127.0.0.1/historic"
-    username: null
-    password: null
   loader:
-    jwt: null
     baseUrl: "http://localhost"
-    credentials:
-      null
-      # username: null
-      # password: null
     httpTimeout: 30
     startPageIdx: 1
     instrumentCoordsFile: "instrument_coords.csv"
@@ -21,17 +11,12 @@ levelAMSConfig:
     secure: false
     host: "127.0.0.1"
     port: null
-    device: "device"
-    tenant: "tenant"
-    password: "changeme"
     topic: "telemetry"
+    tenant: "dt4mob"
   ditto:
     defaultPolicy: "dt4mob:default"
-    username: null
-    password: null
+    subject: "test"
     baseUrl: "http://localhost/api/2"
-
-  cafileContents: null
 
 jobs:
   - name: "default"
