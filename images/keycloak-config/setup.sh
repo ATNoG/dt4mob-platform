@@ -35,6 +35,17 @@ else
     -s "webOrigins=$KEYCLOAK_CLIENT_ORIGINS"
 fi
 
+# Create/Update the admin role
+ADMIN_ROLE_NAME="${ADMIN_ROLE_NAME:-"admin"}"
+ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$ADMIN_ROLE_NAME" -F id --format csv --noquotes || true)
+if [ -z "$ROLEID" ]; then
+  # The `-i` option returns the role name instead of the ID
+  ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
+    -r "$KEYCLOAK_REALM" \
+    -s name="$ADMIN_ROLE_NAME" \
+    -s description="Platform administrator role" | jq -r ".id")
+fi
+
 # Create/Update the system service role
 SYSTEM_SERVICE_ROLE_NAME="${SYSTEM_SERVICE_ROLE_NAME:-"system-service"}"
 ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$SYSTEM_SERVICE_ROLE_NAME" -F id --format csv --noquotes || true)
