@@ -32,3 +32,6 @@ dependencies:
   - name: dt4mob-level-ams-loader
     version: "0.1.0"
     repository: file://../dt4mob-level-ams-loader
+  - name: dt4mob-viz
+    version: "0.1.0"
+    repository: file://../dt4mob-viz

@@ -26,5 +26,8 @@ dependencies:
 - name: dt4mob-level-ams-loader
   repository: file://../dt4mob-level-ams-loader
   version: 0.1.0
-digest: sha256:e05a6461c313855f69f4ec0d00e3628dd56eb0b8c86cdc781135920950802e73
-generated: "2026-06-19T19:20:56.538411189+01:00"
+- name: dt4mob-viz
+  repository: file://../dt4mob-viz
+  version: 0.1.0
+digest: sha256:5d91c9cca832021bff8432d4c4503d25006c5b15982073275fc0cbe8102467d0
+generated: "2026-06-19T20:59:48.414249545+01:00"

@@ -606,6 +606,14 @@ keycloak:
     tag: "latest"
     imagePullPolicy: "Always"
 
+    redirectUris:
+    - "https://{{ .Values.global.host }}/ui"
+    - "https://{{ .Values.global.host }}/viz/login"
+    - "https://{{ .Values.global.host }}/viz/login/generic_oauth"
+
+    clientOrigins:
+    - "https://{{ .Values.global.host }}"
+
 ingressTLS:
   issuer:
     # Spec of the generated issuer if `existingIssuer` is not defined

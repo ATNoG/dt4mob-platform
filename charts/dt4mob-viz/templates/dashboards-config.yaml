@@ -1,0 +1,13 @@
+{{- range .Values.enabledDashboards }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dt4mob-viz.fullname" $ }}-dashboards-{{ . | base }}
+  labels:
+    {{- include "dt4mob-viz.labels" $ | nindent 4 }}
+    "dt4mob.av.it.pt/viz-dashboard": {{ $.Release.Name | quote }}
+data:
+  "{{ . | base }}":
+    {{- toYaml ( $.Files.Get . ) | nindent 4}}
+---
+{{- end }}
