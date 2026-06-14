@@ -1,0 +1,1128 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "adb8tc2",
+    "generation": 2,
+    "creationTimestamp": "2026-06-14T17:07:41Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "builtIn": true,
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "query": {
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "group": "grafana",
+            "kind": "DataQuery",
+            "spec": {},
+            "version": "v0"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-13": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "data": "[\n  {\n    \"instrument_id\": \"${instrument_id}\"\n  }\n]",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "inline",
+                        "type": "json",
+                        "url": "",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "Refresh Query"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 13,
+          "links": [],
+          "title": "",
+          "vizConfig": {
+            "group": "volkovlabs-echarts-panel",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "baidu": {
+                  "callback": "bmapReady",
+                  "key": ""
+                },
+                "editor": {
+                  "format": "auto"
+                },
+                "editorMode": "code",
+                "gaode": {
+                  "key": "",
+                  "plugin": "AMap.Scale,AMap.ToolBar"
+                },
+                "getOption": "const instrumentId = context.grafana.replaceVariables('${instrument_id}');\n\nreturn {\n  grid: {\n    left: 0,\n    right: 0,\n    top: 0,\n    bottom: 0\n  },\n\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: 1 },\n\n  series: [\n    // background image\n    {\n      type: 'custom',\n      renderItem: function (params, api) {\n        return {\n          type: 'image',\n          style: {\n            image: 'https://i.imgur.com/M6fMB9N.jpeg',\n            x: api.coord([0, 1])[0],\n            y: api.coord([0, 1])[1],\n            width: api.coord([1, 0])[0] - api.coord([0, 0])[0],\n            height: api.coord([0, 0])[1] - api.coord([0, 1])[1]\n          }\n        };\n      },\n      data: [0]\n    },\n    // CCs\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2')\n        ? [[0.120, 0.172]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A19`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7')\n        ? [[0.465, 0.320]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.1`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786')\n        ? [[0.467, 0.402]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.2`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6')\n        ? [[0.871, 0.409]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A35`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    // inclinometros\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.058512f0-5bea-445d-a35b-56bcb6a9ddb4')\n        ? [[0.874, 0.435]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I1C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.c072ef5f-3d0f-4c84-95cf-f39165dd60f9')\n        ? [[0.468, 0.455]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I2C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.844def33-8a04-49c9-9fce-5d701a9a7a3c')\n        ? [[0.485, 0.658]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I4`,\n        color: 'yellow',\n        offset: [14, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.eaa688b0-58a4-416c-a6e9-31d5bdd7f1f9')\n        ? [[0.340, 0.650]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3MEEC`,\n        color: 'yellow',\n        offset: [29, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.2fd3c6d1-81b3-4bf6-86b0-9860071aa447')\n        ? [[0.119, 0.208]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    }\n  ]\n};\n",
+                "google": {
+                  "callback": "gmapReady",
+                  "key": ""
+                },
+                "map": "none",
+                "renderer": "canvas",
+                "themeEditor": {
+                  "config": "{}",
+                  "name": "default"
+                },
+                "visualEditor": {
+                  "code": "return {\n  dataset: context.editor.dataset,\n  series: context.editor.series,\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n}\n",
+                  "dataset": [],
+                  "series": []
+                }
+              }
+            },
+            "version": "7.2.5"
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "value.valor",
+                            "text": "valor",
+                            "type": "number"
+                          }
+                        ],
+                        "filterExpression": "path == \"/features/Temp/properties/latestValue\"",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 4,
+          "links": [],
+          "title": "CC - Temperatura",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "Temperatura (ºC)",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "value.valor",
+                            "text": "valor",
+                            "type": "number"
+                          }
+                        ],
+                        "computed_columns": [
+                          {
+                            "selector": "",
+                            "text": "",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "path == \"/features/F/properties/latestValue\"",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "Carga"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp"
+                          },
+                          {
+                            "selector": "instrument_id",
+                            "text": "instrument_id",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "alerta",
+                            "text": "alerta",
+                            "type": "number"
+                          }
+                        ],
+                        "data": "instrument_id,alerta,time\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2,604,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2,604,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7,590,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7,590,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786,609,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786,609,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6,606,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6,606,${__to:date:iso}",
+                        "filterExpression": "instrument_id == '${instrument_id}'",
+                        "filters": [],
+                        "format": "timeseries",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "inline",
+                        "type": "csv",
+                        "url": "",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "Alerta"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp"
+                          },
+                          {
+                            "selector": "instrument_id",
+                            "text": "instrument_id",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "alarme",
+                            "text": "alarme",
+                            "type": "number"
+                          }
+                        ],
+                        "data": "instrument_id,alarme,time\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2,426,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2,426,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7,416,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7,416,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786,430,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786,430,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6,428,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6,428,${__to:date:iso}",
+                        "filterExpression": "instrument_id == '${instrument_id}'",
+                        "filters": [],
+                        "format": "timeseries",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "inline",
+                        "type": "csv",
+                        "url": "",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "Alarme"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "sortBy",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "fields": {},
+                      "sort": [
+                        {
+                          "field": "time"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 5,
+          "links": [],
+          "title": "CC - Carga",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": "Alerta alerta.*"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Alerta"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": "Alarme alarme.*"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Alarme"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Carga valor"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Carga (kN)"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "alarme"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            10
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      },
+                      {
+                        "id": "custom.showPoints",
+                        "value": "never"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": false,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "alerta"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "yellow",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            15
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": false,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.showPoints",
+                        "value": "never"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "value.valor",
+                            "text": "valor (CC1)",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "path == \"/features/F/properties/latestValue\"",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/events/geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2?since=2025-09-01T00:00:00Z",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A19"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "value.valor",
+                            "text": "valor (CC2)",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "path == \"/features/F/properties/latestValue\"",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/events/geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7?since=2025-09-01T00:00:00Z",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A25.1"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "value.valor",
+                            "text": "valor (CC3)",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "path == \"/features/F/properties/latestValue\"",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/events/geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786?since=2025-09-01T00:00:00Z",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A25.2"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "value.valor",
+                            "text": "valor (CC4)",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "timestamp"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "path == \"/features/F/properties/latestValue\"",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/events/geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6?since=2025-09-01T00:00:00Z",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A35"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "sortBy",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "fields": {},
+                      "sort": [
+                        {
+                          "field": "time"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 8,
+          "links": [],
+          "title": "Leituras Ancoragens (todas as CC)",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "Carga (kN)",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.0.2"
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-13"
+              },
+              "height": 11,
+              "width": 8,
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              },
+              "height": 11,
+              "width": 8,
+              "x": 8,
+              "y": 0
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              },
+              "height": 11,
+              "width": 8,
+              "x": 0,
+              "y": 11
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              },
+              "height": 11,
+              "width": 8,
+              "x": 8,
+              "y": 11
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "fiscalYearStartMonth": 0,
+      "from": "2025-09-01T00:00:00.000Z",
+      "hideTimepicker": false,
+      "timezone": "browser",
+      "to": "2026-03-23T12:00:00.000Z"
+    },
+    "title": "Células de Carga",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "I1C",
+            "value": "geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.058512f0-5bea-445d-a35b-56bcb6a9ddb4"
+          },
+          "definition": "",
+          "hide": "dontHide",
+          "includeAll": false,
+          "multi": false,
+          "name": "instrument_id",
+          "options": [],
+          "query": {
+            "datasource": {
+              "name": "aflc3bfm914w0d"
+            },
+            "group": "yesoreyeram-infinity-datasource",
+            "kind": "DataQuery",
+            "spec": {
+              "infinityQuery": {
+                "columns": [
+                  {
+                    "selector": "attributes.matricula",
+                    "text": "matricula",
+                    "type": "string"
+                  },
+                  {
+                    "selector": "thingId",
+                    "text": "thingId",
+                    "type": "string"
+                  }
+                ],
+                "computed_columns": [
+                  {
+                    "selector": "",
+                    "text": "",
+                    "type": "string"
+                  }
+                ],
+                "data": "values\nfoo\nbar\nbaz",
+                "filters": [],
+                "format": "table",
+                "parser": "backend",
+                "refId": "",
+                "root_selector": "items",
+                "source": "url",
+                "type": "json",
+                "url": "/search/things?fields=thingId,attributes&filter=like(thingId,%22geo-asset%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
+                "url_options": {
+                  "data": "",
+                  "method": "GET"
+                }
+              },
+              "meta": {
+                "textField": "matricula",
+                "valueField": "thingId"
+              },
+              "queryType": "infinity",
+              "refId": "variable"
+            },
+            "version": "v0"
+          },
+          "refresh": "onDashboardLoad",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "disabled"
+        }
+      },
+      {
+        "kind": "DatasourceVariable",
+        "spec": {
+          "allowCustomValue": false,
+          "current": {
+            "text": "dt4mob-historic-infinity",
+            "value": "PC0D9786ABF929414"
+          },
+          "hide": "hideVariable",
+          "includeAll": false,
+          "multi": false,
+          "name": "historic",
+          "options": [],
+          "pluginId": "yesoreyeram-infinity-datasource",
+          "refresh": "onDashboardLoad",
+          "regex": "",
+          "skipUrlSync": false
+        }
+      }
+    ]
+  }
+}
