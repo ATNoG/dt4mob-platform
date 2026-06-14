@@ -5,4 +5,4 @@ metadata:
   labels:
     {{- include "dt4mob.labels" . | nindent 4 }}
 data:
-  tenant: {{ .Values.tenant | quote }}
+  tenant: {{ .Values.global.tenant | quote }}

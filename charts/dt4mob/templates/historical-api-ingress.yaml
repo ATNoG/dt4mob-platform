@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: {{ .Values.ditto.ingress.className }}
   rules:
-  - host: {{ .Values.ditto.ingress.host | quote }}
+  - host: {{ .Values.global.host | quote }}
     http:
       paths:
       - path: /historic

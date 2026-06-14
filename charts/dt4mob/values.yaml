@@ -1,9 +1,11 @@
+global:
+  host: ""
+  tenant: "test-tenant"
+
 imagePullSecrets: []
 
 nameOverride: ""
 fullnameOverride: ""
-
-tenant: "test-tenant"
 
 dt4mob-controller:
   config:
@@ -51,6 +53,7 @@ dt4mob-historical:
         clientId: "ditto"
         serverUri: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
         issuers:
+        - "https://{{ .Values.global.host }}/auth/realms/dt4mob"
         - "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
         readRole:
         - "historical-read"

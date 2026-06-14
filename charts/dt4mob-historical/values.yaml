@@ -1,3 +1,6 @@
+global:
+  host: ""
+
 images:
   api:
     repository: atnog-harbor.av.it.pt/dt4mob/data-lake-api

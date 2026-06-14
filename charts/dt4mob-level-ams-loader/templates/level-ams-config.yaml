@@ -24,7 +24,7 @@ data:
       {{- if .port }}
     port = {{ .port }}
       {{- end }}
-    tenant = {{ .tenant | quote }}
+    tenant = {{ $.Values.global.tenant | quote }}
 
     secure = {{ .secure }}
     cafile = "ca.crt"

@@ -1,3 +1,6 @@
+global:
+  tenant: "test-tenant"
+
 levelAMSConfig:
   logLevel: "INFO"
   loader:
@@ -12,7 +15,6 @@ levelAMSConfig:
     host: "127.0.0.1"
     port: null
     topic: "telemetry"
-    tenant: "dt4mob"
   ditto:
     defaultPolicy: "dt4mob:default"
     subject: "test"
