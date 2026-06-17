@@ -4,8 +4,7 @@ from datetime import datetime
 
 import http
 from pydantic import BaseModel
-from fastapi import APIRouter, Depends, status, Body, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, status, Body, HTTPException, Response
 from fastapi_oidc import get_auth, IDToken
 from sqlmodel import Session
 
@@ -140,7 +139,7 @@ def delete_events(
     until: datetime,
 ):
 
-    values = events_service.delete_events(
+    events_service.delete_events(
         thing_id=thing_id, since_iso_timestamp=since, until_iso_timestamp=until
     )
-    return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content=values)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
