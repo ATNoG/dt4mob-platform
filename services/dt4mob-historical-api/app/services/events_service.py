@@ -93,7 +93,7 @@ class EventsService:
         thing_id: str,
         since_iso_timestamp: datetime,
         until_iso_timestamp: datetime,
-    ) -> list[DittoEvent]:
+    ) -> int:
         query = delete(DittoEvent).where(
             (col(DittoEvent.thing_id) == thing_id)
             & (col(DittoEvent.time) >= since_iso_timestamp)
