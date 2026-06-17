@@ -1,7 +1,7 @@
 from app.models.util import Action
 from datetime import datetime
 from sqlmodel import Session, col
-from sqlmodel import select
+from sqlmodel import select,delete
 
 
 from app.models.ditto_events import DittoEvent
@@ -94,14 +94,12 @@ class EventsService:
         since_iso_timestamp: datetime,
         until_iso_timestamp: datetime,
     ) -> list[DittoEvent]:
-        query = select(DittoEvent).where(
+        query = delete(DittoEvent).where(
             (col(DittoEvent.thing_id) == thing_id)
             & (col(DittoEvent.time) >= since_iso_timestamp)
             & (col(DittoEvent.time) <= until_iso_timestamp)
         )
-        events_to_delete = self.session.exec(query).all()
-        for event in events_to_delete:
-            self.session.delete(event)
+        result = self.session.exec(query)
         self.session.commit()
 
-        return list(events_to_delete)
+        return result.rowcount
