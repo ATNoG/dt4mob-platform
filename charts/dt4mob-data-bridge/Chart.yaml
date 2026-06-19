@@ -1,6 +1,0 @@
-apiVersion: v2
-name: data-bridge
-description: Data Bridge — polls external APIs and forwards data to Eclipse Hono using Eclipse Ditto command messages.
-type: application
-version: 0.1.0
-appVersion: "0.1.0"
