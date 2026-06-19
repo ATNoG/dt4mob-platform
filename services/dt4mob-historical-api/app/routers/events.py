@@ -2,9 +2,8 @@ from app.models.paths_response import PathResponseObject
 from typing import Annotated
 from datetime import datetime
 
-import http
 from pydantic import BaseModel
-from fastapi import APIRouter, Depends, status, Body, HTTPException, Response
+from fastapi import APIRouter, Depends, status, Body, HTTPException
 from fastapi_oidc import get_auth, IDToken
 from sqlmodel import Session
 
@@ -120,17 +119,17 @@ def read_events_by_thing(
     return result
 
 
-@router.post("/events")
+@router.post("/events", status_code=status.HTTP_201_CREATED)
 def insert_events(
     _check_role: Annotated[None, Depends(check_role(settings.auth.write_role))],
     events_service: Annotated[EventsService, Depends(get_events_service)],
     events: Annotated[list[DittoEvent], Body(embed=True)],
 ):
     events_service.insert_events(events)
-    return http.HTTPStatus.CREATED
+    return
 
 
-@router.delete("/events/{thing_id}")
+@router.delete("/events/{thing_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_events(
     _check_role: Annotated[None, Depends(check_role(settings.auth.write_role))],
     events_service: Annotated[EventsService, Depends(get_events_service)],
@@ -142,4 +141,4 @@ def delete_events(
     events_service.delete_events(
         thing_id=thing_id, since_iso_timestamp=since, until_iso_timestamp=until
     )
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return
