@@ -30,12 +30,10 @@ KEYCLOAK_CA_CRT_FILE = os.getenv("KEYCLOAK_CA_CRT_FILE")
 CLIENT_ID = env("CLIENT_ID", "ditto")
 API_URL = env("API_URL").rstrip("/")
 SINCE = env("SINCE")
-GRAFANA_URL = env("GRAFANA_URL").rstrip("/")
 REQUEST_TIMEOUT_SECONDS = float(env("REQUEST_TIMEOUT_SECONDS", "30"))
 
 USERNAME = read_secret("USERNAME", "USERNAME_FILE")
 PASSWORD = read_secret("PASSWORD", "PASSWORD_FILE")
-GRAFANA_TOKEN = read_secret("GRAFANA_TOKEN", "GRAFANA_TOKEN_FILE")
 
 
 def load_cells() -> list[dict[str, Any]]:
@@ -93,90 +91,16 @@ def get_latest_value(token: str, cell: dict[str, Any]) -> int | None:
     return int(value)
 
 
-def grafana_headers() -> dict[str, str]:
-    return {
-        "Authorization": f"Bearer {GRAFANA_TOKEN}",
-        "Content-Type": "application/json",
-    }
+def publish_alert_alarm_update(cell: dict[str, Any], *, alert: bool, alarm: bool,) -> None:
+    pass
 
 
-def send_annotation(value: int, cell: dict[str, Any], status: str) -> None:
-    if status == "alarm":
-        text = (
-            f"ALARME Celula de Carga {cell['name']}: {value} kN "
-            f"(threshold: {cell['alarm_threshold']} kN)"
-        )
-    else:
-        text = (
-            f"ALERTA Celula de Carga {cell['name']}: {value} kN "
-            f"(threshold: {cell['alert_threshold']} kN)"
-        )
-
-    response = requests.post(
-        f"{GRAFANA_URL}/api/annotations",
-        headers=grafana_headers(),
-        json={"text": text, "tags": cell["tags"]},
-        timeout=REQUEST_TIMEOUT_SECONDS,
-    )
-
-    if response.ok:
-        print(f"{status.capitalize()} annotation sent to Grafana: {text}")
-        return
-
-    print(f"Failed to send {status} annotation: {response.status_code} - {response.text}")
+def publish_alert_update(cell: dict[str, Any], *, alert: bool) -> None:
+    pass
 
 
-def fetch_annotations(cell: dict[str, Any]) -> list[dict[str, Any]]:
-    response = requests.get(
-        f"{GRAFANA_URL}/api/annotations",
-        headers={"Authorization": f"Bearer {GRAFANA_TOKEN}"},
-        params={"tags": cell["tags"], "limit": 100},
-        timeout=REQUEST_TIMEOUT_SECONDS,
-    )
-
-    if not response.ok:
-        print(
-            f"[{cell['name']}] Failed to fetch annotations: "
-            f"{response.status_code} - {response.text}"
-        )
-        return []
-
-    return response.json()
-
-
-def delete_annotation(annotation_id: int, cell: dict[str, Any], reason: str) -> None:
-    response = requests.delete(
-        f"{GRAFANA_URL}/api/annotations/{annotation_id}",
-        headers={"Authorization": f"Bearer {GRAFANA_TOKEN}"},
-        timeout=REQUEST_TIMEOUT_SECONDS,
-    )
-
-    if response.ok:
-        print(f"[{cell['name']}] Deleted annotation {annotation_id}, {reason}.")
-    else:
-        print(
-            f"[{cell['name']}] Failed to delete annotation {annotation_id}: "
-            f"{response.status_code}"
-        )
-
-
-def delete_all_alert_annotations(cell: dict[str, Any]) -> None:
-    for annotation in fetch_annotations(cell):
-        delete_annotation(annotation["id"], cell, "as the value is now normal")
-
-
-def keep_only_latest_annotation(cell: dict[str, Any]) -> None:
-    annotations = fetch_annotations(cell)
-    if len(annotations) <= 1:
-        return
-
-    annotations.sort(key=lambda annotation: annotation["time"], reverse=True)
-    for annotation in annotations[1:]:
-        delete_annotation(
-            annotation["id"],
-            cell,
-            "to update alert/alarm status",
-        )
+def publish_alarm_update(cell: dict[str, Any], *, alarm: bool) -> None:
+    pass
 
 
 def process_cell(token: str, cell: dict[str, Any]) -> None:
@@ -186,18 +110,25 @@ def process_cell(token: str, cell: dict[str, Any]) -> None:
         print(f"[{cell['name']}] No value retrieved, skipping.")
     elif value <= int(cell["alarm_threshold"]):
         print(f"[{cell['name']}] ALARM: value {value} kN <= {cell['alarm_threshold']} kN")
-        send_annotation(value, cell, "alarm")
+        # TODO: Publish through Hono to update the Ditto thing attributes:
+        # alert = True
+        # alarm = True
+        publish_alert_alarm_update(cell, alert=True, alarm=True)
     elif value <= int(cell["alert_threshold"]):
         print(f"[{cell['name']}] ALERT: value {value} kN <= {cell['alert_threshold']} kN")
-        send_annotation(value, cell, "alert")
+        # TODO: Publish through Hono to update the Ditto thing attributes:
+        # alert = True
+        # alarm = False
+        publish_alert_alarm_update(cell, alert=True, alarm=False)
     else:
         print(
             f"[{cell['name']}] Normal: value {value} kN is above threshold "
-            f"{cell['alert_threshold']} kN, no annotation sent."
+            f"{cell['alert_threshold']} kN."
         )
-        delete_all_alert_annotations(cell)
-
-    keep_only_latest_annotation(cell)
+        # TODO: Publish through Hono to update the Ditto thing attributes:
+        # alert = False
+        # alarm = False
+        publish_alert_alarm_update(cell, alert=False, alarm=False)
     print("--------------------------------------------------")
 
 
