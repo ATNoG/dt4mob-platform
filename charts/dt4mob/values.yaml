@@ -95,6 +95,17 @@ dt4mob-garbage-collector:
       existingSecret: "{{ .Release.Name }}-garbage-collector-credentials"
       caSecret: "{{ .Release.Name }}-internal-keycloak-tls"
 
+dt4mob-alert-checker:
+  config:
+    historical:
+      apiUrl: "http://{{ .Release.Name }}-historical-api:8000/events"
+    auth:
+      tokenEndpoint: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob/protocol/openid-connect/token"
+      existingSecret: "{{ .Release.Name }}-garbage-collector-credentials"
+      caSecret: "{{ .Release.Name }}-internal-keycloak-tls"
+    grafana:
+      existingSecret: "{{ .Release.Name }}-alert-checker-grafana-token"
+      
 dt4mob-level-ams-loader:
   dittoCredsSecretName: "{{ .Release.Name }}-level-ams-loader-credentials"
   caCertSecretName: "{{ .Release.Name }}-root-ca-secret"

@@ -1,0 +1,8 @@
+[project]
+name = "dt4mob-alert-checker"
+version = "0.1.0"
+description = "Hourly alert and alarm checker for DT4MOB load cells."
+requires-python = ">=3.13"
+dependencies = [
+    "requests>=2.32.5",
+]

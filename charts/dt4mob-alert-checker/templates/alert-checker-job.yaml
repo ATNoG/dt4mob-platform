@@ -1,0 +1,74 @@
+{{- $defaultSecretName := printf "%s-secret" (include "dt4mob-alert-checker.fullname" .) -}}
+{{- $authSecretName := tpl .Values.config.auth.existingSecret . | default $defaultSecretName -}}
+{{- $grafanaSecretName := tpl .Values.config.grafana.existingSecret . | default $defaultSecretName -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "dt4mob-alert-checker.fullname" . }}-job
+  labels:
+    {{- include "dt4mob-alert-checker.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.config.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: {{ include "dt4mob-alert-checker.fullname" . }}
+              image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+              imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+              env:
+                - name: PYTHONUNBUFFERED
+                  value: "1"
+                - name: KEYCLOAK_URL
+                  value: {{ tpl .Values.config.auth.tokenEndpoint . | quote }}
+                - name: CLIENT_ID
+                  value: {{ .Values.config.auth.clientId | quote }}
+                - name: USERNAME_FILE
+                  value: "/run/secrets/dt4mob/creds/username"
+                - name: PASSWORD_FILE
+                  value: "/run/secrets/dt4mob/creds/password"
+                {{- if .Values.config.auth.caSecret }}
+                - name: KEYCLOAK_CA_CRT_FILE
+                  value: "/run/secrets/dt4mob/tls/ca.crt"
+                {{- end }}
+                - name: API_URL
+                  value: {{ tpl .Values.config.historical.apiUrl . | quote }}
+                - name: SINCE
+                  value: {{ .Values.config.historical.since | quote }}
+                - name: GRAFANA_URL
+                  value: {{ tpl .Values.config.grafana.url . | quote }}
+                - name: GRAFANA_TOKEN_FILE
+                  value: "/run/secrets/dt4mob/grafana/grafana-token"
+                - name: REQUEST_TIMEOUT_SECONDS
+                  value: {{ .Values.config.requestTimeoutSeconds | quote }}
+                - name: LOAD_CELLS_JSON
+                  value: {{ .Values.config.loadCells | toJson | quote }}
+              volumeMounts:
+                - name: credentials
+                  readOnly: true
+                  mountPath: "/run/secrets/dt4mob/creds"
+                - name: grafana-token
+                  readOnly: true
+                  mountPath: "/run/secrets/dt4mob/grafana"
+                {{- if .Values.config.auth.caSecret }}
+                - name: tls
+                  readOnly: true
+                  mountPath: "/run/secrets/dt4mob/tls"
+                {{- end }}
+          volumes:
+            - name: credentials
+              secret:
+                secretName: {{ $authSecretName | quote }}
+            - name: grafana-token
+              secret:
+                secretName: {{ $grafanaSecretName | quote }}
+            {{- if .Values.config.auth.caSecret }}
+            - name: tls
+              secret:
+                secretName: {{ tpl .Values.config.auth.caSecret . | quote }}
+            {{- end }}

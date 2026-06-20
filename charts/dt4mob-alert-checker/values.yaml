@@ -1,0 +1,51 @@
+image:
+  repository: "atnog-harbor.av.it.pt/dt4mob/alert-checker"
+  tag: "latest"
+  imagePullPolicy: "Always"
+
+config:
+  schedule: "0 * * * *"
+  requestTimeoutSeconds: 30
+  historical:
+    apiUrl: "https://dt4mob.av.it.pt/historic/events"
+    since: "2025-09-01T00:00:00Z"
+  grafana:
+    url: "https://dt4mob.av.it.pt/viz"
+    token: ""
+    existingSecret: ""
+  auth:
+    tokenEndpoint: "https://dt4mob-keycloak:8443/auth/realms/dt4mob/protocol/openid-connect/token"
+    clientId: "ditto"
+    username: ""
+    password: ""
+    existingSecret: ""
+    caSecret: ""
+  loadCells:
+    - name: "A19"
+      tags:
+        - "CC1"
+        - "A19"
+      instrument: "geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2"
+      alert_threshold: 604
+      alarm_threshold: 426
+    - name: "A25.1"
+      tags:
+        - "CC2"
+        - "A25.1"
+      instrument: "geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7"
+      alert_threshold: 590
+      alarm_threshold: 416
+    - name: "A25.2"
+      tags:
+        - "CC3"
+        - "A25.2"
+      instrument: "geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786"
+      alert_threshold: 609
+      alarm_threshold: 430
+    - name: "A35"
+      tags:
+        - "CC4"
+        - "A35"
+      instrument: "geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6"
+      alert_threshold: 606
+      alarm_threshold: 428
