@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["image", "schedule", "hono", "devices"],
+  "properties": {
+    "image": {
+      "type": "object",
+      "required": ["repository", "tag"],
+			"additionalProperties": false,
+      "properties": {
+        "repository": { "type": "string" },
+        "pullPolicy": { "type": "string" },
+        "tag": { "type": "string" }
+      }
+    },
+    "schedule": { "type": "string" },
+    "hono": { "$ref": "#/$defs/HonoSettings" },
+    "devices": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/DeviceSettings" }
+    }
+  },
+  "$defs": {
+    "HonoSettings": {
+      "type": "object",
+      "properties": {
+        "http_adapter": { "type": "string", "format": "uri", "default": "http://localhost:8443" },
+        "tenant_id": { "type": "string", "default": "DEFAULT_TENANT" },
+        "server_cert_path": { "type": ["string", "null"], "default": null }
+      }
+    },
+    "DeviceSettings": {
+      "type": "object",
+      "required": ["policy_id", "namespace", "cert_path", "private_key", "strategies"],
+      "properties": {
+        "policy_id": { "type": "string" },
+        "namespace": { "type": "string" },
+        "cert_path": { "type": "string" },
+        "private_key": { "type": "string" },
+        "strategies": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/Strategy" }
+        }
+      }
+    },
+    "Strategy": {
+      "oneOf": [
+        { "$ref": "#/$defs/MeteoStrategy" },
+        { "$ref": "#/$defs/MeteoWarningsStrategy" },
+        { "$ref": "#/$defs/TrafficStrategy" },
+        { "$ref": "#/$defs/GeoJsonStrategy" }
+      ]
+    },
+    "MeteoStrategy": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "meteo" },
+        "subject": { "type": "string" }
+      },
+      "required": ["type", "subject"],
+      "additionalProperties": false
+    },
+    "MeteoWarningsStrategy": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "meteo_warnings" },
+        "subject": { "type": "string" }
+      },
+      "required": ["type", "subject"],
+      "additionalProperties": false
+    },
+    "TrafficStrategy": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "traffic" },
+        "subject": { "type": "string" },
+        "sensorName": { "type": "string" },
+        "road": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "radius": { "type": "number", "default": 1000 }
+      },
+      "required": ["type", "subject", "sensorName", "road", "latitude", "longitude"],
+      "additionalProperties": false
+    },
+    "GeoJsonStrategy": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "geojson" },
+        "subject": { "type": "string" },
+        "dir": { "type": "string" },
+        "file": { "type": "string" }
+      },
+      "required": ["type", "subject"],
+      "additionalProperties": false,
+      "oneOf": [
+        { "required": ["dir"], "not": { "required": ["file"] } },
+        { "required": ["file"], "not": { "required": ["dir"] } }
+      ]
+    }
+  }
+}
