@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "dt4mob-meteo-populator.fullname" . }}
+  labels:
+    {{- include "dt4mob-meteo-populator.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: {{ .Values.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: meteo-populator
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: "METEO_OIDC__USERNAME"
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl .Values.dittoCredentials.secret $ }}
+                      key: {{ .Values.dittoCredentials.usernameKey }}
+                - name: "METEO_OIDC__PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ tpl .Values.dittoCredentials.secret $ }}
+                      key: {{ .Values.dittoCredentials.passwordKey }}
+                {{- if .Values.extraEnv }}
+                  {{- toYaml .Values.extraEnv | nindent 16 }}
+                {{- end }}
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /app/config.toml
+                  subPath: config.toml
+                  readOnly: true
+                {{- if .Values.extraVolumeMounts }}
+                  {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
+                {{- end }}
+          volumes:
+            - name: config-volume
+              configMap:
+                name: {{ include "dt4mob-meteo-populator.fullname" . }}-config
+            {{- if .Values.extraVolumes }}
+              {{- toYaml .Values.extraVolumes | nindent 12 }}
+            {{- end }}
