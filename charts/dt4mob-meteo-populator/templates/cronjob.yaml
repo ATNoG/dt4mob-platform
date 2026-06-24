@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-job
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: meteo-populator
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /app/config.toml
+                  subPath: config.toml
+                  readOnly: true
+          restartPolicy: Never
+          volumes:
+            - name: config-volume
+              configMap:
+                name: {{ .Release.Name }}-config

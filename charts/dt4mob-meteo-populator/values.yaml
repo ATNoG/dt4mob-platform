@@ -1,0 +1,18 @@
+image:
+  repository: meteo-populator
+  tag: latest
+
+schedule: "0 * * * *"
+
+config:
+  populator:
+    dry_run: false
+  logging:
+    level: "INFO"
+  oidc:
+    base_url: "https://<api>"
+    realm: "<realm>"
+    username: "<username>"
+    password: "<password>"
+    client_id: "<client_id>"
+    scope: "openid"

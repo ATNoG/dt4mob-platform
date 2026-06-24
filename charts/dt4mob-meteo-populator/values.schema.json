@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["image", "schedule", "config"],
+  "properties": {
+    "image": {
+      "type": "object",
+      "required": ["repository", "tag"],
+      "properties": {
+        "repository": { "type": "string" },
+        "tag": { "type": "string" }
+      }
+    },
+    "schedule": { "type": "string" },
+    "config": {
+      "type": "object",
+      "required": ["oidc"],
+      "properties": {
+        "populator": {
+          "type": "object",
+          "properties": {
+            "dry_run": { "type": "boolean" }
+          }
+        },
+        "logging": {
+          "type": "object",
+          "properties": {
+            "level": { "type": "string" }
+          }
+        },
+        "oidc": {
+          "type": "object",
+          "required": ["base_url", "realm", "username", "password", "client_id"],
+          "properties": {
+            "base_url": { "type": "string" },
+            "realm": { "type": "string" },
+            "username": { "type": "string" },
+            "password": { "type": "string" },
+            "client_id": { "type": "string" },
+            "scope": { "type": "string" }
+          }
+        },
+        "station": {
+          "type": "object",
+          "properties": {
+            "namespace": { "type": "string" },
+            "subject": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
