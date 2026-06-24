@@ -29,5 +29,8 @@ dependencies:
 - name: dt4mob-viz
   repository: file://../dt4mob-viz
   version: 0.1.0
-digest: sha256:5d91c9cca832021bff8432d4c4503d25006c5b15982073275fc0cbe8102467d0
-generated: "2026-06-19T20:59:48.414249545+01:00"
+- name: dt4mob-certificate-service
+  repository: file://../dt4mob-certificate-service
+  version: 0.1.0
+digest: sha256:6f008ab9d5ed665420e68d9de2d8a9b3b5cc75f6b95ba4f1729216bca820b115
+generated: "2026-06-19T21:00:07.646157016+01:00"

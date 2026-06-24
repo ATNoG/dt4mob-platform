@@ -16,7 +16,8 @@
       "enforcement": {
         "input": {{ "{{ header:device_id }}" | quote }},
         "filters": [
-          {{ "{{ entity:id }}" | quote }}
+          "admin",
+          {{ "{{ thing:name | fn:substring-before(':') }}" | quote }}
         ]
       },
       "headerMapping": {},
@@ -52,7 +53,8 @@
       "enforcement": {
         "input": {{ "{{ header:device_id }}" | quote }},
         "filters": [
-          {{ "{{ entity:id }}" | quote }}
+          "admin",
+          {{ "{{ thing:name | fn:substring-before(':') }}" | quote }}
         ]
       },
       "headerMapping": {},
@@ -87,7 +89,8 @@
       "enforcement": {
         "input": {{ "{{ header:device_id }}" | quote }},
         "filters": [
-          {{ "{{ entity:id }}" | quote }}
+          "admin",
+          {{ "{{ thing:name | fn:substring-before(':') }}" | quote }}
         ]
       },
       "headerMapping": {

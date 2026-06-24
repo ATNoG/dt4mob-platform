@@ -35,3 +35,6 @@ dependencies:
   - name: dt4mob-viz
     version: "0.1.0"
     repository: file://../dt4mob-viz
+  - name: dt4mob-certificate-service
+    version: "0.1.0"
+    repository: file://../dt4mob-certificate-service
