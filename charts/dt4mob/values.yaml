@@ -34,6 +34,7 @@ dt4mob-site:
   #     cpu: 200m
 
 dt4mob-ingress:
+  enabled: false
   http:
     serviceName: "dt4mob-hono-adapter-http"
   amqp:
@@ -42,6 +43,7 @@ dt4mob-ingress:
     serviceName: "dt4mob-hono-adapter-mqtt"
 
 dt4mob-historical:
+  enabled: false
   kafkaTopic:
     create: true
     name: "exports-test-tenant"
@@ -88,6 +90,7 @@ dt4mob-historical:
       size: 10Gi
   
 dt4mob-garbage-collector:
+  enabled: false
   config:
     ditto:
       apiUrl: "http://{{ .Release.Name }}-ditto-gateway:8080"
@@ -96,6 +99,7 @@ dt4mob-garbage-collector:
       caSecret: "{{ .Release.Name }}-internal-keycloak-tls"
 
 dt4mob-level-ams-loader:
+  enabled: false
   dittoCredsSecretName: "{{ .Release.Name }}-level-ams-loader-credentials"
   caCertSecretName: "{{ .Release.Name }}-root-ca-secret"
 
@@ -107,6 +111,9 @@ dt4mob-level-ams-loader:
     ditto:
       subject: "brisa"
       baseUrl: "http://{{ .Release.Name }}-ditto-gateway:8080/api/2"
+
+dt4mob-viz:
+  enabled: false
 
 reloader:
   reloader:

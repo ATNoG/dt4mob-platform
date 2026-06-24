@@ -1,3 +1,4 @@
+{{- if (get .Values "dt4mob-historical").enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -17,3 +18,4 @@ spec:
             name: {{ include "dt4mob-historical.fullname" (get .Subcharts "dt4mob-historical") }}-api
             port:
               name: http
+{{- end }}

@@ -29,5 +29,5 @@ dependencies:
 - name: dt4mob-viz
   repository: file://../dt4mob-viz
   version: 0.1.0
-digest: sha256:5d91c9cca832021bff8432d4c4503d25006c5b15982073275fc0cbe8102467d0
-generated: "2026-06-19T20:59:48.414249545+01:00"
+digest: sha256:4355badfb7307de8aa78696b09d65c9743bf5abc8bc35b92f4b1887d5c3f2119
+generated: "2026-06-25T14:10:07.982359202+01:00"
