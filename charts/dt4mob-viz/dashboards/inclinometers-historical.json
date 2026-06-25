@@ -3,10 +3,27 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "adzn6fn",
-    "generation": 2,
-    "creationTimestamp": "2026-06-14T17:07:41Z",
-    "labels": {},
-    "annotations": {}
+    "namespace": "default",
+    "uid": "88ad61fd-4512-49ca-9f6d-d3e66983b3c0",
+    "resourceVersion": "1782409009042990",
+    "generation": 73,
+    "creationTimestamp": "2026-06-19T20:07:26Z",
+    "labels": {
+      "grafana.app/deprecatedInternalID": "910897155371008"
+    },
+    "annotations": {
+      "grafana.app/createdBy": "access-policy:service",
+      "grafana.app/folder": "",
+      "grafana.app/managedBy": "classic-file-provisioning",
+      "grafana.app/managerAllowsEdits": "true",
+      "grafana.app/managerId": "sidecarProvider",
+      "grafana.app/saved-from-ui": "Grafana v13.0.2 (3fcdbc5a)",
+      "grafana.app/sourceChecksum": "bd85270072637f2a8c8da52b7982ee17",
+      "grafana.app/sourcePath": "/tmp/dashboards/inclinometers-historical.json",
+      "grafana.app/sourceTimestamp": "1781900458000",
+      "grafana.app/updatedBy": "user:efpmz9ng9o6iod",
+      "grafana.app/updatedTimestamp": "2026-06-25T17:36:49Z"
+    }
   },
   "spec": {
     "annotations": [
@@ -37,7 +54,7 @@
         "kind": "Panel",
         "spec": {
           "id": 10,
-          "title": "Cumulative Deflection - Direction B",
+          "title": "Deslocamento Acumulado - Direção B",
           "description": "",
           "links": [],
           "data": {
@@ -63,7 +80,7 @@
                           },
                           {
                             "selector": "valor",
-                            "text": "Deflection (mm)",
+                            "text": "Deslocamento (mm)",
                             "type": "number"
                           },
                           {
@@ -80,7 +97,7 @@
                         "computed_columns": [
                           {
                             "selector": "(disp_num * -0.5)",
-                            "text": "Elev. (m)",
+                            "text": "Profundidade (m)",
                             "type": "string"
                           }
                         ],
@@ -113,7 +130,7 @@
                       "fields": {},
                       "sort": [
                         {
-                          "field": "Elev. (m)"
+                          "field": "Profundidade (m)"
                         }
                       ]
                     }
@@ -156,13 +173,13 @@
                     "x": {
                       "matcher": {
                         "id": "byName",
-                        "options": "Deflection (mm)"
+                        "options": "Deslocamento (mm)"
                       }
                     },
                     "y": {
                       "matcher": {
                         "id": "byName",
-                        "options": "Elev. (m)"
+                        "options": "Profundidade (m)"
                       }
                     }
                   }
@@ -297,7 +314,7 @@
                   "key": "",
                   "plugin": "AMap.Scale,AMap.ToolBar"
                 },
-                "getOption": "const instrumentId = context.grafana.replaceVariables('${instrument_id}');\n\nreturn {\n  grid: {\n    left: 0,\n    right: 0,\n    top: 0,\n    bottom: 0\n  },\n\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: 1 },\n\n  series: [\n    // background image\n    {\n      type: 'custom',\n      renderItem: function (params, api) {\n        return {\n          type: 'image',\n          style: {\n            image: 'https://i.imgur.com/M6fMB9N.jpeg',\n            x: api.coord([0, 1])[0],\n            y: api.coord([0, 1])[1],\n            width: api.coord([1, 0])[0] - api.coord([0, 0])[0],\n            height: api.coord([0, 0])[1] - api.coord([0, 1])[1]\n          }\n        };\n      },\n      data: [0]\n    },\n    // CCs\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2')\n        ? [[0.120, 0.172]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A19`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7')\n        ? [[0.465, 0.320]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.1`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786')\n        ? [[0.467, 0.402]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.2`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6')\n        ? [[0.871, 0.409]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A35`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    // inclinometros\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.058512f0-5bea-445d-a35b-56bcb6a9ddb4')\n        ? [[0.874, 0.435]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I1C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.c072ef5f-3d0f-4c84-95cf-f39165dd60f9')\n        ? [[0.468, 0.455]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I2C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.844def33-8a04-49c9-9fce-5d701a9a7a3c')\n        ? [[0.485, 0.658]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I4`,\n        color: 'yellow',\n        offset: [14, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.eaa688b0-58a4-416c-a6e9-31d5bdd7f1f9')\n        ? [[0.340, 0.650]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3MEEC`,\n        color: 'yellow',\n        offset: [29, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.2fd3c6d1-81b3-4bf6-86b0-9860071aa447')\n        ? [[0.119, 0.208]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    }\n  ]\n};\n",
+                "getOption": "const instrumentId = context.grafana.replaceVariables('${instrument_id}');\n\nreturn {\n  grid: {\n    left: 0,\n    right: 0,\n    top: 0,\n    bottom: 0\n  },\n\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: 1 },\n\n  series: [\n    // background image\n    {\n      type: 'custom',\n      renderItem: function (params, api) {\n        return {\n          type: 'image',\n          style: {\n            image: 'https://i.imgur.com/M6fMB9N.jpeg',\n            x: api.coord([0, 1])[0],\n            y: api.coord([0, 1])[1],\n            width: api.coord([1, 0])[0] - api.coord([0, 0])[0],\n            height: api.coord([0, 0])[1] - api.coord([0, 1])[1]\n          }\n        };\n      },\n      data: [0]\n    },\n    // inclinometros\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.I1C')\n        ? [[0.874, 0.435]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I1C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.I2C')\n        ? [[0.468, 0.455]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I2C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.I4')\n        ? [[0.485, 0.658]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I4`,\n        color: 'yellow',\n        offset: [14, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.I3 MEEC')\n        ? [[0.340, 0.650]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3MEEC`,\n        color: 'yellow',\n        offset: [29, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.I3C')\n        ? [[0.119, 0.208]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    }\n  ]\n};\n",
                 "google": {
                   "callback": "gmapReady",
                   "key": ""
@@ -326,7 +343,7 @@
         "kind": "Panel",
         "spec": {
           "id": 14,
-          "title": "Cumulative Deflection - Direction A",
+          "title": "Deslocamento Acumulado - Direção A",
           "description": "",
           "links": [],
           "data": {
@@ -352,7 +369,7 @@
                           },
                           {
                             "selector": "valor",
-                            "text": "Deflection (mm)",
+                            "text": "Deslocamento (mm)",
                             "type": "number"
                           },
                           {
@@ -369,7 +386,7 @@
                         "computed_columns": [
                           {
                             "selector": "(disp_num * -0.5)",
-                            "text": "Elev. (m)",
+                            "text": "Profundidade (m)",
                             "type": "string"
                           }
                         ],
@@ -402,7 +419,7 @@
                       "fields": {},
                       "sort": [
                         {
-                          "field": "Elev. (m)"
+                          "field": "Profundidade (m)"
                         }
                       ]
                     }
@@ -445,13 +462,13 @@
                     "x": {
                       "matcher": {
                         "id": "byName",
-                        "options": "Deflection (mm)"
+                        "options": "Deslocamento (mm)"
                       }
                     },
                     "y": {
                       "matcher": {
                         "id": "byName",
-                        "options": "Elev. (m)"
+                        "options": "Profundidade (m)"
                       }
                     }
                   }
@@ -682,8 +699,8 @@
         "kind": "Panel",
         "spec": {
           "id": 16,
-          "title": "Displacement - Direction A",
-          "description": "keep title for now, and give the option to hide or select alarm and alert lines\nFazer varias linhas de displ, a subtrair a data mais recente por cada uma das campanhas anteriores",
+          "title": "Desvio - Direção A",
+          "description": "",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -723,18 +740,23 @@
                           },
                           {
                             "selector": "disp_num",
-                            "text": "disp_num",
+                            "text": "Profundidade (m)",
                             "type": "number"
                           },
                           {
                             "selector": "valor",
-                            "text": "Displacement (mm)",
+                            "text": "Deslocamento (mm)",
                             "type": "number"
                           },
                           {
                             "selector": "path",
                             "text": "path",
                             "type": "string"
+                          },
+                          {
+                            "selector": "intensidade",
+                            "text": "intensidade",
+                            "type": "number"
                           }
                         ],
                         "computed_columns": [
@@ -749,7 +771,7 @@
                         "format": "table",
                         "global_query_id": "",
                         "parser": "backend",
-                        "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispX\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispX\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n\n  $datas := $sort($distinct($dados.time));\n  $data_antiga  := $datas[0];\n  $data_recente := $datas[-1];\n\n  $append(\n    $map(\n      $distinct($dados.disp_num),\n      function($d) {\n        (\n          $reg_recente := $filter($dados, function($r) { $r.time = $data_recente and $r.disp_num = $d })[0];\n          $reg_antigo  := $filter($dados, function($r) { $r.time = $data_antiga  and $r.disp_num = $d })[0];\n      {\n          \"disp_num\":       $d,\n          \"time_recente\":   $reg_recente.time,\n          \"valor_recente\":  $reg_recente.valor,\n          \"time_antigo\":    $reg_antigo.time,\n          \"valor_antigo\":   $reg_antigo.valor,\n          \"valor\": $number($reg_recente.valor) - $number($reg_antigo.valor),\n          \"path\": \"Displacement (mm)\"\n        }\n        )\n      }\n  ),\n    [\n      { \"valor\": -15, \"path\": \"Alert 1\",         \"disp_num\": 0  },\n      { \"valor\": -15, \"path\": \"Alert 1\",         \"disp_num\": 40 },\n      { \"valor\":  15, \"path\": \"Alert 2\",        \"disp_num\": 0  },\n      { \"valor\":  15, \"path\": \"Alert 2\",        \"disp_num\": 40 },\n      { \"valor\": -20, \"path\": \"Alarm 1\",  \"disp_num\": 0  },\n      { \"valor\": -20, \"path\": \"Alarm 1\",  \"disp_num\": 40 },\n      { \"valor\":  20, \"path\": \"Alarm 2\", \"disp_num\": 0  },\n      { \"valor\":  20, \"path\": \"Alarm 2\", \"disp_num\": 40 }\n    ]\n)\n)",
+                        "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispX\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispX\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n$datas := $sort($distinct($dados.time));\n  $data_recente := $datas[-1];\n  $total_datas := $count($datas);\n  $datas_anteriores := $datas[$not($ = $data_recente)];\n  $disps := $sort($distinct($dados.disp_num));\n\n  $comparacoes := $reduce(\n    $datas_anteriores,\n    function($acc, $data_anterior) {\n      (\n        $indice := $count($datas[$not($ > $data_anterior)]) - 1;\n        $intensidade_raw := $indice / ($total_datas - 1);\n        $intensidade := 0.4 + $intensidade_raw * 0.6;\n        $linhas := $map(\n          $disps,\n          function($d) {\n            (\n              $reg_recente  := $filter($dados, function($r) { $r.time = $data_recente  and $r.disp_num = $d })[0];\n              $reg_anterior := $filter($dados, function($r) { $r.time = $data_anterior and $r.disp_num = $d })[0];\n              {\n                \"disp_num\":      $d * -0.5,\n                \"time_recente\":  $reg_recente.time,\n                \"valor_recente\": $reg_recente.valor,\n                \"time_anterior\": $reg_anterior.time,\n                \"valor_anterior\":$reg_anterior.valor,\n                \"valor\":         $number($reg_recente.valor) - $number($reg_anterior.valor),\n                \"path\":          $data_anterior,\n                \"intensidade\":   $intensidade\n              }\n            )\n          }\n        );\n        $append($acc, $linhas)\n      )\n    },\n    []\n  );\n)",
                         "source": "url",
                         "type": "json",
                         "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
@@ -762,20 +784,72 @@
                     "refId": "A",
                     "hidden": false
                   }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "valor",
+                            "text": "Deslocamento (mm)",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "disp_num",
+                            "text": "Profundidade (m)",
+                            "type": "number"
+                          }
+                        ],
+                        "data": "valor,path,disp_num\n-15,Alert 1,0\n-15,Alert 1,-20\n15,Alert 2,0\n15,Alert 2,-20\n-20,Alarm 1,0\n-20,Alarm 1,-20\n20,Alarm 2,0\n20,Alarm 2,-20",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "inline",
+                        "type": "csv",
+                        "url": "",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
                 }
               ],
               "transformations": [
                 {
                   "kind": "Transformation",
-                  "group": "sortBy",
+                  "group": "partitionByValues",
                   "spec": {
+                    "filter": {
+                      "id": "byRefId",
+                      "options": "/^(?:A)$/"
+                    },
                     "options": {
-                      "fields": {},
-                      "sort": [
-                        {
-                          "field": "Elev. (m)"
-                        }
-                      ]
+                      "fields": [
+                        "path"
+                      ],
+                      "keepFields": false,
+                      "naming": {
+                        "asLabels": false
+                      }
                     }
                   }
                 },
@@ -783,14 +857,15 @@
                   "kind": "Transformation",
                   "group": "partitionByValues",
                   "spec": {
+                    "filter": {
+                      "id": "byRefId",
+                      "options": "/^(?:B)$/"
+                    },
                     "options": {
                       "fields": [
                         "path"
                       ],
-                      "keepFields": false,
-                      "naming": {
-                        "asLabels": true
-                      }
+                      "keepFields": true
                     }
                   }
                 }
@@ -813,16 +888,22 @@
                 "mapping": "auto",
                 "series": [
                   {
+                    "color": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "intensidade"
+                      }
+                    },
                     "x": {
                       "matcher": {
                         "id": "byName",
-                        "options": "Displacement (mm)"
+                        "options": "Deslocamento (mm)"
                       }
                     },
                     "y": {
                       "matcher": {
                         "id": "byName",
-                        "options": "Elev. (m)"
+                        "options": "Profundidade (m)"
                       }
                     }
                   }
@@ -849,7 +930,7 @@
                     ]
                   },
                   "color": {
-                    "mode": "palette-classic"
+                    "mode": "continuous-BlPu"
                   },
                   "custom": {
                     "axisBorderShow": false,
@@ -877,140 +958,102 @@
                 "overrides": [
                   {
                     "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) Alert 1"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "yellow",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            15
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) Alert 2"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "yellow",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            15
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) Alarm 1"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "red",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            10
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) Alarm 2"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "red",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            10
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      }
-                    ]
-                  },
-                  {
-                    "__systemRef": "hideSeriesFrom",
-                    "matcher": {
-                      "id": "byNames",
-                      "options": {
-                        "mode": "exclude",
-                        "names": [
-                          "Elev. (m) Displacement (mm)"
-                        ],
-                        "prefix": "All except:",
-                        "readOnly": true
-                      }
+                      "id": "byRegexp",
+                      "scope": "series",
+                      "options": "/(A path|disp_num Disp|intensidade|time_antigo|time_recente|valor_antigo|valor_recente|Elev).*/"
                     },
                     "properties": [
                       {
                         "id": "custom.hideFrom",
                         "value": {
-                          "legend": false,
+                          "legend": true,
                           "tooltip": true,
-                          "viz": true
+                          "viz": false
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "scope": "series",
+                      "options": "/(Alarm).*/"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Alarme"
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            10
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "scope": "series",
+                      "options": "/(Alert).*/"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "yellow",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            15
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Alerta"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "scope": "series",
+                      "options": "/Profundidade.*/"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
                         }
                       }
                     ]
@@ -1021,12 +1064,410 @@
           }
         }
       },
-      "panel-17": {
+      "panel-18": {
         "kind": "Panel",
         "spec": {
-          "id": 17,
-          "title": "Displacement - Direction B",
-          "description": "keep title for now, and give the option to hide or select alarm and alert lines",
+          "id": 18,
+          "title": "Alertas e Alarmes - Direção A",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "P51F62827499EFE58"
+                      },
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "matricula",
+                            "text": "matricula",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "status",
+                            "text": "estado",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "depths_in_alert",
+                            "text": "profundidades em alerta/alarme",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "items[attributes.matricula ~> /^I/].{\n  \"matricula\": attributes.matricula,\n  \"status\": (\n    $f := features;\n    $active := $keys($f)[\n      $contains($, \"DispX\") and\n      $lookup($f, $).properties.latestValue != null\n    ];\n    $count($active) = 0 ? \"UNAVAILABLE\" : (\n      $states := $active.($lookup($f, $).properties.state);\n      $hasState := $count($states[$$ != null]) > 0;\n      $hasState = false ? \"UNAVAILABLE\" :\n        $count($states[$ = \"ALARM\"]) > 0 ? \"ALARM\" :\n        $count($states[$ = \"ALERT\"]) > 0 ? \"ALERT\" : \"OK\"\n    )\n  ),\n  \"depths_in_alert\": (\n    $f := features;\n    $join($keys($f)[\n      $contains($, \"DispX\") and\n      $lookup($f, $).properties.latestValue != null and\n      $lookup($f, $).properties.state != \"OK\" and\n      $lookup($f, $).properties.state != null\n    ], \", \")\n  )\n}",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/search/things?fields=thingId,attributes,features&filter=like(thingId,%22geo-asset%3Abrisa%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "organize",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {
+                        "estado": 1,
+                        "matricula": 0,
+                        "prof_ok": 2,
+                        "profundidades em alerta/alarme": 3
+                      },
+                      "renameByName": {}
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "center",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "estado"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "ALARM": {
+                                "color": "red",
+                                "index": 2,
+                                "text": "ALARM"
+                              },
+                              "ALERT": {
+                                "color": "yellow",
+                                "index": 1,
+                                "text": "ALERT"
+                              },
+                              "OK": {
+                                "color": "green",
+                                "index": 0,
+                                "text": "OK"
+                              },
+                              "UNAVAILABLE": {
+                                "color": "#808080",
+                                "index": 3,
+                                "text": "UNAVAILABLE"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "color-background"
+                        }
+                      },
+                      {
+                        "id": "custom.width",
+                        "value": 107
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "matricula"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 78
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "prof_ok"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 212
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-19": {
+        "kind": "Panel",
+        "spec": {
+          "id": 19,
+          "title": "Alertas e Alarmes - Direção B",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "P51F62827499EFE58"
+                      },
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "matricula",
+                            "text": "matricula",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "status",
+                            "text": "estado",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "depths_in_alert",
+                            "text": "profundidades em alerta/alarme",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "items[attributes.matricula ~> /^I/].{\n  \"matricula\": attributes.matricula,\n  \"status\": (\n    $f := features;\n    $active := $keys($f)[\n      $contains($, \"DispY\") and\n      $lookup($f, $).properties.latestValue != null\n    ];\n    $count($active) = 0 ? \"UNAVAILABLE\" : (\n      $states := $active.($lookup($f, $).properties.state);\n      $hasState := $count($states[$$ != null]) > 0;\n      $hasState = false ? \"UNAVAILABLE\" :\n        $count($states[$ = \"ALARM\"]) > 0 ? \"ALARM\" :\n        $count($states[$ = \"ALERT\"]) > 0 ? \"ALERT\" : \"OK\"\n    )\n  ),\n  \"depths_in_alert\": (\n    $f := features;\n    $join($keys($f)[\n      $contains($, \"DispY\") and\n      $lookup($f, $).properties.latestValue != null and\n      $lookup($f, $).properties.state != \"OK\" and\n      $lookup($f, $).properties.state != null\n    ], \", \")\n  )\n}",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/search/things?fields=thingId,attributes,features&filter=like(thingId,%22geo-asset%3Abrisa%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "organize",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {
+                        "estado": 1,
+                        "matricula": 0,
+                        "prof_ok": 2,
+                        "profundidades em alerta/alarme": 3
+                      },
+                      "renameByName": {}
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "center",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "estado"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "ALARM": {
+                                "color": "red",
+                                "index": 2,
+                                "text": "ALARM"
+                              },
+                              "ALERT": {
+                                "color": "yellow",
+                                "index": 1,
+                                "text": "ALERT"
+                              },
+                              "OK": {
+                                "color": "green",
+                                "index": 0,
+                                "text": "OK"
+                              },
+                              "UNAVAILABLE": {
+                                "color": "#808080",
+                                "index": 3,
+                                "text": "UNAVAILABLE"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "color-background"
+                        }
+                      },
+                      {
+                        "id": "custom.width",
+                        "value": 107
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "matricula"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 78
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "prof_ok"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 212
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-20": {
+        "kind": "Panel",
+        "spec": {
+          "id": 20,
+          "title": "Desvio - Direção B",
+          "description": "",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1066,18 +1507,23 @@
                           },
                           {
                             "selector": "disp_num",
-                            "text": "disp_num",
+                            "text": "Profundidade (m)",
                             "type": "number"
                           },
                           {
                             "selector": "valor",
-                            "text": "Displacement (mm)",
+                            "text": "Deslocamento (mm)",
                             "type": "number"
                           },
                           {
                             "selector": "path",
                             "text": "path",
                             "type": "string"
+                          },
+                          {
+                            "selector": "intensidade",
+                            "text": "intensidade",
+                            "type": "number"
                           }
                         ],
                         "computed_columns": [
@@ -1092,7 +1538,7 @@
                         "format": "table",
                         "global_query_id": "",
                         "parser": "backend",
-                        "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispY\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispY\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n\n  $datas := $sort($distinct($dados.time));\n  $data_antiga  := $datas[0];\n  $data_recente := $datas[-1];\n\n  $append(\n    $map(\n      $distinct($dados.disp_num),\n      function($d) {\n        (\n          $reg_recente := $filter($dados, function($r) { $r.time = $data_recente and $r.disp_num = $d })[0];\n          $reg_antigo  := $filter($dados, function($r) { $r.time = $data_antiga  and $r.disp_num = $d })[0];\n      {\n          \"disp_num\":       $d,\n          \"time_recente\":   $reg_recente.time,\n          \"valor_recente\":  $reg_recente.valor,\n          \"time_antigo\":    $reg_antigo.time,\n          \"valor_antigo\":   $reg_antigo.valor,\n          \"valor\": $number($reg_recente.valor) - $number($reg_antigo.valor),\n          \"path\": \"Displacement (mm)\"\n        }\n        )\n      }\n  ),\n    [\n      { \"valor\": -15, \"path\": \"Alert 1\",         \"disp_num\": 0  },\n      { \"valor\": -15, \"path\": \"Alert 1\",         \"disp_num\": 40 },\n      { \"valor\":  15, \"path\": \"Alert 2\",        \"disp_num\": 0  },\n      { \"valor\":  15, \"path\": \"Alert 2\",        \"disp_num\": 40 },\n      { \"valor\": -20, \"path\": \"Alarm 1\",  \"disp_num\": 0  },\n      { \"valor\": -20, \"path\": \"Alarm 1\",  \"disp_num\": 40 },\n      { \"valor\":  20, \"path\": \"Alarm 2\", \"disp_num\": 0  },\n      { \"valor\":  20, \"path\": \"Alarm 2\", \"disp_num\": 40 }\n    ]\n)\n)",
+                        "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispY\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispY\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n$datas := $sort($distinct($dados.time));\n  $data_recente := $datas[-1];\n  $total_datas := $count($datas);\n  $datas_anteriores := $datas[$not($ = $data_recente)];\n  $disps := $sort($distinct($dados.disp_num));\n\n  $comparacoes := $reduce(\n    $datas_anteriores,\n    function($acc, $data_anterior) {\n      (\n        $indice := $count($datas[$not($ > $data_anterior)]) - 1;\n        $intensidade_raw := $indice / ($total_datas - 1);\n        $intensidade := 0.4 + $intensidade_raw * 0.6;\n        $linhas := $map(\n          $disps,\n          function($d) {\n            (\n              $reg_recente  := $filter($dados, function($r) { $r.time = $data_recente  and $r.disp_num = $d })[0];\n              $reg_anterior := $filter($dados, function($r) { $r.time = $data_anterior and $r.disp_num = $d })[0];\n              {\n                \"disp_num\":      $d * -0.5,\n                \"time_recente\":  $reg_recente.time,\n                \"valor_recente\": $reg_recente.valor,\n                \"time_anterior\": $reg_anterior.time,\n                \"valor_anterior\":$reg_anterior.valor,\n                \"valor\":         $number($reg_recente.valor) - $number($reg_anterior.valor),\n                \"path\":          $data_anterior,\n                \"intensidade\":   $intensidade\n              }\n            )\n          }\n        );\n        $append($acc, $linhas)\n      )\n    },\n    []\n  );\n)",
                         "source": "url",
                         "type": "json",
                         "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
@@ -1105,20 +1551,72 @@
                     "refId": "A",
                     "hidden": false
                   }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "valor",
+                            "text": "Deslocamento (mm)",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "disp_num",
+                            "text": "Profundidade (m)",
+                            "type": "number"
+                          }
+                        ],
+                        "data": "valor,path,disp_num\n-15,Alert 1,0\n-15,Alert 1,-20\n15,Alert 2,0\n15,Alert 2,-20\n-20,Alarm 1,0\n-20,Alarm 1,-20\n20,Alarm 2,0\n20,Alarm 2,-20",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "",
+                        "source": "inline",
+                        "type": "csv",
+                        "url": "",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
                 }
               ],
               "transformations": [
                 {
                   "kind": "Transformation",
-                  "group": "sortBy",
+                  "group": "partitionByValues",
                   "spec": {
+                    "filter": {
+                      "id": "byRefId",
+                      "options": "/^(?:A)$/"
+                    },
                     "options": {
-                      "fields": {},
-                      "sort": [
-                        {
-                          "field": "Elev. (m)"
-                        }
-                      ]
+                      "fields": [
+                        "path"
+                      ],
+                      "keepFields": false,
+                      "naming": {
+                        "asLabels": false
+                      }
                     }
                   }
                 },
@@ -1126,14 +1624,15 @@
                   "kind": "Transformation",
                   "group": "partitionByValues",
                   "spec": {
+                    "filter": {
+                      "id": "byRefId",
+                      "options": "/^(?:B)$/"
+                    },
                     "options": {
                       "fields": [
                         "path"
                       ],
-                      "keepFields": false,
-                      "naming": {
-                        "asLabels": true
-                      }
+                      "keepFields": true
                     }
                   }
                 }
@@ -1156,16 +1655,22 @@
                 "mapping": "auto",
                 "series": [
                   {
+                    "color": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "intensidade"
+                      }
+                    },
                     "x": {
                       "matcher": {
                         "id": "byName",
-                        "options": "Displacement (mm)"
+                        "options": "Deslocamento (mm)"
                       }
                     },
                     "y": {
                       "matcher": {
                         "id": "byName",
-                        "options": "Elev. (m)"
+                        "options": "Profundidade (m)"
                       }
                     }
                   }
@@ -1192,7 +1697,7 @@
                     ]
                   },
                   "color": {
-                    "mode": "palette-classic"
+                    "mode": "continuous-BlPu"
                   },
                   "custom": {
                     "axisBorderShow": false,
@@ -1220,140 +1725,102 @@
                 "overrides": [
                   {
                     "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) Alert 1"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "yellow",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            15
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) Alert 2"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "yellow",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            15
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) Alarm 1"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "red",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            10
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) Alarm 2"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "red",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            10
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      }
-                    ]
-                  },
-                  {
-                    "__systemRef": "hideSeriesFrom",
-                    "matcher": {
-                      "id": "byNames",
-                      "options": {
-                        "mode": "exclude",
-                        "names": [
-                          "Elev. (m) Displacement (mm)"
-                        ],
-                        "prefix": "All except:",
-                        "readOnly": true
-                      }
+                      "id": "byRegexp",
+                      "scope": "series",
+                      "options": "/(A path|disp_num Disp|intensidade|time_antigo|time_recente|valor_antigo|valor_recente|Elev).*/"
                     },
                     "properties": [
                       {
                         "id": "custom.hideFrom",
                         "value": {
-                          "legend": false,
+                          "legend": true,
                           "tooltip": true,
-                          "viz": true
+                          "viz": false
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "scope": "series",
+                      "options": "/(Alarm).*/"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Alarme"
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            10
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "scope": "series",
+                      "options": "/(Alert).*/"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "yellow",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            15
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Alerta"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "scope": "series",
+                      "options": "/Profundidade.*/"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
                         }
                       }
                     ]
@@ -1375,7 +1842,7 @@
               "x": 0,
               "y": 0,
               "width": 8,
-              "height": 11,
+              "height": 8,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-13"
@@ -1430,7 +1897,33 @@
               "height": 23,
               "element": {
                 "kind": "ElementReference",
-                "name": "panel-17"
+                "name": "panel-20"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 8,
+              "width": 8,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-18"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 16,
+              "width": 8,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-19"
               }
             }
           }
@@ -1468,8 +1961,8 @@
         "spec": {
           "name": "instrument_id",
           "current": {
-            "text": "A25.2",
-            "value": "geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786"
+            "text": "I4",
+            "value": "geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.I4"
           },
           "hide": "dontHide",
           "refresh": "onDashboardLoad",
@@ -1479,7 +1972,7 @@
             "group": "yesoreyeram-infinity-datasource",
             "version": "v0",
             "datasource": {
-              "name": "aflc3bfm914w0d"
+              "name": "P51F62827499EFE58"
             },
             "spec": {
               "infinityQuery": {
@@ -1503,14 +1996,15 @@
                   }
                 ],
                 "data": "values\nfoo\nbar\nbaz",
+                "filterExpression": "matricula =~ \"I.*\"",
                 "filters": [],
                 "format": "table",
                 "parser": "backend",
                 "refId": "",
-                "root_selector": "$filter($, function($v) { $startsWith($v.attributes.matricula, \"I\") })",
+                "root_selector": "items",
                 "source": "url",
                 "type": "json",
-                "url": "/search/things?fields=thingId,attributes&filter=like(thingId,%22geo-asset%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
+                "url": "/search/things?fields=thingId,attributes&filter=like(thingId,%22geo-asset%3Abrisa%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
                 "url_options": {
                   "data": "",
                   "method": "GET"
