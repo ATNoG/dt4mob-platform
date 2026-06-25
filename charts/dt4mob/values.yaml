@@ -147,6 +147,8 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
+      quarkusLoggingProfile: "prod"
+
       extraEnv:
       - name: KEY_STORE_PASSWORD
         valueFrom:
@@ -212,6 +214,8 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
+      quarkusLoggingProfile: "prod"
+
       tlsKeysSecret: "dt4mob-adapter-mqtt-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
@@ -254,6 +258,8 @@ hono:
       deployment:
         annotations:
           reloader.stakater.com/auto: "true"
+
+      quarkusLoggingProfile: "prod"
 
       tlsKeysSecret: "dt4mob-adapter-http-cert"
       tlsTrustStoreConfigMap: "none"
@@ -298,6 +304,8 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
+      quarkusLoggingProfile: "prod"
+
       tlsKeysSecret: "dt4mob-adapter-amqp-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
@@ -341,6 +349,8 @@ hono:
       annotations:
         reloader.stakater.com/auto: "true"
 
+    quarkusLoggingProfile: "prod"
+
     tlsKeysSecret: "dt4mob-auth-server-cert"
     tlsTrustStoreSecret:
       secretName: "dt4mob-auth-server-cert"
@@ -379,6 +389,8 @@ hono:
     deployment:
       annotations:
         reloader.stakater.com/auto: "true"
+
+    quarkusLoggingProfile: "prod"
 
     tlsKeysSecret: "dt4mob-command-router-cert"
     tlsTrustStoreConfigMap: "none"
