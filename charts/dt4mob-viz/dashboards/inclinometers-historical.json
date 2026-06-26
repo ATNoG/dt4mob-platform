@@ -5,8 +5,8 @@
     "name": "adzn6fn",
     "namespace": "default",
     "uid": "88ad61fd-4512-49ca-9f6d-d3e66983b3c0",
-    "resourceVersion": "1782409009042990",
-    "generation": 73,
+    "resourceVersion": "1782487852815015",
+    "generation": 101,
     "creationTimestamp": "2026-06-19T20:07:26Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "910897155371008"
@@ -22,7 +22,7 @@
       "grafana.app/sourcePath": "/tmp/dashboards/inclinometers-historical.json",
       "grafana.app/sourceTimestamp": "1781900458000",
       "grafana.app/updatedBy": "user:efpmz9ng9o6iod",
-      "grafana.app/updatedTimestamp": "2026-06-25T17:36:49Z"
+      "grafana.app/updatedTimestamp": "2026-06-26T15:30:52Z"
     }
   },
   "spec": {
@@ -50,205 +50,6 @@
     "cursorSync": "Off",
     "editable": true,
     "elements": {
-      "panel-10": {
-        "kind": "Panel",
-        "spec": {
-          "id": 10,
-          "title": "Deslocamento Acumulado - Direção B",
-          "description": "",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "yesoreyeram-infinity-datasource",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${historic}"
-                      },
-                      "spec": {
-                        "columns": [
-                          {
-                            "selector": "time",
-                            "text": "time",
-                            "type": "string"
-                          },
-                          {
-                            "selector": "valor",
-                            "text": "Deslocamento (mm)",
-                            "type": "number"
-                          },
-                          {
-                            "selector": "path",
-                            "text": "path",
-                            "type": "string"
-                          },
-                          {
-                            "selector": "disp_num",
-                            "text": "disp_num",
-                            "type": "number"
-                          }
-                        ],
-                        "computed_columns": [
-                          {
-                            "selector": "(disp_num * -0.5)",
-                            "text": "Profundidade (m)",
-                            "type": "string"
-                          }
-                        ],
-                        "filterExpression": "",
-                        "filters": [],
-                        "format": "table",
-                        "global_query_id": "",
-                        "parser": "backend",
-                        "root_selector": "$map(\n  $filter($, function($v) {\n    $contains($v.path, \"/properties/latestValue\") and\n    $contains($v.path, \"DispY\")\n  }),\n  function($v) {\n    {\n      \"time\": $substringBefore($v.time, \"T\"),\n      \"valor\": $v.value.valor,\n      \"path\": $v.path,\n      \"disp_num\": $number(\n        $substringBefore(\n          $substringAfter($v.path, \"DispY\"),\n          \"/\"\n        )\n      )\n    }\n  }\n)",
-                        "source": "url",
-                        "type": "json",
-                        "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
-                        "url_options": {
-                          "data": "",
-                          "method": "GET"
-                        }
-                      }
-                    },
-                    "refId": "A",
-                    "hidden": false
-                  }
-                }
-              ],
-              "transformations": [
-                {
-                  "kind": "Transformation",
-                  "group": "sortBy",
-                  "spec": {
-                    "options": {
-                      "fields": {},
-                      "sort": [
-                        {
-                          "field": "Profundidade (m)"
-                        }
-                      ]
-                    }
-                  }
-                },
-                {
-                  "kind": "Transformation",
-                  "group": "partitionByValues",
-                  "spec": {
-                    "options": {
-                      "fields": [
-                        "time"
-                      ],
-                      "keepFields": false,
-                      "naming": {
-                        "asLabels": true
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {}
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "xychart",
-            "version": "13.0.2",
-            "spec": {
-              "options": {
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
-                },
-                "mapping": "auto",
-                "series": [
-                  {
-                    "x": {
-                      "matcher": {
-                        "id": "byName",
-                        "options": "Deslocamento (mm)"
-                      }
-                    },
-                    "y": {
-                      "matcher": {
-                        "id": "byName",
-                        "options": "Profundidade (m)"
-                      }
-                    }
-                  }
-                ],
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
-              },
-              "fieldConfig": {
-                "defaults": {
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "value": 0,
-                        "color": "green"
-                      },
-                      {
-                        "value": 80,
-                        "color": "red"
-                      }
-                    ]
-                  },
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "fillOpacity": 50,
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "lineStyle": {
-                      "fill": "solid"
-                    },
-                    "lineWidth": 1,
-                    "pointShape": "circle",
-                    "pointSize": {
-                      "fixed": 10
-                    },
-                    "pointStrokeWidth": 1,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "show": "points+lines"
-                  }
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": ""
-                    },
-                    "properties": []
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
       "panel-13": {
         "kind": "Panel",
         "spec": {
@@ -339,362 +140,6 @@
           }
         }
       },
-      "panel-14": {
-        "kind": "Panel",
-        "spec": {
-          "id": 14,
-          "title": "Deslocamento Acumulado - Direção A",
-          "description": "",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "yesoreyeram-infinity-datasource",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${historic}"
-                      },
-                      "spec": {
-                        "columns": [
-                          {
-                            "selector": "time",
-                            "text": "time",
-                            "type": "string"
-                          },
-                          {
-                            "selector": "valor",
-                            "text": "Deslocamento (mm)",
-                            "type": "number"
-                          },
-                          {
-                            "selector": "path",
-                            "text": "path",
-                            "type": "string"
-                          },
-                          {
-                            "selector": "disp_num",
-                            "text": "disp_num",
-                            "type": "number"
-                          }
-                        ],
-                        "computed_columns": [
-                          {
-                            "selector": "(disp_num * -0.5)",
-                            "text": "Profundidade (m)",
-                            "type": "string"
-                          }
-                        ],
-                        "filterExpression": "",
-                        "filters": [],
-                        "format": "table",
-                        "global_query_id": "",
-                        "parser": "backend",
-                        "root_selector": "$map(\n  $filter($, function($v) {\n    $contains($v.path, \"/properties/latestValue\") and\n    $contains($v.path, \"DispX\")\n  }),\n  function($v) {\n    {\n      \"time\": $substringBefore($v.time, \"T\"),\n      \"valor\": $v.value.valor,\n      \"path\": $v.path,\n      \"disp_num\": $number(\n        $substringBefore(\n          $substringAfter($v.path, \"DispX\"),\n          \"/\"\n        )\n      )\n    }\n  }\n)",
-                        "source": "url",
-                        "type": "json",
-                        "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
-                        "url_options": {
-                          "data": "",
-                          "method": "GET"
-                        }
-                      }
-                    },
-                    "refId": "A",
-                    "hidden": false
-                  }
-                }
-              ],
-              "transformations": [
-                {
-                  "kind": "Transformation",
-                  "group": "sortBy",
-                  "spec": {
-                    "options": {
-                      "fields": {},
-                      "sort": [
-                        {
-                          "field": "Profundidade (m)"
-                        }
-                      ]
-                    }
-                  }
-                },
-                {
-                  "kind": "Transformation",
-                  "group": "partitionByValues",
-                  "spec": {
-                    "options": {
-                      "fields": [
-                        "time"
-                      ],
-                      "keepFields": false,
-                      "naming": {
-                        "asLabels": true
-                      }
-                    }
-                  }
-                }
-              ],
-              "queryOptions": {}
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "xychart",
-            "version": "13.0.2",
-            "spec": {
-              "options": {
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
-                },
-                "mapping": "auto",
-                "series": [
-                  {
-                    "x": {
-                      "matcher": {
-                        "id": "byName",
-                        "options": "Deslocamento (mm)"
-                      }
-                    },
-                    "y": {
-                      "matcher": {
-                        "id": "byName",
-                        "options": "Profundidade (m)"
-                      }
-                    }
-                  }
-                ],
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
-              },
-              "fieldConfig": {
-                "defaults": {
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "value": 0,
-                        "color": "green"
-                      },
-                      {
-                        "value": -2,
-                        "color": "red"
-                      }
-                    ]
-                  },
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "fillOpacity": 50,
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "lineStyle": {
-                      "fill": "solid"
-                    },
-                    "lineWidth": 0,
-                    "pointShape": "circle",
-                    "pointSize": {
-                      "fixed": 10
-                    },
-                    "pointStrokeWidth": 1,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "show": "points+lines"
-                  }
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) threshold"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "yellow",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            15
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      },
-                      {
-                        "id": "custom.hideFrom",
-                        "value": {
-                          "legend": true,
-                          "tooltip": false,
-                          "viz": false
-                        }
-                      },
-                      {
-                        "id": "custom.lineWidth",
-                        "value": 2
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) threshold2"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "yellow",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            15
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      },
-                      {
-                        "id": "custom.hideFrom",
-                        "value": {
-                          "legend": true,
-                          "tooltip": false,
-                          "viz": false
-                        }
-                      },
-                      {
-                        "id": "custom.lineWidth",
-                        "value": 2
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) threshold_alarme"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "red",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            10
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      },
-                      {
-                        "id": "custom.hideFrom",
-                        "value": {
-                          "legend": true,
-                          "tooltip": false,
-                          "viz": false
-                        }
-                      },
-                      {
-                        "id": "custom.lineWidth",
-                        "value": 2
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Elev. (m) threshold2_alarme"
-                    },
-                    "properties": [
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "red",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.lineStyle",
-                        "value": {
-                          "dash": [
-                            10,
-                            10
-                          ],
-                          "fill": "dash"
-                        }
-                      },
-                      {
-                        "id": "custom.show",
-                        "value": "lines"
-                      },
-                      {
-                        "id": "custom.hideFrom",
-                        "value": {
-                          "legend": true,
-                          "tooltip": false,
-                          "viz": false
-                        }
-                      },
-                      {
-                        "id": "custom.lineWidth",
-                        "value": 2
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
       "panel-16": {
         "kind": "Panel",
         "spec": {
@@ -759,22 +204,16 @@
                             "type": "number"
                           }
                         ],
-                        "computed_columns": [
-                          {
-                            "selector": "(disp_num * -0.5)",
-                            "text": "Elev. (m)",
-                            "type": "string"
-                          }
-                        ],
+                        "computed_columns": [],
                         "filterExpression": "",
                         "filters": [],
                         "format": "table",
                         "global_query_id": "",
                         "parser": "backend",
-                        "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispX\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispX\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n$datas := $sort($distinct($dados.time));\n  $data_recente := $datas[-1];\n  $total_datas := $count($datas);\n  $datas_anteriores := $datas[$not($ = $data_recente)];\n  $disps := $sort($distinct($dados.disp_num));\n\n  $comparacoes := $reduce(\n    $datas_anteriores,\n    function($acc, $data_anterior) {\n      (\n        $indice := $count($datas[$not($ > $data_anterior)]) - 1;\n        $intensidade_raw := $indice / ($total_datas - 1);\n        $intensidade := 0.4 + $intensidade_raw * 0.6;\n        $linhas := $map(\n          $disps,\n          function($d) {\n            (\n              $reg_recente  := $filter($dados, function($r) { $r.time = $data_recente  and $r.disp_num = $d })[0];\n              $reg_anterior := $filter($dados, function($r) { $r.time = $data_anterior and $r.disp_num = $d })[0];\n              {\n                \"disp_num\":      $d * -0.5,\n                \"time_recente\":  $reg_recente.time,\n                \"valor_recente\": $reg_recente.valor,\n                \"time_anterior\": $reg_anterior.time,\n                \"valor_anterior\":$reg_anterior.valor,\n                \"valor\":         $number($reg_recente.valor) - $number($reg_anterior.valor),\n                \"path\":          $data_anterior,\n                \"intensidade\":   $intensidade\n              }\n            )\n          }\n        );\n        $append($acc, $linhas)\n      )\n    },\n    []\n  );\n)",
+                        "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispX\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispX\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n  $datas := $sort($distinct($dados.time));\n  $data_recente := $datas[-1];\n  $data_antiga := $datas[0];\n  $disps := $sort($distinct($dados.disp_num));\n  $maxNum := $max($disps);\n  $depthTop := (0 - $maxNum) * 0.5;\n  $depthBottom := 0;\n  $limAlerta := 15;\n  $limAlarme := 20;\n  $desvios := $map(\n    $disps,\n    function($d) {\n      (\n        $reg_recente := $filter($dados, function($r) { $r.time = $data_recente and $r.disp_num = $d })[0];\n        $reg_antigo := $filter($dados, function($r) { $r.time = $data_antiga and $r.disp_num = $d })[0];\n        {\n          \"disp_num\": ($d - $maxNum) * 0.5,\n          \"valor\": $number($reg_recente.valor) - $number($reg_antigo.valor),\n          \"path\": $data_antiga & \" → \" & $data_recente\n        }\n      )\n    }\n  );\n  $threshold_lines := [\n    {\"disp_num\": $depthTop,    \"valor\": $limAlerta,  \"path\": \"Alerta 1\"},\n    {\"disp_num\": $depthBottom, \"valor\": $limAlerta,  \"path\": \"Alerta 1\"},\n    {\"disp_num\": $depthTop,    \"valor\": -$limAlerta, \"path\": \"Alerta 2\"},\n    {\"disp_num\": $depthBottom, \"valor\": -$limAlerta, \"path\": \"Alerta 2\"},\n    {\"disp_num\": $depthTop,    \"valor\": $limAlarme,  \"path\": \"Alarme 1\"},\n    {\"disp_num\": $depthBottom, \"valor\": $limAlarme,  \"path\": \"Alarme 1\"},\n    {\"disp_num\": $depthTop,    \"valor\": -$limAlarme, \"path\": \"Alarme 2\"},\n    {\"disp_num\": $depthBottom, \"valor\": -$limAlarme, \"path\": \"Alarme 2\"}\n  ];\n  $append($desvios, $threshold_lines)\n)",
                         "source": "url",
                         "type": "json",
-                        "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
+                        "url": "/events/$instrument_id?since=2017-09-01T00:00:00Z",
                         "url_options": {
                           "data": "",
                           "method": "GET"
@@ -782,53 +221,6 @@
                       }
                     },
                     "refId": "A",
-                    "hidden": false
-                  }
-                },
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "yesoreyeram-infinity-datasource",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${historic}"
-                      },
-                      "spec": {
-                        "columns": [
-                          {
-                            "selector": "valor",
-                            "text": "Deslocamento (mm)",
-                            "type": "number"
-                          },
-                          {
-                            "selector": "path",
-                            "text": "path",
-                            "type": "string"
-                          },
-                          {
-                            "selector": "disp_num",
-                            "text": "Profundidade (m)",
-                            "type": "number"
-                          }
-                        ],
-                        "data": "valor,path,disp_num\n-15,Alert 1,0\n-15,Alert 1,-20\n15,Alert 2,0\n15,Alert 2,-20\n-20,Alarm 1,0\n-20,Alarm 1,-20\n20,Alarm 2,0\n20,Alarm 2,-20",
-                        "filters": [],
-                        "format": "table",
-                        "global_query_id": "",
-                        "parser": "backend",
-                        "root_selector": "",
-                        "source": "inline",
-                        "type": "csv",
-                        "url": "",
-                        "url_options": {
-                          "data": "",
-                          "method": "GET"
-                        }
-                      }
-                    },
-                    "refId": "B",
                     "hidden": false
                   }
                 }
@@ -888,12 +280,6 @@
                 "mapping": "auto",
                 "series": [
                   {
-                    "color": {
-                      "matcher": {
-                        "id": "byName",
-                        "options": "intensidade"
-                      }
-                    },
                     "x": {
                       "matcher": {
                         "id": "byName",
@@ -930,7 +316,8 @@
                     ]
                   },
                   "color": {
-                    "mode": "continuous-BlPu"
+                    "mode": "fixed",
+                    "fixedColor": "green"
                   },
                   "custom": {
                     "axisBorderShow": false,
@@ -1462,10 +849,770 @@
           }
         }
       },
-      "panel-20": {
+      "panel-21": {
         "kind": "Panel",
         "spec": {
-          "id": 20,
+          "id": 21,
+          "title": "Deslocamento Acumulado - Direção A",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "valor",
+                            "text": "Deslocamento (mm)",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "disp_num",
+                            "text": "disp_num",
+                            "type": "number"
+                          }
+                        ],
+                        "computed_columns": [
+                          {
+                            "selector": "(disp_num * 0.5)",
+                            "text": "Profundidade (m)",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "(\n  $data := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispX\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $v.value.valor,\n        \"path\": $v.path,\n        \"disp_num\": $number(\n          $substringBefore(\n            $substringAfter($v.path, \"DispX\"),\n            \"/\"\n          )\n        )\n      }\n    }\n  );\n  $maxNum := $max($data.disp_num);\n  $map($data, function($v) {\n    {\n      \"time\": $v.time,\n      \"valor\": $v.valor,\n      \"path\": $v.path,\n      \"disp_num\": $v.disp_num - $maxNum\n    }\n  })\n)",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/events/$instrument_id?since=2017-09-01T00:00:00Z",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "sortBy",
+                  "spec": {
+                    "options": {
+                      "fields": {},
+                      "sort": [
+                        {
+                          "field": "Profundidade (m)"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "partitionByValues",
+                  "spec": {
+                    "options": {
+                      "fields": [
+                        "time"
+                      ],
+                      "keepFields": false,
+                      "naming": {
+                        "asLabels": true
+                      }
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "xychart",
+            "version": "13.0.2",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "mapping": "auto",
+                "series": [
+                  {
+                    "x": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "Deslocamento (mm)"
+                      }
+                    },
+                    "y": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "Profundidade (m)"
+                      }
+                    }
+                  }
+                ],
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "#F2495C"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 50,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 0,
+                    "pointShape": "circle",
+                    "pointSize": {
+                      "fixed": 10
+                    },
+                    "pointStrokeWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "show": "points+lines"
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Elev. (m) threshold"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "yellow",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            15
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Elev. (m) threshold2"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "yellow",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            15
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Elev. (m) threshold_alarme"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            10
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Elev. (m) threshold2_alarme"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            10
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "__systemRef": "hideSeriesFrom",
+                    "matcher": {
+                      "id": "byNames",
+                      "options": {
+                        "mode": "exclude",
+                        "names": [
+                          "Profundidade (m) 2026-01-06",
+                          "Profundidade (m) 2018-12-07",
+                          "Profundidade (m) 2026-01-08",
+                          "Profundidade (m) 2025-12-17"
+                        ],
+                        "prefix": "All except:",
+                        "readOnly": true
+                      }
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": false,
+                          "tooltip": true,
+                          "viz": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-22": {
+        "kind": "Panel",
+        "spec": {
+          "id": 22,
+          "title": "Deslocamento Acumulado - Direção B",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${historic}"
+                      },
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "time",
+                            "text": "time",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "valor",
+                            "text": "Deslocamento (mm)",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "path",
+                            "text": "path",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "disp_num",
+                            "text": "disp_num",
+                            "type": "number"
+                          }
+                        ],
+                        "computed_columns": [
+                          {
+                            "selector": "(disp_num * 0.5)",
+                            "text": "Profundidade (m)",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "(\n  $data := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispY\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $v.value.valor,\n        \"path\": $v.path,\n        \"disp_num\": $number(\n          $substringBefore(\n            $substringAfter($v.path, \"DispY\"),\n            \"/\"\n          )\n        )\n      }\n    }\n  );\n  $maxNum := $max($data.disp_num);\n  $map($data, function($v) {\n    {\n      \"time\": $v.time,\n      \"valor\": $v.valor,\n      \"path\": $v.path,\n      \"disp_num\": $v.disp_num - $maxNum\n    }\n  })\n)",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/events/$instrument_id?since=2017-09-01T00:00:00Z",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "sortBy",
+                  "spec": {
+                    "options": {
+                      "fields": {},
+                      "sort": [
+                        {
+                          "field": "Profundidade (m)"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "partitionByValues",
+                  "spec": {
+                    "options": {
+                      "fields": [
+                        "time"
+                      ],
+                      "keepFields": false,
+                      "naming": {
+                        "asLabels": true
+                      }
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "xychart",
+            "version": "13.0.2",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "mapping": "auto",
+                "series": [
+                  {
+                    "x": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "Deslocamento (mm)"
+                      }
+                    },
+                    "y": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "Profundidade (m)"
+                      }
+                    }
+                  }
+                ],
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "#F2495C"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 50,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 0,
+                    "pointShape": "circle",
+                    "pointSize": {
+                      "fixed": 10
+                    },
+                    "pointStrokeWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "show": "points+lines"
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Elev. (m) threshold"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "yellow",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            15
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Elev. (m) threshold2"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "yellow",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            15
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Elev. (m) threshold_alarme"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            10
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Elev. (m) threshold2_alarme"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            10
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "custom.show",
+                        "value": "lines"
+                      },
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": true,
+                          "tooltip": false,
+                          "viz": false
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  {
+                    "__systemRef": "hideSeriesFrom",
+                    "matcher": {
+                      "id": "byNames",
+                      "options": {
+                        "mode": "exclude",
+                        "names": [
+                          "Profundidade (m) 2026-01-06",
+                          "Profundidade (m) 2018-12-07",
+                          "Profundidade (m) 2026-01-08",
+                          "Profundidade (m) 2025-12-17"
+                        ],
+                        "prefix": "All except:",
+                        "readOnly": true
+                      }
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom",
+                        "value": {
+                          "legend": false,
+                          "tooltip": true,
+                          "viz": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-23": {
+        "kind": "Panel",
+        "spec": {
+          "id": 23,
           "title": "Desvio - Direção B",
           "description": "",
           "links": [],
@@ -1526,22 +1673,16 @@
                             "type": "number"
                           }
                         ],
-                        "computed_columns": [
-                          {
-                            "selector": "(disp_num * -0.5)",
-                            "text": "Elev. (m)",
-                            "type": "string"
-                          }
-                        ],
+                        "computed_columns": [],
                         "filterExpression": "",
                         "filters": [],
                         "format": "table",
                         "global_query_id": "",
                         "parser": "backend",
-                        "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispY\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispY\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n$datas := $sort($distinct($dados.time));\n  $data_recente := $datas[-1];\n  $total_datas := $count($datas);\n  $datas_anteriores := $datas[$not($ = $data_recente)];\n  $disps := $sort($distinct($dados.disp_num));\n\n  $comparacoes := $reduce(\n    $datas_anteriores,\n    function($acc, $data_anterior) {\n      (\n        $indice := $count($datas[$not($ > $data_anterior)]) - 1;\n        $intensidade_raw := $indice / ($total_datas - 1);\n        $intensidade := 0.4 + $intensidade_raw * 0.6;\n        $linhas := $map(\n          $disps,\n          function($d) {\n            (\n              $reg_recente  := $filter($dados, function($r) { $r.time = $data_recente  and $r.disp_num = $d })[0];\n              $reg_anterior := $filter($dados, function($r) { $r.time = $data_anterior and $r.disp_num = $d })[0];\n              {\n                \"disp_num\":      $d * -0.5,\n                \"time_recente\":  $reg_recente.time,\n                \"valor_recente\": $reg_recente.valor,\n                \"time_anterior\": $reg_anterior.time,\n                \"valor_anterior\":$reg_anterior.valor,\n                \"valor\":         $number($reg_recente.valor) - $number($reg_anterior.valor),\n                \"path\":          $data_anterior,\n                \"intensidade\":   $intensidade\n              }\n            )\n          }\n        );\n        $append($acc, $linhas)\n      )\n    },\n    []\n  );\n)",
+                        "root_selector": "(\n  $dados := $map(\n    $filter($, function($v) {\n      $contains($v.path, \"/properties/latestValue\") and\n      $contains($v.path, \"DispY\")\n    }),\n    function($v) {\n      {\n        \"time\": $substringBefore($v.time, \"T\"),\n        \"valor\": $number($v.value.valor),\n        \"disp_num\": $number(\n          $substringBefore($substringAfter($v.path, \"DispY\"), \"/\")\n        ),\n        \"path\": $v.path\n      }\n    }\n  );\n  $datas := $sort($distinct($dados.time));\n  $data_recente := $datas[-1];\n  $data_antiga := $datas[0];\n  $disps := $sort($distinct($dados.disp_num));\n  $maxNum := $max($disps);\n  $depthTop := (0 - $maxNum) * 0.5;\n  $depthBottom := 0;\n  $limAlerta := 15;\n  $limAlarme := 20;\n  $desvios := $map(\n    $disps,\n    function($d) {\n      (\n        $reg_recente := $filter($dados, function($r) { $r.time = $data_recente and $r.disp_num = $d })[0];\n        $reg_antigo := $filter($dados, function($r) { $r.time = $data_antiga and $r.disp_num = $d })[0];\n        {\n          \"disp_num\": ($d - $maxNum) * 0.5,\n          \"valor\": $number($reg_recente.valor) - $number($reg_antigo.valor),\n          \"path\": $data_antiga & \" → \" & $data_recente\n        }\n      )\n    }\n  );\n  $threshold_lines := [\n    {\"disp_num\": $depthTop,    \"valor\": $limAlerta,  \"path\": \"Alerta 1\"},\n    {\"disp_num\": $depthBottom, \"valor\": $limAlerta,  \"path\": \"Alerta 1\"},\n    {\"disp_num\": $depthTop,    \"valor\": -$limAlerta, \"path\": \"Alerta 2\"},\n    {\"disp_num\": $depthBottom, \"valor\": -$limAlerta, \"path\": \"Alerta 2\"},\n    {\"disp_num\": $depthTop,    \"valor\": $limAlarme,  \"path\": \"Alarme 1\"},\n    {\"disp_num\": $depthBottom, \"valor\": $limAlarme,  \"path\": \"Alarme 1\"},\n    {\"disp_num\": $depthTop,    \"valor\": -$limAlarme, \"path\": \"Alarme 2\"},\n    {\"disp_num\": $depthBottom, \"valor\": -$limAlarme, \"path\": \"Alarme 2\"}\n  ];\n  $append($desvios, $threshold_lines)\n)",
                         "source": "url",
                         "type": "json",
-                        "url": "/events/$instrument_id?since=2025-09-01T00:00:00Z",
+                        "url": "/events/$instrument_id?since=2017-09-01T00:00:00Z",
                         "url_options": {
                           "data": "",
                           "method": "GET"
@@ -1549,53 +1690,6 @@
                       }
                     },
                     "refId": "A",
-                    "hidden": false
-                  }
-                },
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "yesoreyeram-infinity-datasource",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "${historic}"
-                      },
-                      "spec": {
-                        "columns": [
-                          {
-                            "selector": "valor",
-                            "text": "Deslocamento (mm)",
-                            "type": "number"
-                          },
-                          {
-                            "selector": "path",
-                            "text": "path",
-                            "type": "string"
-                          },
-                          {
-                            "selector": "disp_num",
-                            "text": "Profundidade (m)",
-                            "type": "number"
-                          }
-                        ],
-                        "data": "valor,path,disp_num\n-15,Alert 1,0\n-15,Alert 1,-20\n15,Alert 2,0\n15,Alert 2,-20\n-20,Alarm 1,0\n-20,Alarm 1,-20\n20,Alarm 2,0\n20,Alarm 2,-20",
-                        "filters": [],
-                        "format": "table",
-                        "global_query_id": "",
-                        "parser": "backend",
-                        "root_selector": "",
-                        "source": "inline",
-                        "type": "csv",
-                        "url": "",
-                        "url_options": {
-                          "data": "",
-                          "method": "GET"
-                        }
-                      }
-                    },
-                    "refId": "B",
                     "hidden": false
                   }
                 }
@@ -1655,12 +1749,6 @@
                 "mapping": "auto",
                 "series": [
                   {
-                    "color": {
-                      "matcher": {
-                        "id": "byName",
-                        "options": "intensidade"
-                      }
-                    },
                     "x": {
                       "matcher": {
                         "id": "byName",
@@ -1697,7 +1785,8 @@
                     ]
                   },
                   "color": {
-                    "mode": "continuous-BlPu"
+                    "mode": "fixed",
+                    "fixedColor": "green"
                   },
                   "custom": {
                     "axisBorderShow": false,
@@ -1855,10 +1944,10 @@
               "x": 8,
               "y": 0,
               "width": 4,
-              "height": 23,
+              "height": 24,
               "element": {
                 "kind": "ElementReference",
-                "name": "panel-14"
+                "name": "panel-21"
               }
             }
           },
@@ -1868,7 +1957,7 @@
               "x": 12,
               "y": 0,
               "width": 4,
-              "height": 23,
+              "height": 24,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-16"
@@ -1881,10 +1970,10 @@
               "x": 16,
               "y": 0,
               "width": 4,
-              "height": 23,
+              "height": 24,
               "element": {
                 "kind": "ElementReference",
-                "name": "panel-10"
+                "name": "panel-22"
               }
             }
           },
@@ -1894,10 +1983,10 @@
               "x": 20,
               "y": 0,
               "width": 4,
-              "height": 23,
+              "height": 24,
               "element": {
                 "kind": "ElementReference",
-                "name": "panel-20"
+                "name": "panel-23"
               }
             }
           },
@@ -1920,7 +2009,7 @@
               "x": 0,
               "y": 16,
               "width": 8,
-              "height": 7,
+              "height": 8,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-19"
