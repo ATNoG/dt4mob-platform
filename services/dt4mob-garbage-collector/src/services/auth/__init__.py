@@ -25,6 +25,10 @@ class AuthenticationService:
         self._token = None
         self._expires_in = datetime.now()
 
+    def seconds_until_expiration(self) -> float:
+        remaining = self._expires_in - datetime.now()
+        return max(0.0, remaining.total_seconds())
+
     async def get_token(self) -> str:
         if self._token is not None and self._expires_in > datetime.now():
             return self._token

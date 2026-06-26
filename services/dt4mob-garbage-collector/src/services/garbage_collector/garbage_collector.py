@@ -1,9 +1,10 @@
+import logging
 from src.services.ditto_api import DittoClient
 
 from src.services.envelope_formatter.ditto_thing import envelop_formater
 from src.models.ditto import DittoProtocolEnvelope
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class GarbageCollector:
@@ -11,8 +12,9 @@ class GarbageCollector:
         self.client = client
 
     async def get_expired_envelops(self) -> list[DittoProtocolEnvelope]:
-        current_time = datetime.now()
-        values = await self.client.get_all_things_expired_lt(current_time)
+        current_time = datetime.now(timezone.utc)
+        logging.info(f"Searching for things expired before {current_time}")
+        values = await self.client.get_things_expired_lt(current_time)
 
         envelops = []
         for thing in values:
