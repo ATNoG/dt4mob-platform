@@ -1,9 +1,12 @@
-from src.models.ditto_events import DittoEvent,Action
 import logging
 from datetime import datetime
 
+from src.models.ditto_events import DittoEvent, Action
+
+
 def parse_message(msg) -> DittoEvent:
     topic_processed = msg["topic"].split("/")
+
     headers = msg.get("headers", {})
 
     override_timestamp = headers.get("dt4mob-historic-timestamp-override")
@@ -18,6 +21,8 @@ def parse_message(msg) -> DittoEvent:
                 f"Malformed historic override timestamp detected: '{override_timestamp}'. "
                 "Falling back to message default timestamp."
             )
+
+    # 3. Fallback to normal timestamp if override missing or invalid
     if not event_time:
         event_time = msg["timestamp"]
 
@@ -27,7 +32,7 @@ def parse_message(msg) -> DittoEvent:
         action=Action(topic_processed[5]),
         path=msg["path"],
         revision=msg["revision"],
-        value=msg.get("value", {})
+        value=msg.get("value", {}),
     )
 
     return dittomsg
