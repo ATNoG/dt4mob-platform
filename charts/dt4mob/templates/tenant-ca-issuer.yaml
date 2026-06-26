@@ -12,7 +12,7 @@ metadata:
 spec:
   isCA: true
   duration: "87660h" # 10 years
-  commonName: {{ .Values.tenant }}
+  commonName: {{ .Values.global.tenant }}
   secretName: {{ include "dt4mob.fullname" . }}-tenant-ca-secret
   privateKey:
     algorithm: ECDSA

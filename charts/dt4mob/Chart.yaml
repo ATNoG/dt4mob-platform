@@ -23,9 +23,19 @@ dependencies:
   - name: dt4mob-historical
     version: "0.1.0"
     repository: file://../dt4mob-historical
+    condition: dt4mob-historical.enabled
   - name: dt4mob-garbage-collector
     version: "0.1.0"
     repository: file://../dt4mob-garbage-collector
+    condition: dt4mob-garbage-collector.enabled
   - name: dt4mob-ingress
     version: "0.1.0"
     repository: file://../dt4mob-ingress
+  - name: dt4mob-level-ams-loader
+    version: "0.1.0"
+    repository: file://../dt4mob-level-ams-loader
+    condition: dt4mob-level-ams-loader.enabled
+  - name: dt4mob-viz
+    version: "0.1.0"
+    repository: file://../dt4mob-viz
+    condition: dt4mob-viz.enabled

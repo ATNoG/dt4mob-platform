@@ -32,5 +32,18 @@
         "revoke": []
       }
     }
+  },
+  "VISUALIZER": {
+    "subjects": {
+      "keycloak:role:visualizer": {
+        "type": "DT4Mob Visualizer Role"
+      }
+    },
+    "resources": {
+      "thing:/": {
+        "grant": [ "READ" ],
+        "revoke": []
+      }
+    }
   }
 }

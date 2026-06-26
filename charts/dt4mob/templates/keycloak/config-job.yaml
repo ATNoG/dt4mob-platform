@@ -36,8 +36,18 @@ spec:
         - name: "KEYCLOAK_CLIENT"
           value: "ditto"
         - name: "KEYCLOAK_CLIENT_REDIRECTS"
-          value: {{ tpl "https://{{ .Values.ditto.ingress.host }}/ui" . | list  | toRawJson | quote }}
+          {{ $tplRedirects := list }}
+          {{- range $i, $redirect := .Values.keycloak.config.redirectUris }}
+          {{- $tplRedirects = append $tplRedirects (tpl $redirect $) }}
+          {{- end }}
+          value: {{ $tplRedirects | toJson | quote }}
         - name: "KEYCLOAK_CLIENT_ORIGINS"
-          value: {{ tpl "https://{{ .Values.ditto.ingress.host }}" . | list  | toRawJson | quote }}
+          {{ $tplOrigins := list }}
+          {{- range $i, $origin := .Values.keycloak.config.clientOrigins }}
+          {{- $tplOrigins = append $tplOrigins (tpl $origin $) }}
+          {{- end }}
+          value: {{ $tplOrigins | toJson | quote }}
         - name: "GARBAGE_COLLECTOR_SECRET_NAME"
           value: "{{ include "dt4mob.fullname" . }}-garbage-collector-credentials"
+        - name: "LEVEL_AMS_LOADER_SECRET_NAME"
+          value: "{{ include "dt4mob.fullname" . }}-level-ams-loader-credentials"

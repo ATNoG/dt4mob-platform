@@ -1,0 +1,80 @@
+global:
+  host: ""
+
+enabledDashboards:
+- "dashboards/inclinometers-historical.json"
+- "dashboards/load-cells-historical.json"
+
+grafana:
+  global:
+    host: ""
+
+  plugins:
+    - yesoreyeram-infinity-datasource
+    - volkovlabs-echarts-panel
+
+  persistence:
+    enabled: true
+    storageClassName: local-path
+
+  grafana.ini:
+    server:
+      domain: "{{ .Values.global.host }}"
+      protocol: "http"
+      root_url: 'https://%(domain)s/{{ .Values.ingress.path | trimPrefix "/" }}'
+      serve_from_sub_path: true
+    auth:
+      disable_login_form: true
+    auth.generic_oauth:
+      enabled: true
+      name: "Keycloak"
+      allow_sign_up: true
+      client_id: "ditto"
+      scopes: "openid email profile offline_access roles"
+      email_attribute_path: "email"
+      login_attribute_path: "username"
+      name_attribute_path: "full_name"
+      auth_url: "https://{{ .Values.global.host }}/auth/realms/dt4mob/protocol/openid-connect/auth"
+      token_url: "http://{{ .Release.Name }}-keycloak:8080/auth/realms/dt4mob/protocol/openid-connect/token"
+      api_url: "http://{{ .Release.Name }}-keycloak:8080/auth/realms/dt4mob/protocol/openid-connect/userinfo"
+      signout_redirect_url: 'https://{{ .Values.global.host }}/auth/realms/dt4mob/protocol/openid-connect/logout?post_logout_redirect_uri=https%3A%2F%2F{{ tpl (get .Values "grafana.ini").server.domain . }}%2F{{ .Values.ingress.path | trimPrefix "/" }}%2Flogin'
+      use_refresh_token: true
+      use_pkce: true
+      role_attribute_path: "contains(resource_access.ditto.roles[*], 'admin') && 'GrafanaAdmin' || 'Viewer'"
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - '{{ tpl (get .Values "grafana.ini").server.domain . }}'
+    path: "/viz"
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: "dt4mob-infinity"
+          type: "yesoreyeram-infinity-datasource"
+          url: "http://{{ .Release.Name }}-ditto-gateway:8080/api/2"
+          jsonData:
+            auth_method: "oauthPassThru"
+            oauthPassThru: true
+          readOnly: false
+        - name: "dt4mob-historic-infinity"
+          type: "yesoreyeram-infinity-datasource"
+          url: "http://{{ .Release.Name }}-historical-api:8080/historic"
+          jsonData:
+            auth_method: "oauthPassThru"
+            oauthPassThru: true
+          readOnly: false
+
+  sidecar:
+    dashboards:
+      enabled: true
+      label: dt4mob.av.it.pt/viz-dashboard
+      labelValue: "{{ .Release.Name }}"
+
+      provider:
+        disableDelete: true
+        allowUiUpdates: true
+

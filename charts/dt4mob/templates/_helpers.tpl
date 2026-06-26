@@ -106,7 +106,7 @@ metadata:
 spec:
   commonName: {{ .component }}
   dnsNames:
-  - {{ .dot.Values.ditto.ingress.host }}
+  - {{ .dot.Values.global.host }}
   {{- if (get .dot.Values "dt4mob-ingress").http.enabled }}
   - {{ (get .dot.Values "dt4mob-ingress").http.host }}
   {{- end }}

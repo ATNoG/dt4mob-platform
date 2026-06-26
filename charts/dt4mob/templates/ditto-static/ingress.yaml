@@ -11,7 +11,7 @@ spec:
   tls:
   - secretName: {{ include "dt4mob.fullname" . }}-ingress-tls
   rules:
-  - host: {{ .Values.ditto.ingress.host | quote }}
+  - host: {{ .Values.global.host | quote }}
     http:
       paths:
       - path: /ui($)

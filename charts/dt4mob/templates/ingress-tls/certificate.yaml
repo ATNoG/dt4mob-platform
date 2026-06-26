@@ -6,9 +6,9 @@ metadata:
     {{- include "dt4mob.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "dt4mob.fullname" . }}-ingress-tls
-  commonName: {{ .Values.ditto.ingress.host }}
+  commonName: {{ .Values.global.host }}
   dnsNames:
-    - {{ .Values.ditto.ingress.host }}
+    - {{ .Values.global.host }}
     {{- with .Values.ingressTLS.certificate.additionalDnsNames }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

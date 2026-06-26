@@ -23,5 +23,11 @@ dependencies:
 - name: dt4mob-ingress
   repository: file://../dt4mob-ingress
   version: 0.1.0
-digest: sha256:c1abae95b9f1616067e021653d37ac79adc5190a5ef0b4c0ebbba2b0d22d10fe
-generated: "2026-05-25T12:55:30.645921507+01:00"
+- name: dt4mob-level-ams-loader
+  repository: file://../dt4mob-level-ams-loader
+  version: 0.1.0
+- name: dt4mob-viz
+  repository: file://../dt4mob-viz
+  version: 0.1.0
+digest: sha256:4355badfb7307de8aa78696b09d65c9743bf5abc8bc35b92f4b1887d5c3f2119
+generated: "2026-06-25T14:10:07.982359202+01:00"

@@ -1,45 +1,30 @@
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
-  name: level-ams-loader-config
-stringData:
+  name: {{ include "dt4mob-level-ams-loader.fullname" . }}-level-ams-loader-config
+data:
 {{- with .Values.levelAMSConfig }}
   config.toml: |
     log_level = {{ .logLevel | quote }}
 
-    {{- with .history}}
     [history]
-    enabled = {{ .enabled }}
-
-    base_url = {{ .baseUrl | quote }}
-
-      {{- if and .username .password }}
-    username = {{ .username | quote }}
-    password = {{ .password | quote }}
-      {{- end }}
-    {{- end }}
+    enabled = false
 
     {{- with .ditto }}
     [ditto]
     default_policy = {{ .defaultPolicy | quote }}
-      {{- if and .username .password }}
-    username = {{ .username | quote }}
-    password = {{ .password | quote }}
-      {{- end }}
-    base_url = {{ .baseUrl | quote}}
+    subject = {{ .subject | quote }}
+    base_url = {{ tpl .baseUrl $ | quote}}
     cafile = "ca.crt"
     {{- end }}
 
     {{- with .hono }}
     [hono]
-    host = {{ .host | quote }}
+    host = {{ tpl .host $ | quote }}
       {{- if .port }}
     port = {{ .port }}
       {{- end }}
-
-    device = {{ .device | quote }}
-    tenant = {{ .tenant | quote }}
-    password = {{ .password | quote }}
+    tenant = {{ $.Values.global.tenant | quote }}
 
     secure = {{ .secure }}
     cafile = "ca.crt"
@@ -49,7 +34,7 @@ stringData:
 
     {{- with .loader }}
     [loader]
-    base_url = {{ .baseUrl | quote }}
+    base_url = {{ tpl .baseUrl $ | quote }}
 
     http_timeout = {{ .httpTimeout }}
     parameters_chunk_size = {{ .parametersChunkSize }}
@@ -57,19 +42,7 @@ stringData:
     start_page_idx = {{ .startPageIdx }}
     
     instrument_coords_file = "instrument_coords.csv"
-
-      {{- if .jwt }}
-    jwt = {{ .jwt | quote }}
-      {{- end }}
-
-      {{- with .credentials }}
-    [loader.credentials]
-    username = {{ .username | required "loader.credentials.username is required" | quote }}
-    password = {{ .password | required "loader.credentials.password is required" | quote }}
-      {{- end }}
     {{- end }}
-  ca.crt: |
-{{ .cafileContents | required "cafileContents is required" | indent 4 }}
   instrument_coords.csv: |
     matricula,x,y,z
     A25.1,-86447.163228000005,-86617.66476,88.951789000000005

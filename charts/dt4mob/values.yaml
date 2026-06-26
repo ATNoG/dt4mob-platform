@@ -1,9 +1,11 @@
+global:
+  host: ""
+  tenant: "test-tenant"
+
 imagePullSecrets: []
 
 nameOverride: ""
 fullnameOverride: ""
-
-tenant: "test-tenant"
 
 dt4mob-controller:
   config:
@@ -32,6 +34,7 @@ dt4mob-site:
   #     cpu: 200m
 
 dt4mob-ingress:
+  enabled: false
   http:
     serviceName: "dt4mob-hono-adapter-http"
   amqp:
@@ -40,6 +43,7 @@ dt4mob-ingress:
     serviceName: "dt4mob-hono-adapter-mqtt"
 
 dt4mob-historical:
+  enabled: false
   kafkaTopic:
     create: true
     name: "exports-test-tenant"
@@ -51,6 +55,7 @@ dt4mob-historical:
         clientId: "ditto"
         serverUri: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
         issuers:
+        - "https://{{ .Values.global.host }}/auth/realms/dt4mob"
         - "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob"
         readRole:
         - "historical-read"
@@ -85,12 +90,30 @@ dt4mob-historical:
       size: 10Gi
   
 dt4mob-garbage-collector:
+  enabled: false
   config:
     ditto:
       apiUrl: "http://{{ .Release.Name }}-ditto-gateway:8080"
     auth:
       existingSecret: "{{ .Release.Name }}-garbage-collector-credentials"
       caSecret: "{{ .Release.Name }}-internal-keycloak-tls"
+
+dt4mob-level-ams-loader:
+  enabled: false
+  dittoCredsSecretName: "{{ .Release.Name }}-level-ams-loader-credentials"
+  caCertSecretName: "{{ .Release.Name }}-root-ca-secret"
+
+  levelAMSConfig:
+    hono:
+      secure: true
+      host: "{{ .Release.Name }}-hono-adapter-mqtt"
+      port: 8883
+    ditto:
+      subject: "brisa"
+      baseUrl: "http://{{ .Release.Name }}-ditto-gateway:8080/api/2"
+
+dt4mob-viz:
+  enabled: false
 
 reloader:
   reloader:
@@ -589,6 +612,14 @@ keycloak:
     repository: "atnog-harbor.av.it.pt/dt4mob/keycloak-config"
     tag: "latest"
     imagePullPolicy: "Always"
+
+    redirectUris:
+    - "https://{{ .Values.global.host }}/ui"
+    - "https://{{ .Values.global.host }}/viz/login"
+    - "https://{{ .Values.global.host }}/viz/login/generic_oauth"
+
+    clientOrigins:
+    - "https://{{ .Values.global.host }}"
 
 ingressTLS:
   issuer:
