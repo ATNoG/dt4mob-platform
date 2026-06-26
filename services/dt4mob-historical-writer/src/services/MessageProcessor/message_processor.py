@@ -4,7 +4,6 @@ from datetime import datetime
 
 def parse_message(msg) -> DittoEvent:
     topic_processed = msg["topic"].split("/")
-
     headers = msg.get("headers", {})
 
     override_timestamp = headers.get("dt4mob-historic-timestamp-override")
@@ -19,8 +18,6 @@ def parse_message(msg) -> DittoEvent:
                 f"Malformed historic override timestamp detected: '{override_timestamp}'. "
                 "Falling back to message default timestamp."
             )
-
-    # 3. Fallback to normal timestamp if override missing or invalid
     if not event_time:
         event_time = msg["timestamp"]
 
