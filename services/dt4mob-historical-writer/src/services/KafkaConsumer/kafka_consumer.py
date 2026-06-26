@@ -28,9 +28,9 @@ class KafkaConsumer:
                         continue
                     message_text = msg_value.decode('utf-8')
                     message_data = json.loads(message_text)
+                    logging.debug("writed: %s", message_data)
                     event = parse_message(message_data)
                     manager.write(event)
-                    logging.debug("writed: %s", event)
                     self.consumer.commit(asynchronous=False)
                     
                 except json.JSONDecodeError as e:
