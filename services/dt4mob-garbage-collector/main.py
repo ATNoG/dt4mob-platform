@@ -10,19 +10,16 @@ async def main():
 
     envelops = await garbage_collector.get_expired_envelops()
 
-    if not envelops:
-        logging.info("No expired Things to Delete.")
-        return
+    while len(envelops) > 5:
+        logging.info(f"number things:{len(envelops)}")
+        for envelop in envelops:
+            try:
+                await ditto_client.send_ws_message(envelop)
 
-    logging.info(f"Found {len(envelops)} expired Things to Delete.")
-
-    for envelop in envelops:
-        try:
-            await ditto_client.send_ws_message(envelop)
-
-        except Exception as e:
-            logging.error(f"Failed to process {envelop.topic}: {type(e).__name__}: {e}")
-            continue
+            except Exception as e:
+                logging.error(f"Failed to process {envelop.topic}: {type(e).__name__}: {e}")
+                continue
+        envelops = await garbage_collector.get_expired_envelops()
 
     logging.info("Done, closing client and mqtt")
     await ditto_client.close()
