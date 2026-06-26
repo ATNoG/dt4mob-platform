@@ -9,7 +9,7 @@ class DittoThingEnvelopeFormatter:
     def delete_message(self, delete_thing_id: str) -> DittoProtocolEnvelope:
         correlation_id = str(uuid.uuid4())
         return DittoProtocolEnvelope(
-            topic=f"{delete_thing_id.replace(':', '/')}/things/twin/commands/delete",
+            topic=f"{delete_thing_id.replace(':', '/',1)}/things/twin/commands/delete",
             headers=Headers(correlation_id=correlation_id),
             path="/",
         )
