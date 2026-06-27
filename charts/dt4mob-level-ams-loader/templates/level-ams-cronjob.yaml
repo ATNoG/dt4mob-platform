@@ -17,6 +17,9 @@ spec:
             - name: ca-volume
               secret:
                 secretName: {{ tpl $.Values.caCertSecretName $ | quote }}
+            {{/* - name: client-cert-key-volume */}}
+            {{/*   secret: */}}
+            {{/*     secretName: {{ tpl $.Values.clientCertKeySecretName $ | quote }} */}}
           containers:
             - name: level-ams-loader
               image: atnog-harbor.av.it.pt/dt4mob/level-ams-loader:latest
@@ -48,6 +51,14 @@ spec:
                   readOnly: true
                   mountPath: "/app/ca.crt"
                   subPath: "ca.crt"
+                # - name: client-cert-volume
+                #   readOnly: true
+                #   mountPath: "/app/cert.pem"
+                #   subPath: "cert.pem"
+                # - name: client-cert-volume
+                #   readOnly: true
+                #   mountPath: "/app/key.pem"
+                #   subPath: "key.pem"
               env:
                 - name: LEVEL_AMS_LOADER_DITTO__USERNAME
                   valueFrom:
