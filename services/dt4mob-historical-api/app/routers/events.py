@@ -1,5 +1,5 @@
 from app.models.paths_response import PathResponseObject
-from typing import Annotated
+from typing import Annotated, Any, Literal
 from datetime import datetime
 
 from pydantic import BaseModel
@@ -142,3 +142,70 @@ def delete_events(
         thing_id=thing_id, since_iso_timestamp=since, until_iso_timestamp=until
     )
     return
+
+@router.get("/events/projection/{thing_id}", response_model=list[Any])
+def read_jsonpath_projection(
+    _check_role: Annotated[None, Depends(check_role(settings.auth.read_role))],
+    events_service: Annotated[EventsService, Depends(get_events_service)],
+    json_path: str,
+    since: datetime,
+    thing_id: str,
+    until: datetime | None = None,
+    path_prefix: str | None = None,
+):
+    """
+    Extracts custom fields from event payloads using a JSONPath expression.
+    """
+    if until is None:
+        result = events_service.get_jsonpath_projection(
+            json_path=json_path,
+            thing_id=thing_id,
+            path_prefix=path_prefix,
+            since_iso_timestamp=since,
+        )
+    else:
+        result = events_service.get_jsonpath_projection(
+            json_path=json_path,
+            thing_id=thing_id,
+            path_prefix=path_prefix,
+            since_iso_timestamp=since,
+            until_iso_timestamp=until,
+        )
+    return result
+
+
+@router.get("/events/time-buckets/{thing_id}", response_model=list[dict[str, Any]])
+def read_events_custom_time_buckets(
+    _check_role: Annotated[None, Depends(check_role(settings.auth.read_role))],
+    events_service: Annotated[EventsService, Depends(get_events_service)],
+    json_path: str,
+    since: datetime,
+    until: datetime,
+    thing_id: str,
+    bucket_minutes: int | None = None,
+    agg_type: Literal["count", "sum", "avg", "min", "max"] = "count",
+    path_prefix: str | None = None
+
+):
+    """
+    Groups events into specific time chunks (buckets) and runs aggregations on a JSONPath target.
+    """
+    if path_prefix and path_prefix.strip():
+        return events_service.get_events_custom_time_buckets_with_path(
+            json_path=json_path,
+            since_iso_timestamp=since,
+            until_iso_timestamp=until,
+            path_prefixes=path_prefix,
+            bucket_minutes=bucket_minutes,
+            agg_type=agg_type,
+            thing_id=thing_id
+        )
+        
+    return events_service.get_events_custom_time_buckets(
+        json_path=json_path,
+        since_iso_timestamp=since,
+        until_iso_timestamp=until,
+        bucket_minutes=bucket_minutes,
+        agg_type=agg_type,
+        thing_id=thing_id
+    )
