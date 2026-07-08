@@ -2,31 +2,42 @@
   "apiVersion": "dashboard.grafana.app/v2",
   "kind": "Dashboard",
   "metadata": {
-    "name": "adb8tc2",
-    "generation": 2,
-    "creationTimestamp": "2026-06-14T17:07:41Z",
-    "labels": {},
-    "annotations": {}
+    "name": "adb8tc2d",
+    "namespace": "default",
+    "uid": "6d40d79a-a52f-4af3-a27d-3cb274425883",
+    "resourceVersion": "1782410144544012",
+    "generation": 37,
+    "creationTimestamp": "2026-06-19T20:25:08Z",
+    "labels": {
+      "grafana.app/deprecatedInternalID": "915349607809024"
+    },
+    "annotations": {
+      "grafana.app/createdBy": "user:efpmz9ng9o6iod",
+      "grafana.app/folder": "",
+      "grafana.app/saved-from-ui": "Grafana v13.0.2 (3fcdbc5a)",
+      "grafana.app/updatedBy": "user:efpmz9ng9o6iod",
+      "grafana.app/updatedTimestamp": "2026-06-25T17:55:44Z"
+    }
   },
   "spec": {
     "annotations": [
       {
         "kind": "AnnotationQuery",
         "spec": {
-          "builtIn": true,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "spec": {}
+          },
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
           "name": "Annotations & Alerts",
-          "query": {
-            "datasource": {
-              "name": "-- Grafana --"
-            },
-            "group": "grafana",
-            "kind": "DataQuery",
-            "spec": {},
-            "version": "v0"
-          }
+          "builtIn": true
         }
       }
     ],
@@ -36,6 +47,10 @@
       "panel-13": {
         "kind": "Panel",
         "spec": {
+          "id": 13,
+          "title": "",
+          "description": "",
+          "links": [],
           "data": {
             "kind": "QueryGroup",
             "spec": {
@@ -43,13 +58,13 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [],
                         "data": "[\n  {\n    \"instrument_id\": \"${instrument_id}\"\n  }\n]",
@@ -65,29 +80,22 @@
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "Refresh Query"
+                    "refId": "Refresh Query",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
-          "description": "",
-          "id": 13,
-          "links": [],
-          "title": "",
           "vizConfig": {
-            "group": "volkovlabs-echarts-panel",
             "kind": "VizConfig",
+            "group": "volkovlabs-echarts-panel",
+            "version": "7.2.5",
             "spec": {
-              "fieldConfig": {
-                "defaults": {},
-                "overrides": []
-              },
               "options": {
                 "baidu": {
                   "callback": "bmapReady",
@@ -101,7 +109,7 @@
                   "key": "",
                   "plugin": "AMap.Scale,AMap.ToolBar"
                 },
-                "getOption": "const instrumentId = context.grafana.replaceVariables('${instrument_id}');\n\nreturn {\n  grid: {\n    left: 0,\n    right: 0,\n    top: 0,\n    bottom: 0\n  },\n\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: 1 },\n\n  series: [\n    // background image\n    {\n      type: 'custom',\n      renderItem: function (params, api) {\n        return {\n          type: 'image',\n          style: {\n            image: 'https://i.imgur.com/M6fMB9N.jpeg',\n            x: api.coord([0, 1])[0],\n            y: api.coord([0, 1])[1],\n            width: api.coord([1, 0])[0] - api.coord([0, 0])[0],\n            height: api.coord([0, 0])[1] - api.coord([0, 1])[1]\n          }\n        };\n      },\n      data: [0]\n    },\n    // CCs\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2')\n        ? [[0.120, 0.172]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A19`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7')\n        ? [[0.465, 0.320]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.1`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786')\n        ? [[0.467, 0.402]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.2`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6')\n        ? [[0.871, 0.409]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A35`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    // inclinometros\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.058512f0-5bea-445d-a35b-56bcb6a9ddb4')\n        ? [[0.874, 0.435]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I1C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.c072ef5f-3d0f-4c84-95cf-f39165dd60f9')\n        ? [[0.468, 0.455]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I2C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.844def33-8a04-49c9-9fce-5d701a9a7a3c')\n        ? [[0.485, 0.658]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I4`,\n        color: 'yellow',\n        offset: [14, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.eaa688b0-58a4-416c-a6e9-31d5bdd7f1f9')\n        ? [[0.340, 0.650]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3MEEC`,\n        color: 'yellow',\n        offset: [29, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.2fd3c6d1-81b3-4bf6-86b0-9860071aa447')\n        ? [[0.119, 0.208]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    }\n  ]\n};\n",
+                "getOption": "const instrumentId = context.grafana.replaceVariables('${instrument_id}');\n\nreturn {\n  grid: {\n    left: 0,\n    right: 0,\n    top: 0,\n    bottom: 0\n  },\n\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: 1 },\n\n  series: [\n    // background image\n    {\n      type: 'custom',\n      renderItem: function (params, api) {\n        return {\n          type: 'image',\n          style: {\n            image: 'https://i.imgur.com/M6fMB9N.jpeg',\n            x: api.coord([0, 1])[0],\n            y: api.coord([0, 1])[1],\n            width: api.coord([1, 0])[0] - api.coord([0, 0])[0],\n            height: api.coord([0, 0])[1] - api.coord([0, 1])[1]\n          }\n        };\n      },\n      data: [0]\n    },\n    // CCs\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A19')\n        ? [[0.120, 0.172]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A19`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.1')\n        ? [[0.465, 0.320]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.1`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.2')\n        ? [[0.467, 0.402]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A25.2`,\n        color: 'red',\n        offset: [23, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A35')\n        ? [[0.871, 0.409]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'red' },\n      label: {\n        show: true,\n        formatter: (params) => `A35`,\n        color: 'red',\n        offset: [18, 0]\n      }\n    },\n    // inclinometros\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.058512f0-5bea-445d-a35b-56bcb6a9ddb4')\n        ? [[0.874, 0.435]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I1C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.c072ef5f-3d0f-4c84-95cf-f39165dd60f9')\n        ? [[0.468, 0.455]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I2C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.844def33-8a04-49c9-9fce-5d701a9a7a3c')\n        ? [[0.485, 0.658]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I4`,\n        color: 'yellow',\n        offset: [14, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.eaa688b0-58a4-416c-a6e9-31d5bdd7f1f9')\n        ? [[0.340, 0.650]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3MEEC`,\n        color: 'yellow',\n        offset: [29, 0]\n      }\n    },\n    {\n      type: 'scatter',\n      symbolSize: 8,\n      data: (instrumentId === 'geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.2fd3c6d1-81b3-4bf6-86b0-9860071aa447')\n        ? [[0.119, 0.208]]   // show point\n        : [],                // hide point\n      itemStyle: { color: 'yellow' },\n      label: {\n        show: true,\n        formatter: (params) => `I3C`,\n        color: 'yellow',\n        offset: [18, 0]\n      }\n    }\n  ]\n};\n",
                 "google": {
                   "callback": "gmapReady",
                   "key": ""
@@ -117,15 +125,22 @@
                   "dataset": [],
                   "series": []
                 }
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
               }
-            },
-            "version": "7.2.5"
+            }
           }
         }
       },
-      "panel-4": {
+      "panel-14": {
         "kind": "Panel",
         "spec": {
+          "id": 14,
+          "title": "Alertas e Alarmes (todas as CC)",
+          "description": "",
+          "links": [],
           "data": {
             "kind": "QueryGroup",
             "spec": {
@@ -133,13 +148,211 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "P51F62827499EFE58"
+                      },
+                      "spec": {
+                        "columns": [
+                          {
+                            "selector": "estado",
+                            "text": "estado",
+                            "type": "string"
+                          },
+                          {
+                            "selector": "valor",
+                            "text": "valor",
+                            "type": "number"
+                          },
+                          {
+                            "selector": "matricula",
+                            "text": "matricula",
+                            "type": "string"
+                          }
+                        ],
+                        "filterExpression": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "backend",
+                        "root_selector": "items[attributes.matricula ~> /^A/].{\n  \"matricula\": attributes.matricula,\n  \"estado\": (\n    $s := features.F.properties.state;\n    $exists($s) = false ? \"UNAVAILABLE\" : $s\n  ),\n  \"valor\": features.F.properties.latestValue.valor\n}",
+                        "source": "url",
+                        "type": "json",
+                        "url": "/search/things?fields=thingId,attributes,features&filter=like(thingId,%22geo-asset%3Abrisa%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
+                        "url_options": {
+                          "data": "",
+                          "method": "GET"
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "organize",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {
+                        "estado": 1,
+                        "matricula": 0,
+                        "valor": 2
+                      },
+                      "renameByName": {}
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": []
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "red"
+                  },
+                  "custom": {
+                    "align": "center",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "estado"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "ALARM": {
+                                "color": "red",
+                                "index": 2,
+                                "text": "ALARM"
+                              },
+                              "ALERT": {
+                                "color": "yellow",
+                                "index": 1,
+                                "text": "ALERT"
+                              },
+                              "OK": {
+                                "color": "green",
+                                "index": 0,
+                                "text": "OK"
+                              },
+                              "UNAVAILABLE": {
+                                "color": "#808080",
+                                "index": 3,
+                                "text": "UNAVAILABLE"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "applyToRow": false,
+                          "mode": "gradient",
+                          "type": "color-background"
+                        }
+                      },
+                      {
+                        "id": "custom.width",
+                        "value": 189
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "matricula"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 161
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "valor"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 175
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "CC - Temperatura",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [
                           {
@@ -171,27 +384,54 @@
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "A"
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [],
+              "queryOptions": {}
             }
           },
-          "description": "",
-          "id": 4,
-          "links": [],
-          "title": "CC - Temperatura",
           "vizConfig": {
-            "group": "timeseries",
             "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.2",
             "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -228,48 +468,21 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
                   }
                 },
                 "overrides": []
-              },
-              "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
               }
-            },
-            "version": "13.0.2"
+            }
           }
         }
       },
       "panel-5": {
         "kind": "Panel",
         "spec": {
+          "id": 5,
+          "title": "CC - Carga",
+          "description": "",
+          "links": [],
           "data": {
             "kind": "QueryGroup",
             "spec": {
@@ -277,13 +490,13 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [
                           {
@@ -322,22 +535,22 @@
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "Carga"
+                    "refId": "Carga",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [
                           {
@@ -356,7 +569,7 @@
                             "type": "number"
                           }
                         ],
-                        "data": "instrument_id,alerta,time\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2,604,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2,604,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7,590,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7,590,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786,609,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786,609,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6,606,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6,606,${__to:date:iso}",
+                        "data": "instrument_id,alerta,time\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A19,604,${__from:date:iso}\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A19,604,${__to:date:iso}\n\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.1,590,${__from:date:iso}\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.1,590,${__to:date:iso}\n\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.2,609,${__from:date:iso}\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.2,609,${__to:date:iso}\n\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A35,606,${__from:date:iso}\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A35,606,${__to:date:iso}",
                         "filterExpression": "instrument_id == '${instrument_id}'",
                         "filters": [],
                         "format": "timeseries",
@@ -370,22 +583,22 @@
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "Alerta"
+                    "refId": "Alerta",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [
                           {
@@ -404,7 +617,7 @@
                             "type": "number"
                           }
                         ],
-                        "data": "instrument_id,alarme,time\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2,426,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2,426,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7,416,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7,416,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786,430,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786,430,${__to:date:iso}\n\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6,428,${__from:date:iso}\ngeo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6,428,${__to:date:iso}",
+                        "data": "instrument_id,alarme,time\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A19,426,${__from:date:iso}\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A19,426,${__to:date:iso}\n\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.1,416,${__from:date:iso}\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.1,416,${__to:date:iso}\n\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.2,430,${__from:date:iso}\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.2,430,${__to:date:iso}\n\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A35,428,${__from:date:iso}\ngeo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A35,428,${__to:date:iso}",
                         "filterExpression": "instrument_id == '${instrument_id}'",
                         "filters": [],
                         "format": "timeseries",
@@ -418,18 +631,17 @@
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "Alarme"
+                    "refId": "Alarme",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
               "transformations": [
                 {
-                  "group": "sortBy",
                   "kind": "Transformation",
+                  "group": "sortBy",
                   "spec": {
                     "options": {
                       "fields": {},
@@ -441,19 +653,43 @@
                     }
                   }
                 }
-              ]
+              ],
+              "queryOptions": {}
             }
           },
-          "description": "",
-          "id": 5,
-          "links": [],
-          "title": "CC - Carga",
           "vizConfig": {
-            "group": "timeseries",
             "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.2",
             "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -490,15 +726,6 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
                   }
                 },
                 "overrides": [
@@ -621,32 +848,18 @@
                     ]
                   }
                 ]
-              },
-              "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
               }
-            },
-            "version": "13.0.2"
+            }
           }
         }
       },
       "panel-8": {
         "kind": "Panel",
         "spec": {
+          "id": 8,
+          "title": "Leituras Ancoragens (todas as CC)",
+          "description": "",
+          "links": [],
           "data": {
             "kind": "QueryGroup",
             "spec": {
@@ -654,13 +867,13 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [
                           {
@@ -687,27 +900,27 @@
                         "root_selector": "",
                         "source": "url",
                         "type": "json",
-                        "url": "/events/geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.78e58190-3c87-431e-8a2a-626c2ceedbc2?since=2025-09-01T00:00:00Z",
+                        "url": "/events/geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A19?since=2025-09-01T00:00:00Z",
                         "url_options": {
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "A19"
+                    "refId": "A19",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [
                           {
@@ -734,27 +947,27 @@
                         "root_selector": "",
                         "source": "url",
                         "type": "json",
-                        "url": "/events/geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.8d59d0a4-d72f-4413-be74-dbaca6068ec7?since=2025-09-01T00:00:00Z",
+                        "url": "/events/geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.1?since=2025-09-01T00:00:00Z",
                         "url_options": {
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "A25.1"
+                    "refId": "A25.1",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [
                           {
@@ -781,27 +994,27 @@
                         "root_selector": "",
                         "source": "url",
                         "type": "json",
-                        "url": "/events/geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.1051293b-f75f-4a5b-b005-7f2920e15786?since=2025-09-01T00:00:00Z",
+                        "url": "/events/geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A25.2?since=2025-09-01T00:00:00Z",
                         "url_options": {
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "A25.2"
+                    "refId": "A25.2",
+                    "hidden": false
                   }
                 },
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "group": "yesoreyeram-infinity-datasource",
+                      "version": "v0",
                       "datasource": {
                         "name": "${historic}"
                       },
-                      "group": "yesoreyeram-infinity-datasource",
-                      "kind": "DataQuery",
                       "spec": {
                         "columns": [
                           {
@@ -828,23 +1041,22 @@
                         "root_selector": "",
                         "source": "url",
                         "type": "json",
-                        "url": "/events/geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.f99d4847-ebf4-4b08-be16-b145da8912a6?since=2025-09-01T00:00:00Z",
+                        "url": "/events/geo-asset:brisa:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.A35?since=2025-09-01T00:00:00Z",
                         "url_options": {
                           "data": "",
                           "method": "GET"
                         }
-                      },
-                      "version": "v0"
+                      }
                     },
-                    "refId": "A35"
+                    "refId": "A35",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
               "transformations": [
                 {
-                  "group": "sortBy",
                   "kind": "Transformation",
+                  "group": "sortBy",
                   "spec": {
                     "options": {
                       "fields": {},
@@ -856,19 +1068,47 @@
                     }
                   }
                 }
-              ]
+              ],
+              "queryOptions": {}
             }
           },
-          "description": "",
-          "id": 8,
-          "links": [],
-          "title": "Leituras Ancoragens (todas as CC)",
           "vizConfig": {
-            "group": "timeseries",
             "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.2",
             "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "fieldConfig": {
                 "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
                   "color": {
                     "mode": "palette-classic"
                   },
@@ -908,42 +1148,11 @@
                     "thresholdsStyle": {
                       "mode": "off"
                     }
-                  },
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
                   }
                 },
                 "overrides": []
-              },
-              "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
               }
-            },
-            "version": "13.0.2"
+            }
           }
         }
       }
@@ -955,53 +1164,66 @@
           {
             "kind": "GridLayoutItem",
             "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 8,
+              "height": 11,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-13"
-              },
-              "height": 11,
-              "width": 8,
-              "x": 0,
-              "y": 0
+              }
             }
           },
           {
             "kind": "GridLayoutItem",
             "spec": {
+              "x": 8,
+              "y": 0,
+              "width": 8,
+              "height": 11,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-5"
-              },
-              "height": 11,
-              "width": 8,
-              "x": 8,
-              "y": 0
+              }
             }
           },
           {
             "kind": "GridLayoutItem",
             "spec": {
+              "x": 16,
+              "y": 0,
+              "width": 7,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-14"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 11,
+              "width": 8,
+              "height": 11,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-4"
-              },
-              "height": 11,
-              "width": 8,
-              "x": 0,
-              "y": 11
+              }
             }
           },
           {
             "kind": "GridLayoutItem",
             "spec": {
+              "x": 8,
+              "y": 11,
+              "width": 8,
+              "height": 11,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-8"
-              },
-              "height": 11,
-              "width": 8,
-              "x": 8,
-              "y": 11
+              }
             }
           }
         ]
@@ -1012,6 +1234,9 @@
     "preload": false,
     "tags": [],
     "timeSettings": {
+      "timezone": "browser",
+      "from": "2025-09-01T00:00:00.000Z",
+      "to": "2026-03-23T12:00:00.000Z",
       "autoRefresh": "",
       "autoRefreshIntervals": [
         "5s",
@@ -1025,34 +1250,29 @@
         "2h",
         "1d"
       ],
-      "fiscalYearStartMonth": 0,
-      "from": "2025-09-01T00:00:00.000Z",
       "hideTimepicker": false,
-      "timezone": "browser",
-      "to": "2026-03-23T12:00:00.000Z"
+      "fiscalYearStartMonth": 0
     },
     "title": "Células de Carga",
     "variables": [
       {
         "kind": "QueryVariable",
         "spec": {
-          "allowCustomValue": true,
+          "name": "instrument_id",
           "current": {
             "text": "I1C",
             "value": "geo-asset:e27a9388-84c5-4081-8c85-b7e8abc2b09a.instrument.058512f0-5bea-445d-a35b-56bcb6a9ddb4"
           },
-          "definition": "",
           "hide": "dontHide",
-          "includeAll": false,
-          "multi": false,
-          "name": "instrument_id",
-          "options": [],
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
           "query": {
-            "datasource": {
-              "name": "aflc3bfm914w0d"
-            },
-            "group": "yesoreyeram-infinity-datasource",
             "kind": "DataQuery",
+            "group": "yesoreyeram-infinity-datasource",
+            "version": "v0",
+            "datasource": {
+              "name": "P51F62827499EFE58"
+            },
             "spec": {
               "infinityQuery": {
                 "columns": [
@@ -1075,6 +1295,7 @@
                   }
                 ],
                 "data": "values\nfoo\nbar\nbaz",
+                "filterExpression": "matricula =~ \"A.*\"",
                 "filters": [],
                 "format": "table",
                 "parser": "backend",
@@ -1082,7 +1303,7 @@
                 "root_selector": "items",
                 "source": "url",
                 "type": "json",
-                "url": "/search/things?fields=thingId,attributes&filter=like(thingId,%22geo-asset%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
+                "url": "/search/things?fields=thingId,attributes&filter=like(thingId,%22geo-asset%3Abrisa%3Ae27a9388-84c5-4081-8c85-b7e8abc2b09a.*%22)",
                 "url_options": {
                   "data": "",
                   "method": "GET"
@@ -1094,33 +1315,35 @@
               },
               "queryType": "infinity",
               "refId": "variable"
-            },
-            "version": "v0"
+            }
           },
-          "refresh": "onDashboardLoad",
           "regex": "",
           "regexApplyTo": "value",
-          "skipUrlSync": false,
-          "sort": "disabled"
+          "sort": "disabled",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": false,
+          "allowCustomValue": true
         }
       },
       {
         "kind": "DatasourceVariable",
         "spec": {
-          "allowCustomValue": false,
+          "name": "historic",
+          "pluginId": "yesoreyeram-infinity-datasource",
+          "refresh": "onDashboardLoad",
+          "regex": "",
           "current": {
             "text": "dt4mob-historic-infinity",
             "value": "PC0D9786ABF929414"
           },
-          "hide": "hideVariable",
-          "includeAll": false,
-          "multi": false,
-          "name": "historic",
           "options": [],
-          "pluginId": "yesoreyeram-infinity-datasource",
-          "refresh": "onDashboardLoad",
-          "regex": "",
-          "skipUrlSync": false
+          "multi": false,
+          "includeAll": false,
+          "hide": "hideVariable",
+          "skipUrlSync": false,
+          "allowCustomValue": false
         }
       }
     ]

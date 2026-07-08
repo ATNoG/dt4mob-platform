@@ -1,6 +1,8 @@
-from src.models.ditto_events import DittoEvent,Action
 import logging
 from datetime import datetime
+
+from src.models.ditto_events import DittoEvent, Action
+
 
 def parse_message(msg) -> DittoEvent:
     topic_processed = msg["topic"].split("/")
@@ -27,7 +29,7 @@ def parse_message(msg) -> DittoEvent:
         action=Action(topic_processed[5]),
         path=msg["path"],
         revision=msg["revision"],
-        value=msg.get("value", {})
+        value=msg.get("value", {}),
     )
 
     return dittomsg
