@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-level-ams-loader-{{ .name }}
+  name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-{{ .name }}
 spec:
   schedule: {{ .cronSchedule | quote }}
   jobTemplate:
@@ -13,7 +13,7 @@ spec:
           volumes:
             - name: config-volume
               configMap:
-                name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-level-ams-loader-config
+                name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-config
             - name: ca-volume
               secret:
                 secretName: {{ tpl $.Values.caCertSecretName $ | quote }}
