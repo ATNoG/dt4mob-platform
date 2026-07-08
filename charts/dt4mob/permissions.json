@@ -72,13 +72,29 @@
         "activities": [ "EXECUTE" ]
       }
     ],
-    "device-manager": [
+    "device-registry": [
       {
         "resource": "registration/*",
         "activities": [ "READ", "WRITE" ]
       },
       {
         "operation": "registration/*:*",
+        "activities": [ "EXECUTE" ]
+      },
+      {
+        "resource": "tenant",
+        "activities": [ "READ", "WRITE", "EXECUTE" ]
+      },
+      {
+        "operation": "tenant/*:*",
+        "activities": [ "EXECUTE" ]
+      },
+      {
+        "resource": "credentials/*",
+        "activities": [ "READ", "WRITE" ]
+      },
+      {
+        "operation": "credentials/*:get",
         "activities": [ "EXECUTE" ]
       }
     ]
@@ -114,7 +130,7 @@
     },
     "device-registry": {
       "mechanism": "EXTERNAL",
-      "authorities": ["hono-component"]
+      "authorities": [ "hono-component", "device-registry" ]
     }
   }
 }
