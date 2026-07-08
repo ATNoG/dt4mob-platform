@@ -17,9 +17,9 @@ spec:
             - name: ca-volume
               secret:
                 secretName: {{ tpl $.Values.caCertSecretName $ | quote }}
-            - name: client-cert-key-volume
+            - name: device-cert-key-volume
               secret:
-                secretName: {{ tpl $.Values.clientCertKeySecretName $ | quote }}
+                secretName: {{ tpl ($.Values.deviceCert.existingSecret | default "{{ include \"dt4mob-level-ams-loader.fullname\" . }}-device-cert") $ | quote }}
           containers:
             - name: level-ams-loader
               image: atnog-harbor.av.it.pt/dt4mob/level-ams-loader:latest
@@ -51,14 +51,9 @@ spec:
                   readOnly: true
                   mountPath: "/app/ca.crt"
                   subPath: "ca.crt"
-                - name: client-cert-key-volume
+                - name: device-cert-key-volume
                   readOnly: true
-                  mountPath: "/app/cert.pem"
-                  subPath: "cert.pem"
-                - name: client-cert-key-volume
-                  readOnly: true
-                  mountPath: "/app/key.pem"
-                  subPath: "key.pem"
+                  mountPath: "/run/secrets/hono"
               env:
                 - name: LEVEL_AMS_LOADER_DITTO__USERNAME
                   valueFrom:
@@ -71,6 +66,7 @@ spec:
                       name: {{ tpl $.Values.dittoCredsSecretName $ | quote }}
                       key: password
 
+                {{- if $.Values.usePasswordAuth  }}
                 - name: LEVEL_AMS_LOADER_HONO__DEVICE
                   valueFrom:
                     secretKeyRef:
@@ -81,6 +77,7 @@ spec:
                     secretKeyRef:
                       name: {{ tpl $.Values.levelAMSCredsSecretName $ | quote }}
                       key: honoPassword
+                {{- end }}
 
                 - name: LEVEL_AMS_LOADER_LOADER__CREDENTIALS__USERNAME
                   valueFrom:

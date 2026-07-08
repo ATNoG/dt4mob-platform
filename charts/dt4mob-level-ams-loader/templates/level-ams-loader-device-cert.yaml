@@ -1,0 +1,23 @@
+{{- if not .Values.deviceCert.existingSecret }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "dt4mob-level-ams-loader.fullname" . }}-device-cert
+spec:
+  commonName: {{ .Values.levelAMSConfig.ditto.subject | quote }}
+  duration: 168h
+  issuerRef:
+    group: {{ .Values.deviceCert.issuer.group | quote }}
+    kind: {{ .Values.deviceCert.issuer.kind | quote }}
+    name: {{ tpl .Values.deviceCert.issuer.name . | quote }}
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+    size: 256
+  secretName: {{ include "dt4mob-level-ams-loader.fullname" . }}-device-cert
+  usages:
+  - client auth
+  subject:
+    organizations:
+    - dt4mob
+{{- end }}
