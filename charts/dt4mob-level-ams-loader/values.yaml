@@ -1,6 +1,15 @@
 global:
   tenant: "test-tenant"
 
+usePasswordAuth: false
+
+deviceCert:
+  # existingSecret: ""
+  issuer:
+    group: cert-manager.io
+    kind: Issuer
+    name: "{{ .Release.Name }}-tenant-ca-issuer"
+  
 levelAMSConfig:
   logLevel: "INFO"
   loader:

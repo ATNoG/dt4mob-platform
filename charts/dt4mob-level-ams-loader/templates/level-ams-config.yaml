@@ -26,8 +26,8 @@ data:
       {{- end }}
     tenant = {{ $.Values.global.tenant | quote }}
     cafile = "ca.crt"
-    certfile = "cert.pem"
-    keyfile = "key.pem"
+    certfile = "/run/secrets/hono/tls.crt"
+    keyfile = "/run/secrets/hono/tls.key"
     topic = {{ .topic | quote }}
     {{- end }}
 
