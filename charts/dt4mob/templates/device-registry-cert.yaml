@@ -1,1 +1,1 @@
-{{- include "dt4mob.serverCertificate" ( dict "dot" . "component" "device-registry" ) }}
+{{- include "dt4mob.honoCertificate" ( dict "dot" . "component" "device-registry" ) }}

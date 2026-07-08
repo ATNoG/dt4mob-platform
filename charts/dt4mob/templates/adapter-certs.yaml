@@ -1,5 +1,5 @@
-{{- include "dt4mob.serverCertificate" ( dict "dot" . "component" "mqtt-adapter" ) }}
+{{- include "dt4mob.honoCertificate" ( dict "dot" . "component" "adapter-mqtt" ) }}
 ---
-{{- include "dt4mob.serverCertificate" ( dict "dot" . "component" "http-adapter" ) }}
+{{- include "dt4mob.honoCertificate" ( dict "dot" . "component" "adapter-http" ) }}
 ---
-{{- include "dt4mob.serverCertificate" ( dict "dot" . "component" "amqp-adapter" ) }}
+{{- include "dt4mob.honoCertificate" ( dict "dot" . "component" "adapter-amqp" ) }}

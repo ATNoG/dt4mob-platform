@@ -92,11 +92,11 @@ app.kubernetes.io/component: "ditto-static"
 {{- end }}
 
 {{/*
-Configuration for a server certificate
+Configuration for a hono certificate
 - (mandatory) "dot": the root scope (".") and
 - (mandatory) "component": the name of the component
 */}}
-{{- define "dt4mob.serverCertificate" -}}
+{{- define "dt4mob.honoCertificate" -}}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:

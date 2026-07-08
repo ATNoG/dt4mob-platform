@@ -100,6 +100,7 @@ dt4mob-garbage-collector:
 
 dt4mob-level-ams-loader:
   enabled: false
+
   dittoCredsSecretName: "{{ .Release.Name }}-level-ams-loader-credentials"
   caCertSecretName: "{{ .Release.Name }}-root-ca-secret"
 
@@ -211,10 +212,10 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
-      tlsKeysSecret: "dt4mob-mqtt-adapter-cert"
+      tlsKeysSecret: "dt4mob-adapter-mqtt-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "dt4mob-mqtt-adapter-cert"
+        secretName: "dt4mob-adapter-mqtt-cert"
 
       extraEnv:
       - name: KEY_STORE_PASSWORD
@@ -254,10 +255,10 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
-      tlsKeysSecret: "dt4mob-http-adapter-cert"
+      tlsKeysSecret: "dt4mob-adapter-http-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "dt4mob-http-adapter-cert"
+        secretName: "dt4mob-adapter-http-cert"
 
       extraEnv:
       - name: KEY_STORE_PASSWORD
@@ -297,10 +298,10 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
-      tlsKeysSecret: "dt4mob-amqp-adapter-cert"
+      tlsKeysSecret: "dt4mob-adapter-amqp-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "dt4mob-amqp-adapter-cert"
+        secretName: "dt4mob-adapter-amqp-cert"
 
       extraEnv:
       - name: KEY_STORE_PASSWORD
