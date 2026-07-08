@@ -135,6 +135,8 @@ hono:
   externalAccess:
     enabled: false
 
+  otelExporterDisable: true
+
   deviceRegistryExample:
     type: mongodb
     addExampleData: false
