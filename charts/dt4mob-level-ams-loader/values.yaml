@@ -3,6 +3,10 @@ global:
 
 usePasswordAuth: false
 
+concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 1
+failedJobsHistoryLimit: 1
+
 deviceCert:
   # existingSecret: ""
   issuer:
@@ -76,3 +80,6 @@ jobs:
     cronSchedule: "*/5 * * * *"
     geoAssetId: null
     instrumentIds: []
+    # concurrencyPolicy: Forbid
+    # successfulJobsHistoryLimit: 1
+    # failedJobsHistoryLimit: 1

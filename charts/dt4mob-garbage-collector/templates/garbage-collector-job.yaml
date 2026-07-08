@@ -7,9 +7,9 @@ metadata:
     {{- include "dt4mob-garbage-collector.labels" . | nindent 6}}
 spec:
   schedule: {{ .Values.config.schedule | quote }}
-  concurrencyPolicy: Forbid 
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 1
+  concurrencyPolicy: {{ .Values.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:

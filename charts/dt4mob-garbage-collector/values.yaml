@@ -3,6 +3,10 @@ image:
   tag: "latest"
   imagePullPolicy: "Always" 
 
+concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 1
+failedJobsHistoryLimit: 1
+
 config:
   schedule: "*/5 * * * *"
   logLevel: "INFO"

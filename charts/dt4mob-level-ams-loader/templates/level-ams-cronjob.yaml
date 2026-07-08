@@ -6,6 +6,9 @@ metadata:
   name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-{{ .name }}
 spec:
   schedule: {{ .cronSchedule | quote }}
+  concurrencyPolicy: {{ .concurrencyPolicy | default $.Values.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit | default $.Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .failedJobsHistoryLimit | default $.Values.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
