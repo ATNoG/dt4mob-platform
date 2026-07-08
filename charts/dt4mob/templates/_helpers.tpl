@@ -107,6 +107,7 @@ spec:
   commonName: {{ .component }}
   dnsNames:
   - {{ .dot.Values.global.host }}
+  - {{ include "hono.fullname" .dot.Subcharts.hono }}-{{ .component }}
   {{- if (get .dot.Values "dt4mob-ingress").http.enabled }}
   - {{ (get .dot.Values "dt4mob-ingress").http.host }}
   {{- end }}
