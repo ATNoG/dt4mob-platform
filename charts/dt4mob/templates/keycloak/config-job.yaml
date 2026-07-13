@@ -59,4 +59,7 @@ spec:
           {{- if (get .Values "dt4mob-level-ams-loader").enabled }}
           {{- $systemAccounts = append $systemAccounts "level-ams-loader" }}
           {{- end }}
+          {{- if (get .Values "dt4mob-meteo-populator").enabled }}
+          {{- $systemAccounts = append $systemAccounts "meteo-populator" }}
+          {{- end }}
           value: {{ $systemAccounts | join "," | quote }}

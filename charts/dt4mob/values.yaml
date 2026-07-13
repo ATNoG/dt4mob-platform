@@ -116,6 +116,29 @@ dt4mob-level-ams-loader:
 dt4mob-viz:
   enabled: false
 
+dt4mob-meteo-populator:
+  enabled: false
+  config:
+    ditto:
+      url: "http://{{ .Release.Name }}-ditto-gateway:8080/api/2/"
+    oidc:
+      url: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob/protocol/openid-connect/token"
+      ca_file: "/run/secrets/keycloak/ca.crt"
+
+  dittoCredentials:
+    secret: "{{ .Release.Name }}-meteo-populator-credentials"
+
+  extraVolumeMounts:
+  - name: internal-keycloak-tls
+    mountPath: /run/secrets/keycloak/ca.crt
+    subPath: ca.crt
+    readOnly: true
+  extraVolumes:
+  - name: internal-keycloak-tls
+    secret:
+      secretName: dt4mob-internal-keycloak-tls
+
+
 reloader:
   reloader:
     watchGlobally: false

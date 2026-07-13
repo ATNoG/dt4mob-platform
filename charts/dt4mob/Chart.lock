@@ -29,5 +29,8 @@ dependencies:
 - name: dt4mob-viz
   repository: file://../dt4mob-viz
   version: 0.1.0
-digest: sha256:59d1a77e7a384388dc25776fda1adc242fe825aa9cd58a283f0d04b76a62d361
-generated: "2026-07-08T19:12:47.893385546+01:00"
+- name: dt4mob-meteo-populator
+  repository: file://../dt4mob-meteo-populator
+  version: 0.1.0
+digest: sha256:5cc9cf24d35db7b0d860ffd89c7d2a8316223245a6b09e531b068c7954930f89
+generated: "2026-07-13T15:21:20.682376255+01:00"
