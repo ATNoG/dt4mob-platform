@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 31,
+  "id": 0,
   "links": [],
   "panels": [
     {
@@ -50,7 +50,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 8,
         "w": 12,
         "x": 0,
         "y": 0
@@ -103,6 +103,68 @@
               {
                 "color": "green",
                 "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum by (category, direction, success) (increase(connection_messages_total{id=\"hono-kafka-connection-for-dt4mob\"}[$__range]))",
+          "format": "time_series",
+          "legendFormat": "{{category}}={{success}} ({{direction}})",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "# messages/category (Ditto dt4mob-tenant)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
               },
               {
                 "color": "red",
@@ -114,10 +176,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 0
+        "x": 0,
+        "y": 8
       },
       "id": 4,
       "options": {
@@ -141,7 +203,8 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (status, tenant) (rate(hono_telemetry_payload_bytes_count{status!=\"forwarded\"}[$__rate_interval]))",
+          "expr": "sum by (tenant) (rate(hono_telemetry_payload_bytes_count{status!=\"forwarded\"}[$__rate_interval]))",
+          "hide": false,
           "legendFormat": "[Hono] {{tenant}}",
           "range": true,
           "refId": "A"
@@ -152,7 +215,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (id, category) (rate(connection_messages_total{direction=\"inbound\", success=\"false\"}[$__rate_interval]))",
+          "expr": "sum by (id) (rate(connection_messages_total{direction=\"inbound\", success=\"false\"}[$__rate_interval]))",
           "hide": false,
           "instant": false,
           "legendFormat": "[Ditto IN] {{id}}",
@@ -165,10 +228,10 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (id, category) (rate(connection_messages_total{direction=\"outbound\", success=\"false\"}[$__rate_interval]))",
+          "expr": "sum by (id) (rate(connection_messages_total{direction=\"outbound\", success=\"false\"}[$__rate_interval]))",
           "hide": false,
           "instant": false,
-          "legendFormat": "[Ditto OUT] {{id}}",
+          "legendFormat": "[Ditto OUT] {{id}} {{category}}",
           "range": true,
           "refId": "C"
         }
@@ -241,8 +304,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 6
+        "x": 12,
+        "y": 8
       },
       "id": 6,
       "options": {
@@ -294,79 +357,16 @@
                 "value": 80
               }
             ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 6
-      },
-      "id": 7,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "increase(connection_messages_total{id=\"hono-kafka-connection-for-test-tenant\", direction=\"inbound\"}[$__range])",
-          "legendFormat": "{{category}}={{success}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "# messages/category (Ditto test-tenant)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
           },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
+          "unit": "short"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 16
       },
       "id": 3,
       "options": {
@@ -493,9 +493,8 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "[Hono] test-tenant",
-                  "[Ditto] test-tenant",
-                  "[Kafka] test-tenant"
+                  "[Hono] dt4mob",
+                  "[Ditto] dt4mob-tenant"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -518,7 +517,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 22
       },
       "id": 2,
       "options": {
@@ -588,5 +587,5 @@
   "timezone": "browser",
   "title": "Received-Consumed message metrics",
   "uid": "ad7nprr",
-  "version": 13
+  "version": 5
 }
