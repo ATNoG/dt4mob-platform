@@ -92,11 +92,11 @@ app.kubernetes.io/component: "ditto-static"
 {{- end }}
 
 {{/*
-Configuration for a server certificate
+Configuration for a hono certificate
 - (mandatory) "dot": the root scope (".") and
 - (mandatory) "component": the name of the component
 */}}
-{{- define "dt4mob.serverCertificate" -}}
+{{- define "dt4mob.honoCertificate" -}}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -107,6 +107,7 @@ spec:
   commonName: {{ .component }}
   dnsNames:
   - {{ .dot.Values.global.host }}
+  - {{ include "hono.fullname" .dot.Subcharts.hono }}-{{ .component }}
   {{- if (get .dot.Values "dt4mob-ingress").http.enabled }}
   - {{ (get .dot.Values "dt4mob-ingress").http.host }}
   {{- end }}

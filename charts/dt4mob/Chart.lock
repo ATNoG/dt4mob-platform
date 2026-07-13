@@ -7,7 +7,7 @@ dependencies:
   version: 4.1.0
 - name: reloader
   repository: https://stakater.github.io/stakater-charts
-  version: 2.2.12
+  version: 2.2.14
 - name: psmdb-db
   repository: https://percona.github.io/percona-helm-charts/
   version: 1.20.1
@@ -29,5 +29,8 @@ dependencies:
 - name: dt4mob-viz
   repository: file://../dt4mob-viz
   version: 0.1.0
-digest: sha256:4355badfb7307de8aa78696b09d65c9743bf5abc8bc35b92f4b1887d5c3f2119
-generated: "2026-06-25T14:10:07.982359202+01:00"
+- name: dt4mob-meteo-populator
+  repository: file://../dt4mob-meteo-populator
+  version: 0.1.0
+digest: sha256:5cc9cf24d35db7b0d860ffd89c7d2a8316223245a6b09e531b068c7954930f89
+generated: "2026-07-13T15:21:20.682376255+01:00"

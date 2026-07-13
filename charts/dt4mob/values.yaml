@@ -100,6 +100,7 @@ dt4mob-garbage-collector:
 
 dt4mob-level-ams-loader:
   enabled: false
+
   dittoCredsSecretName: "{{ .Release.Name }}-level-ams-loader-credentials"
   caCertSecretName: "{{ .Release.Name }}-root-ca-secret"
 
@@ -114,6 +115,29 @@ dt4mob-level-ams-loader:
 
 dt4mob-viz:
   enabled: false
+
+dt4mob-meteo-populator:
+  enabled: false
+  config:
+    ditto:
+      url: "http://{{ .Release.Name }}-ditto-gateway:8080/api/2/"
+    oidc:
+      url: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob/protocol/openid-connect/token"
+      ca_file: "/run/secrets/keycloak/ca.crt"
+
+  dittoCredentials:
+    secret: "{{ .Release.Name }}-meteo-populator-credentials"
+
+  extraVolumeMounts:
+  - name: internal-keycloak-tls
+    mountPath: /run/secrets/keycloak/ca.crt
+    subPath: ca.crt
+    readOnly: true
+  extraVolumes:
+  - name: internal-keycloak-tls
+    secret:
+      secretName: dt4mob-internal-keycloak-tls
+
 
 reloader:
   reloader:
@@ -134,6 +158,8 @@ hono:
   externalAccess:
     enabled: false
 
+  otelExporterDisable: true
+
   deviceRegistryExample:
     type: mongodb
     addExampleData: false
@@ -145,6 +171,8 @@ hono:
       deployment:
         annotations:
           reloader.stakater.com/auto: "true"
+
+      quarkusLoggingProfile: "prod"
 
       extraEnv:
       - name: KEY_STORE_PASSWORD
@@ -211,10 +239,12 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
-      tlsKeysSecret: "dt4mob-mqtt-adapter-cert"
+      quarkusLoggingProfile: "prod"
+
+      tlsKeysSecret: "dt4mob-adapter-mqtt-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "dt4mob-mqtt-adapter-cert"
+        secretName: "dt4mob-adapter-mqtt-cert"
 
       extraEnv:
       - name: KEY_STORE_PASSWORD
@@ -254,10 +284,12 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
-      tlsKeysSecret: "dt4mob-http-adapter-cert"
+      quarkusLoggingProfile: "prod"
+
+      tlsKeysSecret: "dt4mob-adapter-http-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "dt4mob-http-adapter-cert"
+        secretName: "dt4mob-adapter-http-cert"
 
       extraEnv:
       - name: KEY_STORE_PASSWORD
@@ -297,10 +329,12 @@ hono:
         annotations:
           reloader.stakater.com/auto: "true"
 
-      tlsKeysSecret: "dt4mob-amqp-adapter-cert"
+      quarkusLoggingProfile: "prod"
+
+      tlsKeysSecret: "dt4mob-adapter-amqp-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
-        secretName: "dt4mob-amqp-adapter-cert"
+        secretName: "dt4mob-adapter-amqp-cert"
 
       extraEnv:
       - name: KEY_STORE_PASSWORD
@@ -340,6 +374,8 @@ hono:
       annotations:
         reloader.stakater.com/auto: "true"
 
+    quarkusLoggingProfile: "prod"
+
     tlsKeysSecret: "dt4mob-auth-server-cert"
     tlsTrustStoreSecret:
       secretName: "dt4mob-auth-server-cert"
@@ -378,6 +414,8 @@ hono:
     deployment:
       annotations:
         reloader.stakater.com/auto: "true"
+
+    quarkusLoggingProfile: "prod"
 
     tlsKeysSecret: "dt4mob-command-router-cert"
     tlsTrustStoreConfigMap: "none"

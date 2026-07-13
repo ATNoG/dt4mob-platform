@@ -3,9 +3,12 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-level-ams-loader-{{ .name }}
+  name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-{{ .name }}
 spec:
   schedule: {{ .cronSchedule | quote }}
+  concurrencyPolicy: {{ .concurrencyPolicy | default $.Values.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit | default $.Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .failedJobsHistoryLimit | default $.Values.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
@@ -13,10 +16,13 @@ spec:
           volumes:
             - name: config-volume
               configMap:
-                name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-level-ams-loader-config
+                name: {{ include "dt4mob-level-ams-loader.fullname" $ }}-config
             - name: ca-volume
               secret:
                 secretName: {{ tpl $.Values.caCertSecretName $ | quote }}
+            - name: device-cert-key-volume
+              secret:
+                secretName: {{ tpl ($.Values.deviceCert.existingSecret | default "{{ include \"dt4mob-level-ams-loader.fullname\" . }}-device-cert") $ | quote }}
           containers:
             - name: level-ams-loader
               image: atnog-harbor.av.it.pt/dt4mob/level-ams-loader:latest
@@ -48,6 +54,9 @@ spec:
                   readOnly: true
                   mountPath: "/app/ca.crt"
                   subPath: "ca.crt"
+                - name: device-cert-key-volume
+                  readOnly: true
+                  mountPath: "/run/secrets/hono"
               env:
                 - name: LEVEL_AMS_LOADER_DITTO__USERNAME
                   valueFrom:
@@ -60,6 +69,7 @@ spec:
                       name: {{ tpl $.Values.dittoCredsSecretName $ | quote }}
                       key: password
 
+                {{- if $.Values.usePasswordAuth  }}
                 - name: LEVEL_AMS_LOADER_HONO__DEVICE
                   valueFrom:
                     secretKeyRef:
@@ -70,6 +80,7 @@ spec:
                     secretKeyRef:
                       name: {{ tpl $.Values.levelAMSCredsSecretName $ | quote }}
                       key: honoPassword
+                {{- end }}
 
                 - name: LEVEL_AMS_LOADER_LOADER__CREDENTIALS__USERNAME
                   valueFrom:

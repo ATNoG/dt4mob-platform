@@ -46,36 +46,6 @@ if [ -z "$ROLEID" ]; then
     -s description="Platform administrator role" | jq -r ".id")
 fi
 
-# Create/Update the system service role
-SYSTEM_SERVICE_ROLE_NAME="${SYSTEM_SERVICE_ROLE_NAME:-"system-service"}"
-ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$SYSTEM_SERVICE_ROLE_NAME" -F id --format csv --noquotes || true)
-if [ -z "$ROLEID" ]; then
-  # The `-i` option returns the role name instead of the ID
-  ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
-    -r "$KEYCLOAK_REALM" \
-    -s name="$SYSTEM_SERVICE_ROLE_NAME" \
-    -s description="Systems services role" | jq -r ".id")
-fi
-
-GARBAGE_COLLECTOR_NAME="${GARBAGE_COLLECTOR_NAME:-"dt4mob-garbage-collector"}"
-GARBAGE_COLLECTOR_ID=$(kcadm get users -r "$KEYCLOAK_REALM" -q "q=username:$GARBAGE_COLLECTOR_NAME" | jq -r ".[0].id")
-if [ "$GARBAGE_COLLECTOR_ID" = "null" ]; then
-  GARBAGE_COLLECTOR_ID=$(kcadm create users -i \
-    -r "$KEYCLOAK_REALM" \
-    -s username="$GARBAGE_COLLECTOR_NAME" \
-    -s enabled=true)
-fi
-
-kcadm add-roles -r "$KEYCLOAK_REALM" --uid "$GARBAGE_COLLECTOR_ID" --cid "$CID" --roleid "$ROLEID"
-
-if ! kubectl get secrets "$GARBAGE_COLLECTOR_SECRET_NAME"; then
-  GARBAGE_COLLECTOR_PASSWORD="$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 16)"
-  kubectl create secret generic "$GARBAGE_COLLECTOR_SECRET_NAME" \
-    --from-literal=username="$GARBAGE_COLLECTOR_NAME" \
-    --from-literal=password="$GARBAGE_COLLECTOR_PASSWORD"
-  kcadm set-password -r "$KEYCLOAK_REALM" --userid "$GARBAGE_COLLECTOR_ID" --new-password "$GARBAGE_COLLECTOR_PASSWORD"
-fi
-
 # Create/Update the historical API roles 
 HISTORICAL_READ_ROLE_NAME="${HISTORICAL_READ_ROLE_NAME:-"historical-read"}"
 ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$HISTORICAL_READ_ROLE_NAME" -F id --format csv --noquotes || true)
@@ -97,22 +67,36 @@ if [ -z "$ROLEID" ]; then
     -s description="Historical API write access" | jq -r ".id")
 fi
 
-
-LEVEL_AMS_LOADER_NAME="${LEVEL_AMS_LOADER_NAME:-"dt4mob-level-ams-loader"}"
-LEVEL_AMS_LOADER_ID=$(kcadm get users -r "$KEYCLOAK_REALM" -q "q=username:$LEVEL_AMS_LOADER_NAME" | jq -r ".[0].id")
-if [ "$LEVEL_AMS_LOADER_ID" = "null" ]; then
-  LEVEL_AMS_LOADER_ID=$(kcadm create users -i \
+# Create/Update the system service role
+SYSTEM_SERVICE_ROLE_NAME="${SYSTEM_SERVICE_ROLE_NAME:-"system-service"}"
+ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$SYSTEM_SERVICE_ROLE_NAME" -F id --format csv --noquotes || true)
+if [ -z "$ROLEID" ]; then
+  # The `-i` option returns the role name instead of the ID
+  ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
     -r "$KEYCLOAK_REALM" \
-    -s username="$LEVEL_AMS_LOADER_NAME" \
-    -s enabled=true)
+    -s name="$SYSTEM_SERVICE_ROLE_NAME" \
+    -s description="Systems services role" | jq -r ".id")
 fi
 
-kcadm add-roles -r "$KEYCLOAK_REALM" --uid "$LEVEL_AMS_LOADER_ID" --cid "$CID" --roleid "$ROLEID"
+echo "$SYSTEM_ACCOUNTS" | tr , '\n' | while read NAME; do
+  ACCOUNT_NAME="$ACCOUNTS_PREFIX-$NAME"
 
-if ! kubectl get secrets "$LEVEL_AMS_LOADER_SECRET_NAME"; then
-  LEVEL_AMS_LOADER_PASSWORD="$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 16)"
-  kubectl create secret generic "$LEVEL_AMS_LOADER_SECRET_NAME" \
-    --from-literal=username="$LEVEL_AMS_LOADER_NAME" \
-    --from-literal=password="$LEVEL_AMS_LOADER_PASSWORD"
-  kcadm set-password -r "$KEYCLOAK_REALM" --userid "$LEVEL_AMS_LOADER_ID" --new-password "$LEVEL_AMS_LOADER_PASSWORD"
-fi
+  ACCOUNT_ID=$(kcadm get users -r "$KEYCLOAK_REALM" -q "username=$ACCOUNT_NAME" -q "exact=true" | jq -r ".[0].id")
+  if [ "$ACCOUNT_ID" = "null" ]; then
+    ACCOUNT_ID=$(kcadm create users -i \
+      -r "$KEYCLOAK_REALM" \
+      -s username="$ACCOUNT_NAME" \
+      -s enabled=true)
+  fi
+
+  kcadm add-roles -r "$KEYCLOAK_REALM" --uid "$ACCOUNT_ID" --cid "$CID" --roleid "$ROLEID"
+
+  SECRET_NAME="$SECRETS_PREFIX-$NAME-credentials"
+  if ! kubectl get secrets "$SECRET_NAME"; then
+    ACCOUNT_PASSWORD="$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 16)"
+    kubectl create secret generic "$SECRET_NAME" \
+      --from-literal=username="$ACCOUNT_NAME" \
+      --from-literal=password="$ACCOUNT_PASSWORD"
+    kcadm set-password -r "$KEYCLOAK_REALM" --userid "$ACCOUNT_ID" --new-password "$ACCOUNT_PASSWORD"
+  fi
+done

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "dt4mob-level-ams-loader.fullname" . }}-level-ams-loader-config
+  name: {{ include "dt4mob-level-ams-loader.fullname" . }}-config
 data:
 {{- with .Values.levelAMSConfig }}
   config.toml: |
@@ -25,10 +25,9 @@ data:
     port = {{ .port }}
       {{- end }}
     tenant = {{ $.Values.global.tenant | quote }}
-
-    secure = {{ .secure }}
     cafile = "ca.crt"
-
+    certfile = "/run/secrets/hono/tls.crt"
+    keyfile = "/run/secrets/hono/tls.key"
     topic = {{ .topic | quote }}
     {{- end }}
 
@@ -42,6 +41,46 @@ data:
     start_page_idx = {{ .startPageIdx }}
     
     instrument_coords_file = "instrument_coords.csv"
+    {{- end }}
+
+    {{- with .dashboard }}
+    [dashboard]
+    inclinometer_base_url = {{ .inclinometerBaseUrl | quote }}
+    inclinometer_query_param = {{ .inclinometerQueryParam | quote }}
+    load_cell_base_url = {{ .loadCellBaseUrl | quote }}
+    load_cell_query_param = {{ .loadCellQueryParam | quote }}
+    {{- end }}
+
+    {{- if .instrumentThresholds }}
+    [instrument_thresholds]
+    {{- range $matricula, $thresholds := .instrumentThresholds }}
+    [instrument_thresholds.{{ $matricula | quote }}]
+    parameter_types = {{ $thresholds.parameterTypes | toJson }}
+
+    [instrument_thresholds.{{ $matricula | quote }}.alert]
+    threshold_type = {{ $thresholds.alert.thresholdType | quote }}
+    value = {{ $thresholds.alert.value }}
+
+    [instrument_thresholds.{{ $matricula | quote }}.alarm]
+    threshold_type = {{ $thresholds.alarm.thresholdType | quote }}
+    value = {{ $thresholds.alarm.value }}
+    {{- end }}
+    {{- end }}
+
+    {{- if .instrumentTypeThresholds }}
+    [instrument_type_thresholds]
+    {{- range $type, $thresholds := .instrumentTypeThresholds }}
+    [instrument_type_thresholds.{{ $type | quote }}]
+    parameter_types = {{ $thresholds.parameterTypes | toJson }}
+
+    [instrument_type_thresholds.{{ $type | quote }}.alert]
+    threshold_type = {{ $thresholds.alert.thresholdType | quote }}
+    value = {{ $thresholds.alert.value }}
+
+    [instrument_type_thresholds.{{ $type | quote }}.alarm]
+    threshold_type = {{ $thresholds.alarm.thresholdType | quote }}
+    value = {{ $thresholds.alarm.value }}
+    {{- end }}
     {{- end }}
   instrument_coords.csv: |
     matricula,x,y,z

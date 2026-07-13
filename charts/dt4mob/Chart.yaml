@@ -39,3 +39,7 @@ dependencies:
     version: "0.1.0"
     repository: file://../dt4mob-viz
     condition: dt4mob-viz.enabled
+  - name: dt4mob-meteo-populator
+    version: "0.1.0"
+    repository: file://../dt4mob-meteo-populator
+    condition: dt4mob-meteo-populator.enabled

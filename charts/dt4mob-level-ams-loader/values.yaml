@@ -1,6 +1,19 @@
 global:
   tenant: "test-tenant"
 
+usePasswordAuth: false
+
+concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 1
+failedJobsHistoryLimit: 1
+
+deviceCert:
+  # existingSecret: ""
+  issuer:
+    group: cert-manager.io
+    kind: Issuer
+    name: "{{ .Release.Name }}-tenant-ca-issuer"
+  
 levelAMSConfig:
   logLevel: "INFO"
   loader:
@@ -11,7 +24,6 @@ levelAMSConfig:
     parametersChunkSize: 10
     instrumentsChunkSize: 10
   hono:
-    secure: false
     host: "127.0.0.1"
     port: null
     topic: "telemetry"
@@ -19,9 +31,55 @@ levelAMSConfig:
     defaultPolicy: "dt4mob:default"
     subject: "test"
     baseUrl: "http://localhost/api/2"
+  dashboard:
+    inclinometerBaseUrl: "http://127.0.0.1"
+    inclinometerQueryParam: "var-instrument_id"
+    loadCellBaseUrl: "http://127.0.0.1"
+    loadCellQueryParam: "var-instrument_id"
+  # Per-instrument thresholds keyed by matricula
+  # Each threshold defines parameter_type, alert and alarm with threshold_type (LT/GT/DELTA) and value
+  # Example:
+  # instrumentThresholds:
+  #   A19:
+  #     parameterTypes:
+  #       -"F"
+  #     alert:
+  #       thresholdType: "LT"
+  #       value: 100.0
+  #     alarm:
+  #       thresholdType: "LT"
+  #       value: 50.0
+  #   A25.1:
+  #     parameterTypes:
+  #       -"F"
+  #     alert:
+  #       thresholdType: "GT"
+  #       value: 500.0
+  #     alarm:
+  #       thresholdType: "GT"
+  #       value: 750.0
+  instrumentThresholds: {}
+
+  # Per-instrument-type thresholds keyed by InstrumentType (InstrumentoTipoInstrumento_Inclinometro, InstrumentoTipoInstrumento_CelulaCarga)
+  # Example:
+  # instrumentTypeThresholds:
+  #   InstrumentoTipoInstrumento_Inclinometro:
+  #     parameterTypes:
+  #       -"DispX"
+  #       -"DispY"
+  #     alert:
+  #       thresholdType: "DELTA"
+  #       value: 10.0
+  #     alarm:
+  #       thresholdType: "DELTA"
+  #       value: 15.0
+  instrumentTypeThresholds: {}
 
 jobs:
   - name: "default"
     cronSchedule: "*/5 * * * *"
     geoAssetId: null
     instrumentIds: []
+    # concurrencyPolicy: Forbid
+    # successfulJobsHistoryLimit: 1
+    # failedJobsHistoryLimit: 1

@@ -1,1 +1,1 @@
-{{- include "dt4mob.serverCertificate" ( dict "dot" . "component" "command-router" ) }}
+{{- include "dt4mob.honoCertificate" ( dict "dot" . "component" "command-router" ) }}

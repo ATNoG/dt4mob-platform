@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"io"
@@ -30,11 +31,13 @@ const MAX_RETRIES int = 5
 func updateHonoTenant(config *config.Config, state *state.State) bool {
 	tenantUrl := state.HonoTenantUrl(config)
 
+	block, _ := pem.Decode([]byte(state.TrustCrt))
+
 	body := map[string]any{
 		"trusted-ca": []any{
 			map[string]any{
 				"id":                                   "operator-managed-ca",
-				"cert":                                 base64.StdEncoding.EncodeToString([]byte(state.TrustCrt)),
+				"cert":                                 base64.StdEncoding.EncodeToString(block.Bytes),
 				"auto-provisioning-enabled":            true,
 				"auto-provisioning-device-id-template": "{{subject-cn}}",
 			},

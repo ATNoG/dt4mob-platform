@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dt4mob-meteo-populator.fullname" . }}-config
+  labels:
+    {{- include "dt4mob-meteo-populator.labels" . | nindent 4 }}
+data:
+  config.toml: |
+{{ tpl (.Values.config | toToml) $ | indent 4 }}

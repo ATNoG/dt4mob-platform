@@ -1,0 +1,31 @@
+image:
+  repository: atnog-harbor.av.it.pt/dt4mob/meteo-populator
+  tag: latest
+  pullPolicy: Always
+
+schedule: "0 * * * *"
+concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 3 
+failedJobsHistoryLimit: 1
+
+config:
+  ditto:
+    url: "http://{{ .Release.Name }}-ditto-gateway:8080/api/2/"
+  populator:
+    dry_run: false
+  logging:
+    level: "INFO"
+  oidc:
+    url: "https://{{ .Release.Name }}-keycloak:8443/auth/realms/dt4mob/protocol/openid-connect/token"
+    client_id: "ditto"
+    scope: "openid"
+
+dittoCredentials:
+  # Needs to be set
+  secret: "{{ .Release.Name }}-meteo-populator-credentials"
+  usernameKey: "username"
+  passwordKey: "password"
+
+# extraEnv: []
+# extraVolumeMounts: []
+# extraVolumes: []
