@@ -25,6 +25,5 @@ class KafkaSettings(BaseSettings):
             'ssl.certificate.location': self.ssl_certificate_location,
             'ssl.key.location': self.ssl_key_location,
             'group.id': self.consumer_group,
-            'auto.offset.reset': self.auto_offset_reset,
-            'enable.auto.commit': False
+            'auto.offset.reset': self.auto_offset_reset
         }
