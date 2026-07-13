@@ -47,7 +47,16 @@ spec:
           {{- $tplOrigins = append $tplOrigins (tpl $origin $) }}
           {{- end }}
           value: {{ $tplOrigins | toJson | quote }}
-        - name: "GARBAGE_COLLECTOR_SECRET_NAME"
-          value: "{{ include "dt4mob.fullname" . }}-garbage-collector-credentials"
-        - name: "LEVEL_AMS_LOADER_SECRET_NAME"
-          value: "{{ include "dt4mob.fullname" . }}-level-ams-loader-credentials"
+        - name: ACCOUNTS_PREFIX
+          value: "{{ include "dt4mob.fullname" . }}"
+        - name: SECRETS_PREFIX
+          value: "{{ include "dt4mob.fullname" . }}"
+        - name: SYSTEM_ACCOUNTS
+          {{ $systemAccounts := list }}
+          {{- if (get .Values "dt4mob-garbage-collector").enabled }}
+          {{- $systemAccounts = append $systemAccounts "garbage-collector" }}
+          {{- end }}
+          {{- if (get .Values "dt4mob-level-ams-loader").enabled }}
+          {{- $systemAccounts = append $systemAccounts "level-ams-loader" }}
+          {{- end }}
+          value: {{ $systemAccounts | join "," | quote }}
