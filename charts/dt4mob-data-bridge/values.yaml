@@ -7,6 +7,8 @@ image:
 
 schedule: "0 * * * *"
 
+concurrencyPolicy: Forbid
+
 
 hono:
   http_adapter: "https://<hono-http-adapter>"
@@ -14,8 +16,8 @@ hono:
   server_cert_path: "/path/to/cert.pem"
 
 devices:
-  - namespace: "internal"
-    policy_id: "meteo:default"
+  - namespace: "<namespace>"
+    policy_id: "<policy>"
     cert_path: "/path/to/device.crt"
     private_key: "/path/to/device.key"
     strategies:

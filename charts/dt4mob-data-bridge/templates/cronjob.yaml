@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: {{ .Chart.Name }}
 spec:
   schedule: {{ .Values.schedule | quote }}
-  concurrencyPolicy: {{ (((.Values.jobs).myBackupJob).concurrencyPolicy) | default "Forbid" }}
+  concurrencyPolicy: {{ (((.Values.jobs).myBackupJob).concurrencyPolicy) }}
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
   jobTemplate:
@@ -16,7 +16,7 @@ spec:
           containers:
             - name: data-bridge
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-              imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
               volumeMounts:
                 - name: config-volume
                   mountPath: /app/config.toml
