@@ -32,10 +32,10 @@
     },
     "DeviceSettings": {
       "type": "object",
-      "required": ["policy_id", "namespace", "cert_path", "private_key", "strategies"],
+      "required": ["policy_id", "subject", "cert_path", "private_key", "strategies"],
       "properties": {
         "policy_id": { "type": "string" },
-        "namespace": { "type": "string" },
+        "subject": { "type": "string" },
         "cert_path": { "type": "string" },
         "private_key": { "type": "string" },
         "strategies": {
@@ -57,43 +57,43 @@
       "type": "object",
       "properties": {
         "type": { "const": "meteo" },
-        "subject": { "type": "string" }
+        "namespace": { "type": "string" }
       },
-      "required": ["type", "subject"],
+      "required": ["type", "namespace"],
       "additionalProperties": false
     },
     "MeteoWarningsStrategy": {
       "type": "object",
       "properties": {
         "type": { "const": "meteo_warnings" },
-        "subject": { "type": "string" }
+        "namespace": { "type": "string" }
       },
-      "required": ["type", "subject"],
+      "required": ["type", "namespace"],
       "additionalProperties": false
     },
     "TrafficStrategy": {
       "type": "object",
       "properties": {
         "type": { "const": "traffic" },
-        "subject": { "type": "string" },
+        "namespace": { "type": "string" },
         "sensorName": { "type": "string" },
         "road": { "type": "string" },
         "latitude": { "type": "number" },
         "longitude": { "type": "number" },
         "radius": { "type": "number", "default": 1000 }
       },
-      "required": ["type", "subject", "sensorName", "road", "latitude", "longitude"],
+      "required": ["type", "namespace", "sensorName", "road", "latitude", "longitude"],
       "additionalProperties": false
     },
     "GeoJsonStrategy": {
       "type": "object",
       "properties": {
         "type": { "const": "geojson" },
-        "subject": { "type": "string" },
+        "namespace": { "type": "string" },
         "dir": { "type": "string" },
         "file": { "type": "string" }
       },
-      "required": ["type", "subject"],
+      "required": ["type", "namespace"],
       "additionalProperties": false,
       "oneOf": [
         { "required": ["dir"], "not": { "required": ["file"] } },

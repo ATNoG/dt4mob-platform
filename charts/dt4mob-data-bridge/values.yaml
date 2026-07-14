@@ -16,12 +16,12 @@ hono:
   server_cert_path: "/path/to/cert.pem"
 
 devices:
-  - namespace: "<namespace>"
+  - subject: "<device_subject>"
     policy_id: "<policy>"
     cert_path: "/path/to/device.crt"
     private_key: "/path/to/device.key"
     strategies:
       - type: "<strategy-type>"
-        subject: "<thing-subject>"
+        namespace: "<thing-namespace>"
       - type: "<strategy-type>"
-        subject: "<thing-subject>"
+        namespace: "<thing-namespace>"
