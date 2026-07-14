@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "dt4mob-data-bridge.name" . }}
+  labels:
+    {{ include "dt4mob-data-bridge.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: {{ .Values.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: data-bridge
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: LOGURU_LEVEL
+                  value: {{ .Values.logLevel }}
+              {{- with .Values.env }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /app/config.toml
+                  subPath: config.toml
+                  readOnly: true
+                - name: device-cert-key-volume
+                  readOnly: true
+                  mountPath: "/run/secrets/device"
+                {{- if .Values.caCertSecretName }}
+                - name: ca-volume
+                  readOnly: true
+                  mountPath: "/run/secrets/hono/ca.crt"
+                  subPath: "ca.crt"
+                {{- end }}
+                {{- if .Values.extraVolumeMounts }}
+                  {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
+                {{- end }}
+          restartPolicy: Never
+          volumes:
+            - name: config-volume
+              configMap:
+                name: {{ include "dt4mob-data-bridge.name" . }}-config
+            - name: device-cert-key-volume
+              secret:
+                secretName: {{ tpl ($.Values.deviceCert.existingSecret | default "{{ include \"dt4mob-data-bridge.fullname\" . }}-device-cert") $ | quote }}
+            {{- if .Values.caCertSecretName }}
+            - name: ca-volume
+              secret:
+                secretName: {{ tpl $.Values.caCertSecretName $ | quote }}
+            {{- end }}
+            {{- if .Values.extraVolumes }}
+              {{- toYaml .Values.extraVolumes | nindent 12 }}
+            {{- end }}

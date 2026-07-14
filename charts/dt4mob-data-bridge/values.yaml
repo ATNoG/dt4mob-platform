@@ -1,74 +1,46 @@
-# Default values for data-bridge helm chart.
+global:
+  tenant: "test-tenant"
 
-# Registry image location — replace with your actual registry
 image:
   repository: atnog-harbor.av.it.pt/dt4mob/data-bridge
-  tag: latest
-  pullPolicy: Always 
+  # This sets the pull policy for images.
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
 
-# Number of replicas.
-replicaCount: 1
+schedule: "0 * * * *"
 
-# Kubernetes Service settings.
-service:
-  type: ClusterIP
-  port: 8000
+concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 3 
+failedJobsHistoryLimit: 1
 
-# Application environment: dev | prod
-# In dev mode, SSL verification is disabled for Hono requests.
-env: dev
+logLevel: INFO
 
-# Polling interval in seconds — how often the service fetches data from sources.
-pollingInterval: 900
+caCertSecretName: "{{ .Release.Name }}-root-ca-secret"
 
-# Eclipse Hono connection settings.
-# These point to the Hono services deployed in the same namespace.
+deviceCert:
+  # existingSecret: ""
+  issuer:
+    group: cert-manager.io
+    kind: Issuer
+    name: "{{ .Release.Name }}-tenant-ca-issuer"
+
 hono:
-  deviceRegistry: "http://dt4mob-hono-service-device-registry.dt4mob.svc.cluster.local:8443"
-  httpAdapter: "http://dt4mob-hono-adapter-http.dt4mob.svc.cluster.local:8443"
-  tenantId: "dt4mob"
-  # serverCertPath: "/etc/certs/hono-ca.pem"  # optional mTLS CA certificate path
+  http_adapter: "https://{{ .Release.Name }}-hono-adapter-http:8443"
+  tenant_id: "{{ .Values.global.tenant }}"
+  server_cert_path: "/run/secrets/hono/ca.crt"
 
-# File paths inside the container where GeoJSON data is mounted.
-# Populate the charts/data-bridge/data/ directory with your GeoJSON files.
-# See README for directory structure.
-# signs:
-#   dir: "/data/Signs"
-# barriers:
-#   dir: "/data/Barriers/Barreiras.geojson"
-# equivia:
-#   dir: "/data/Equivia"
-# lights:
-#   file: "/data/lights.geojson"
+devices: []
+  # - subject: "internal"
+  #   policy_id: "meteo:default"
+  #   cert_path: "/run/secrets/device/tls.crt"
+  #   private_key: "/run/secrets/device/tls.key"
+  #   strategies:
+  #     - type: "meteo"
+  #       namespace: "meteo"
+  #     - type: "meteo_warnings"
+  #       namespace: "meteo"
 
-# Traffic sensor points — used to query Waze for live road data.
-# tolls:
-#   - name: SensorPoint1
-#     road: VCI
-#     latitude: 41.1453611
-#     longitude: -8.5811944
-#     areaRadius: 1000
-
-# The name of an existing Kubernetes Secret containing device credentials.
-# The secret must have a key named "devices" containing a JSON array.
-# See the README for the expected secret format.
-# Example: kubectl create secret generic data-bridge-devices --from-literal=devices='[{"type":"meteo","policyId":"meteo:default","passwd":"secret"}]'
-existingSecret: ""
-
-# Pod resource requests and limits.
-resources: {}
-#   requests:
-#     memory: "64Mi"
-#     cpu: "50m"
-#   limits:
-#     memory: "128Mi"
-#     cpu: "200m"
-
-# Pod scheduling preferences.
-nodeSelector: {}
-tolerations: []
-affinity: {}
-
-# Extra labels and annotations added to all resources.
-labels: {}
-annotations: {}
+# extraEnv: []
+# extraVolumeMounts: []
+# extraVolumes: []
