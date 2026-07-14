@@ -1,5 +1,5 @@
 apiVersion: v2
-name: data-bridge
+name: dt4mob-data-bridge
 description: A Helm chart for the data-bridge CronJob
 type: application
 version: 0.1.0

@@ -1,14 +1,14 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .Release.Name }}-job
+  name: {{ include "dt4mob-data-bridge.name" . }}
   labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}
+    {{ include "dt4mob-data-bridge.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.schedule | quote }}
-  concurrencyPolicy: {{ (((.Values.jobs).myBackupJob).concurrencyPolicy) }}
-  successfulJobsHistoryLimit: 3
-  failedJobsHistoryLimit: 1
+  concurrencyPolicy: {{ .Values.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
@@ -17,13 +17,42 @@ spec:
             - name: data-bridge
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: LOGURU_LEVEL
+                  value: {{ .Values.logLevel }}
+              {{- with .Values.env }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               volumeMounts:
                 - name: config-volume
                   mountPath: /app/config.toml
                   subPath: config.toml
                   readOnly: true
+                - name: device-cert-key-volume
+                  readOnly: true
+                  mountPath: "/run/secrets/device"
+                {{- if .Values.caCertSecretName }}
+                - name: ca-volume
+                  readOnly: true
+                  mountPath: "/run/secrets/hono/ca.crt"
+                  subPath: "ca.crt"
+                {{- end }}
+                {{- if .Values.extraVolumeMounts }}
+                  {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
+                {{- end }}
           restartPolicy: Never
           volumes:
             - name: config-volume
               configMap:
-                name: {{ .Release.Name }}-config
+                name: {{ include "dt4mob-data-bridge.name" . }}-config
+            - name: device-cert-key-volume
+              secret:
+                secretName: {{ tpl ($.Values.deviceCert.existingSecret | default "{{ include \"dt4mob-data-bridge.fullname\" . }}-device-cert") $ | quote }}
+            {{- if .Values.caCertSecretName }}
+            - name: ca-volume
+              secret:
+                secretName: {{ tpl $.Values.caCertSecretName $ | quote }}
+            {{- end }}
+            {{- if .Values.extraVolumes }}
+              {{- toYaml .Values.extraVolumes | nindent 12 }}
+            {{- end }}

@@ -1,3 +1,6 @@
+global:
+  tenant: "test-tenant"
+
 image:
   repository: atnog-harbor.av.it.pt/dt4mob/data-bridge
   # This sets the pull policy for images.
@@ -8,20 +11,36 @@ image:
 schedule: "0 * * * *"
 
 concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 3 
+failedJobsHistoryLimit: 1
 
+logLevel: INFO
+
+caCertSecretName: "{{ .Release.Name }}-root-ca-secret"
+
+deviceCert:
+  # existingSecret: ""
+  issuer:
+    group: cert-manager.io
+    kind: Issuer
+    name: "{{ .Release.Name }}-tenant-ca-issuer"
 
 hono:
-  http_adapter: "https://<hono-http-adapter>"
-  tenant_id: "<hono-tenant-id>"
-  server_cert_path: "/path/to/cert.pem"
+  http_adapter: "https://{{ .Release.Name }}-hono-adapter-http:8443"
+  tenant_id: "{{ .Values.global.tenant }}"
+  server_cert_path: "/run/secrets/hono/ca.crt"
 
-devices:
-  - subject: "<device_subject>"
-    policy_id: "<policy>"
-    cert_path: "/path/to/device.crt"
-    private_key: "/path/to/device.key"
-    strategies:
-      - type: "<strategy-type>"
-        namespace: "<thing-namespace>"
-      - type: "<strategy-type>"
-        namespace: "<thing-namespace>"
+devices: []
+  # - subject: "internal"
+  #   policy_id: "meteo:default"
+  #   cert_path: "/run/secrets/device/tls.crt"
+  #   private_key: "/run/secrets/device/tls.key"
+  #   strategies:
+  #     - type: "meteo"
+  #       namespace: "meteo"
+  #     - type: "meteo_warnings"
+  #       namespace: "meteo"
+
+# extraEnv: []
+# extraVolumeMounts: []
+# extraVolumes: []

@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-config
+  name: {{ include "dt4mob-data-bridge.name" . }}-config
   labels:
-    app.kubernetes.io/name: {{ .Chart.Name }}
+    {{ include "dt4mob-data-bridge.labels" . | nindent 4 }}
 data:
   config.toml: |
-{{ dict "hono" .Values.hono "devices" .Values.devices | toToml | indent 4 }}
+{{ tpl (dict "hono" .Values.hono "devices" .Values.devices | toToml) $ | indent 4 }}

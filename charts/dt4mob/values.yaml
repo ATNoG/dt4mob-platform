@@ -150,6 +150,14 @@ dt4mob-meteo-populator:
     secret:
       secretName: dt4mob-internal-keycloak-tls
 
+dt4mob-data-bridge:
+  enabled: false
+
+  caCertSecretName: "{{ .Release.Name }}-root-ca-secret"
+
+  hono:
+    http_adapter: "https://{{ .Release.Name }}-hono-adapter-http:8443"
+
 reloader:
   reloader:
     watchGlobally: false
