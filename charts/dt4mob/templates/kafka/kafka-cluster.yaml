@@ -31,6 +31,24 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
+  {{- if .Values.kafka.cruiseControl.enabled }}
+  cruiseControl:
+    autoRebalance:
+      - mode: add-brokers
+        template:
+          name: {{ include "dt4mob.fullname" . }}-add-brokers-rebalancing-template
+      - mode: remove-brokers
+        template:
+          name: {{ include "dt4mob.fullname" . }}-remove-brokers-rebalancing-template
+    {{- if .Values.kafka.metrics.enabled}}
+    metricsConfig:
+      type: jmxPrometheusExporter
+      valueFrom:
+        configMapKeyRef:
+          name: {{ include "dt4mob.fullname" . }}-kafka-metrics
+          key: cruise-control-config.yml
+    {{- end }}
+  {{- end }}
 ---
 {{- if .Values.kafka.metrics.enabled }}
 kind: ConfigMap
@@ -202,6 +220,14 @@ data:
     - pattern: "kafka.server<type=broker-metadata-metrics><>(.+):"
       name: kafka_server_brokermetadatametrics_$1
       type: GAUGE
+  cruise-control-config.yml: |
+    # See https://github.com/prometheus/jmx_exporter for more info about JMX Prometheus Exporter metrics
+    lowercaseOutputName: true
+    rules:
+    - pattern: kafka.cruisecontrol<name=(.+)><>(\w+)
+      name: kafka_cruisecontrol_$1_$2
+      type: GAUGE
+{{- end }}
 ---
 {{- if .Values.kafka.metrics.enabled }}
 apiVersion: monitoring.coreos.com/v1
@@ -254,4 +280,22 @@ spec:
       targetLabel: node_ip
       replacement: $1
       action: replace
+{{- end }}
+---
+{{- if .Values.kafka.cruiseControl.enabled }}
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaRebalance
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-add-brokers-rebalancing-template
+  annotations:
+    strimzi.io/rebalance-template: "true"
+spec: {}
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaRebalance
+metadata:
+  name: {{ include "dt4mob.fullname" . }}-remove-brokers-rebalancing-template
+  annotations:
+    strimzi.io/rebalance-template: "true"
+spec: {}
 {{- end }}
