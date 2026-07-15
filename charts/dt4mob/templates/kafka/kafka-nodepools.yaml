@@ -1,9 +1,10 @@
-apiVersion: kafka.strimzi.io/v1beta2
+apiVersion: kafka.strimzi.io/v1
 kind: KafkaNodePool
 metadata:
   name: {{ include "dt4mob.fullname" . }}-controller
   labels:
     strimzi.io/cluster: {{ include "dt4mob.fullname" . }}-kafka-cluster
+    {{- include "dt4mob.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.kafka.controller.replicas }}
   roles:
@@ -33,12 +34,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 ---
-apiVersion: kafka.strimzi.io/v1beta2
+apiVersion: kafka.strimzi.io/v1
 kind: KafkaNodePool
 metadata:
   name: {{ include "dt4mob.fullname" . }}-broker
   labels:
     strimzi.io/cluster: {{ include "dt4mob.fullname" . }}-kafka-cluster
+    {{- include "dt4mob.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.kafka.broker.replicas }}
   roles:

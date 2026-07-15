@@ -605,6 +605,8 @@ ditto:
     uriSecret: "dt4mob-mongodb-ditto-secret"
 
 kafka:
+  version: 4.3.0
+  metadataVersion: 4.3
   controller:
     replicas: 3
     # resources:

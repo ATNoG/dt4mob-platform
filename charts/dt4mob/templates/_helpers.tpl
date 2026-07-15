@@ -141,7 +141,7 @@ Configuration for a kafka user
 - (mandatory) "component": the name of the component
 */}}
 {{- define "dt4mob.kafkaUser" -}}
-apiVersion: kafka.strimzi.io/v1beta2
+apiVersion: kafka.strimzi.io/v1
 kind: KafkaUser
 metadata:
   name: {{ include "dt4mob.fullname" .dot }}-{{ .component }}-kafka-user

@@ -1,14 +1,16 @@
-apiVersion: kafka.strimzi.io/v1beta2
+apiVersion: kafka.strimzi.io/v1
 kind: Kafka
 metadata:
   name: {{ include "dt4mob.fullname" . }}-kafka-cluster
+  labels:
+    {{- include "dt4mob.labels" . | nindent 4 }}
   annotations:
     strimzi.io/node-pools: enabled
     strimzi.io/kraft: enabled
 spec:
   kafka:
-    version: 4.1.1
-    metadataVersion: 4.1-IV1
+    version: {{ .Values.kafka.version | quote }}
+    metadataVersion: {{ .Values.kafka.metadataVersion | quote }}
     listeners:
       - name: plain
         port: 9092
