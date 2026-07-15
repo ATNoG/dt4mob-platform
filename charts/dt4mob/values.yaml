@@ -627,6 +627,8 @@ kafka:
     log.retention.bytes: 2147483648 # 2 GiB
     log.segment.bytes: 157286400 # 150 MiB
     log.retention.check.interval.ms: 300000
+  metrics:
+    enabled: true
 
 psmdb-db:
   image:
