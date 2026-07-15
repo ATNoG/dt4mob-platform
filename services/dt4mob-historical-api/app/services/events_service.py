@@ -16,6 +16,43 @@ from app.models.paths_response import PathResponseObject
 class EventsService:
     def __init__(self, session: Session):
         self.session = session
+    
+    def _handle_database_error(self, e: Exception, json_path: str, json_filter: str | None, agg_type: str) -> None:
+        """
+        Centraliza o tratamento de erros de BD para evitar fugas de 500s 
+        e devolver 400s detalhados ao cliente.
+        """
+        self.session.rollback()
+        err_msg = str(e).lower()
+
+        if "cannot cast jsonb object" in err_msg or "invalid input syntax for type double precision" in err_msg:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=(
+                    f"A agregação '{agg_type}' requer valores numéricos. "
+                    f"O JSONPath '{json_path}' fornecido resolveu para um tipo não numérico (objeto, array ou string). "
+                    f"Corrige o caminho para apontar para um número ou usa a agregação 'count'."
+                )
+            )
+
+        if "jsonpath" in err_msg or "bad jsonpath representation" in err_msg:
+            invalid_expression = json_path
+            context = "json_path"
+            
+            if json_filter and any(part in err_msg for part in ["filter", "exists"]):
+                invalid_expression = json_filter
+                context = "json_filter"
+
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Sintaxe inválida na expressão de {context}: '{invalid_expression}'."
+            )
+
+        orig_err = getattr(e, "orig", e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Erro de processamento de dados na base de dados: {str(orig_err)}"
+        )
 
     def get_available_things(self, thing_id_prefix: str | None = None) -> list[str]:
         query = select(DittoEvent.thing_id).distinct()
@@ -142,6 +179,7 @@ class EventsService:
         bucket_minutes: int | None = None,
         agg_type: Literal["count", "sum", "avg", "min", "max"] = "count",
         thing_id: str | None = None,
+        json_filter: str | None = None,
     ) -> list[dict[str, Any]]:
         """
         Groups events into custom time buckets of arbitrary width (in seconds).
@@ -181,33 +219,17 @@ class EventsService:
         if thing_id:
             query = query.where(col(DittoEvent.thing_id) == thing_id)
 
+        if json_filter:
+            typed_filter = func.cast(json_filter, JSONPATH)
+            query = query.where(func.jsonb_path_exists(DittoEvent.value, typed_filter))
+
         if not is_all_time:
             query = query.group_by(text("bucket")).order_by(text("bucket ASC"))
 
         try:
             result = self.session.exec(query).all()
-        except DataError as e:
-            self.session.rollback()
-            
-            if "cannot cast jsonb object to type double precision" in str(e):
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=(
-                        f"Aggregation type '{agg_type}' requires a numeric value. "
-                        f"The provided JSONPath '{json_path}' resolved to an object or dictionary instead. "
-                        f"Please update your path to target a numeric field, or switch your agg_type to 'count'."
-                    )
-                )
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Data processing error: {str(e.orig)}"
-            )
-        except ProgrammingError as e:
-            self.session.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid JSONPath expression syntax: '{json_path}'. Details: {str(e.orig)}"
-            )
+        except (DataError, ProgrammingError) as e:
+            self._handle_database_error(e, json_path, json_filter, agg_type)
         
         if is_all_time:
             val = result[0][1] if result else None
@@ -228,6 +250,7 @@ class EventsService:
             bucket_minutes: int | None = None,
             agg_type: Literal["count", "sum", "avg", "min", "max"] = "count",
             thing_id: str | None = None,
+            json_filter: str | None = None,
         ) -> list[dict[str, Any]]:
             """
             Groups events into custom time buckets, segmented by multiple path prefixes.
@@ -272,6 +295,10 @@ class EventsService:
 
             if thing_id:
                 query = query.where(col(DittoEvent.thing_id) == thing_id)
+            
+            if json_filter:
+                typed_filter = func.cast(json_filter, JSONPATH)
+                query = query.where(func.jsonb_path_exists(DittoEvent.value, typed_filter))
                 
             prefix_conditions = [col(DittoEvent.path).startswith(p) for p in path_prefixes_arr]
             query = query.where(or_(*prefix_conditions))
@@ -283,12 +310,8 @@ class EventsService:
 
             try:
                 result = self.session.exec(query).all()
-            except DataError as e:
-                self.session.rollback()
-                raise
-            except ProgrammingError as e:
-                self.session.rollback()
-                raise
+            except (DataError, ProgrammingError) as e:
+                self._handle_database_error(e, json_path, json_filter, agg_type)
             
             if is_all_time:
                 return [

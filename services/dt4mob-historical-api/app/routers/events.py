@@ -184,8 +184,8 @@ def read_events_custom_time_buckets(
     thing_id: str,
     bucket_minutes: int | None = None,
     agg_type: Literal["count", "sum", "avg", "min", "max"] = "count",
-    path_prefix: str | None = None
-
+    path_prefix: str | None = None,
+    json_filter: str | None = None,
 ):
     """
     Groups events into specific time chunks (buckets) and runs aggregations on a JSONPath target.
@@ -198,7 +198,8 @@ def read_events_custom_time_buckets(
             path_prefixes=path_prefix,
             bucket_minutes=bucket_minutes,
             agg_type=agg_type,
-            thing_id=thing_id
+            thing_id=thing_id,
+            json_filter=json_filter
         )
         
     return events_service.get_events_custom_time_buckets(
@@ -207,5 +208,6 @@ def read_events_custom_time_buckets(
         until_iso_timestamp=until,
         bucket_minutes=bucket_minutes,
         agg_type=agg_type,
-        thing_id=thing_id
+        thing_id=thing_id,
+        json_filter=json_filter
     )
