@@ -252,6 +252,7 @@ hono:
         ssl.keystore.type: "PKCS12"
         ssl.keystore.password: ${KEY_STORE_PASSWORD}
         ssl.keystore.location: "/opt/hono/tls/kafka-certs/user.p12"
+  
 
     mqtt:
       resources:
@@ -263,6 +264,11 @@ hono:
           reloader.stakater.com/auto: "true"
 
       quarkusLoggingProfile: "prod"
+
+      kafkaMessagingSpec:
+        telemetry:
+          producerConfig:
+            partitioner.ignore.keys: true
 
       tlsKeysSecret: "dt4mob-adapter-mqtt-cert"
       tlsTrustStoreConfigMap: "none"
@@ -309,6 +315,11 @@ hono:
 
       quarkusLoggingProfile: "prod"
 
+      kafkaMessagingSpec:
+        telemetry:
+          producerConfig:
+            partitioner.ignore.keys: true
+
       tlsKeysSecret: "dt4mob-adapter-http-cert"
       tlsTrustStoreConfigMap: "none"
       tlsTrustStoreSecret:
@@ -353,6 +364,11 @@ hono:
           reloader.stakater.com/auto: "true"
 
       quarkusLoggingProfile: "prod"
+
+      kafkaMessagingSpec:
+        telemetry:
+          producerConfig:
+            partitioner.ignore.keys: true
 
       tlsKeysSecret: "dt4mob-adapter-amqp-cert"
       tlsTrustStoreConfigMap: "none"
