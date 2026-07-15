@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 32,
+  "id": 0,
   "links": [],
   "panels": [
     {
@@ -1451,7 +1451,9 @@
   "preload": false,
   "refresh": "30s",
   "schemaVersion": 42,
-  "tags": [],
+  "tags": [
+    "Ditto"
+  ],
   "templating": {
     "list": [
       {
@@ -1476,12 +1478,12 @@
     ]
   },
   "time": {
-    "from": "2025-11-24T15:22:52.090Z",
-    "to": "2025-11-24T15:40:16.485Z"
+    "from": "now-1h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Search Performance Metrics",
   "uid": "5CJ1fOmiz",
-  "version": 3
+  "version": 2
 }
