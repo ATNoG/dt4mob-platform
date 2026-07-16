@@ -31,6 +31,11 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
+  {{- if .Values.kafka.metrics.enabled }}
+  kafkaExporter:
+    topicRegex: ".*"
+    groupRegex: ".*"
+  {{- end }}
   {{- if .Values.kafka.cruiseControl.enabled }}
   cruiseControl:
     autoRebalance:
