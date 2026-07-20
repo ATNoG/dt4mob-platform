@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -eu
+set -euo pipefail
 
 # Wait for keycloak to be running
 kubectl rollout status statefulsets.apps "$KEYCLOAK_STATEFUL_SET"
@@ -35,37 +35,18 @@ else
     -s "webOrigins=$KEYCLOAK_CLIENT_ORIGINS"
 fi
 
-# Create/Update the admin role
-ADMIN_ROLE_NAME="${ADMIN_ROLE_NAME:-"admin"}"
-ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$ADMIN_ROLE_NAME" -F id --format csv --noquotes || true)
-if [ -z "$ROLEID" ]; then
-  # The `-i` option returns the role name instead of the ID
-  ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
-    -r "$KEYCLOAK_REALM" \
-    -s name="$ADMIN_ROLE_NAME" \
-    -s description="Platform administrator role" | jq -r ".id")
-fi
-
-# Create/Update the historical API roles 
-HISTORICAL_READ_ROLE_NAME="${HISTORICAL_READ_ROLE_NAME:-"historical-read"}"
-ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$HISTORICAL_READ_ROLE_NAME" -F id --format csv --noquotes || true)
-if [ -z "$ROLEID" ]; then
-  # The `-i` option returns the role name instead of the ID
-  ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
-    -r "$KEYCLOAK_REALM" \
-    -s name="$HISTORICAL_READ_ROLE_NAME" \
-    -s description="Historical API read access" | jq -r ".id")
-fi
-
-HISTORICAL_WRITE_ROLE_NAME="${HISTORICAL_WRITE_ROLE_NAME:-"historical-write"}"
-ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$HISTORICAL_WRITE_ROLE_NAME" -F id --format csv --noquotes || true)
-if [ -z "$ROLEID" ]; then
-  # The `-i` option returns the role name instead of the ID
-  ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
-    -r "$KEYCLOAK_REALM" \
-    -s name="$HISTORICAL_WRITE_ROLE_NAME" \
-    -s description="Historical API write access" | jq -r ".id")
-fi
+jq -cn --stream 'env.SYSTEM_ROLES | fromjson.[]' | while read role; do
+  ROLE_NAME="$(echo "$role" | jq -r ".name")"
+  ROLE_DESCRIPTION="$(echo "$role" | jq -r ".description")"
+  ROLEID=$(kcadm get-roles -r "$KEYCLOAK_REALM" --cid "$CID" --rolename "$ROLE_NAME" -F id --format csv --noquotes || true)
+  if [ -z "$ROLEID" ]; then
+    # The `-i` option returns the role name instead of the ID
+    ROLEID=$(kcadm create clients/"$CID"/roles -o -F id \
+      -r "$KEYCLOAK_REALM" \
+      -s name="$ROLE_NAME" \
+      -s description="$ROLE_DESCRIPTION" | jq -r ".id")
+  fi
+done
 
 # Create/Update the system service role
 SYSTEM_SERVICE_ROLE_NAME="${SYSTEM_SERVICE_ROLE_NAME:-"system-service"}"

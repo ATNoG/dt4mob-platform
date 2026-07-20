@@ -51,6 +51,15 @@ spec:
           value: "{{ include "dt4mob.fullname" . }}"
         - name: SECRETS_PREFIX
           value: "{{ include "dt4mob.fullname" . }}"
+        - name: SYSTEM_ROLES
+          {{ $systemRoles := list }}
+          {{- $systemRoles = append $systemRoles (dict "name" "admin" "description" "Platform administrator role") }}
+          {{- $systemRoles = append $systemRoles (dict "name" "certificate-issuer" "description" "Certificate issuance role") }}
+          {{- if (get .Values "dt4mob-historical").enabled }}
+          {{- $systemRoles = append $systemRoles (dict "name" "historical-read" "description" "Historical API read access role") }}
+          {{- $systemRoles = append $systemRoles (dict "name" "historical-write" "description" "Historical API write access role") }}
+          {{- end }}
+          value: {{ $systemRoles | toJson | quote }}
         - name: SYSTEM_ACCOUNTS
           {{ $systemAccounts := list }}
           {{- if (get .Values "dt4mob-garbage-collector").enabled }}
