@@ -58,6 +58,12 @@ placeholder domain, but the values must be set. The value of `issuer` must
 be set manually, due to constraints of Helm packaging, to the same value of
 `global.host` with `/auth/realms/dt4mob` appended at the end.
 
+It also might be of interest to change the `global.tenant` value from its
+default of `test-tenant` to a more appropriate name. This will change the name
+of the tenant created in Hono and also the name of the connections created in
+Ditto. This value can be changed later but requires manual work to migrate all
+the previous uses of the old tenant name to the new one.
+
 ## Exposing the platform
 
 The platform has two parts that can be separately exposed and through different

@@ -166,3 +166,162 @@ From here, press the "Create role", button which will trigger navigation to the
 role creation form, insert the name of the new role and optionally a description
 for it, and submit the form to finish creating the role. Assign the role to a
 user as explained in @sec:assign-role to begin using it.
+
+## Ditto
+
+As previously mentioned, Eclipse Ditto is the backend that allows for the storage
+and querying of digital twins in the DT4Mob platform. The following sections
+explain how to access Ditto, create policies, and gain DevOps privileges.
+
+### Accessing Ditto
+
+Ditto is exposed under the paths `https://<host>/ui` and `https://<host>/api`,
+where `<host>` is the domain name configured in @sec:installation, for the
+Web UI and the API, respectively. Navigating to the Web UI will automatically
+redirect to Keycloak's login form if the user has no current authentication
+session. No role is required to interact with Ditto. API access requires that
+the access token be obtained previously and passed as a bearer token in the
+`Authorization` header.
+
+### Defining policies
+
+Policies control access to themselves and things within Ditto. A policy is
+composed of a set of entries, each defining for a set of subjects the allowed
+resource operations. A thing has exactly one policy associated with it that
+controls its access. Policies can import from one another to allow reusing logic
+for common authorization decisions. For more information, consult the relevant
+documentation[^policies].
+
+A policy can be created either through the Web UI in the "policies" tab or
+through the API. To create a policy through the Web UI, ensure that no policy
+is currently selected and navigate to the "JSON" tab in the right pane (not the
+navigation bar).
+
+![Ditto Web UI policies view](./user-manual/assets/03-operation/ditto-create-policy.png)
+
+From here, press the "create" button on the right pane to begin editing the new
+policy; it won't be possible to edit any of the fields before doing so. Define
+a unique policy ID that must follow the format `<namespace>:<name>`, and write
+the policy definition in the large text box below it. For details on the policy
+definition syntax, consult the Ditto documentation.
+
+On the left pane, under the "Who am I" section is a list of all the subjects
+the current user represents. These are directly derived from the access token
+obtained from Keycloak. The table below lists the different subjects extracted
+from the token that can be in policy definitions:
+
+| Subject &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description                                                                                                                                                                                                                                                                               |
+| -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keycloak:sub:<uid>`                                                                         | The `sub` field of the access token, uniquely identifies the user. Shouldn't be used in policy definitions since it isn't obvious what the actual user is from the UID.                                                                                                                   |
+| `keycloak:user:<uid>`                                                                        | The username of the user extracted from the access token, uniquely identifies the user at this point in time but might be reused for another user later if this user is deleted and a new one then created. Preferred over `keycloak:sub` but in most cases roles should be used instead. |
+| `keycloak:role:<uid>`                                                                        | Client roles extracted from the access token. Usually the best option when defining policies as it allows defining access by function instead of identity of the user, and is also easier to manage.                                                                                      |
+
+Table: Subjects obtained from the access token
+
+[^policies]: <https://eclipse.dev/ditto/basic-policy.html>
+
+#### Allowing Hono messages
+
+Policies need to include a special subject to allow for messages to be accepted
+from the Hono connection to things controlled by the policy. This is done by
+adding the following entry to the policy:
+
+```{.json caption="Hono connection policy entry"}
+"HONO": {
+  "subjects": {
+    "pre-authenticated:hono-connection-<tenant>": {
+      "type": "Connection to Eclipse Hono"
+    }
+  },
+  "resources": {
+    "thing:/": {
+      "grant": [
+        "READ",
+        "WRITE"
+      ],
+      "revoke": []
+    },
+    "message:/": {
+      "grant": [
+        "READ",
+        "WRITE"
+      ],
+      "revoke": []
+    },
+    "policy:/": {
+      "grant": [
+        "READ"
+      ],
+      "revoke": []
+    }
+  },
+  "importable": "implicit"
+}
+```
+
+Where `<tenant>` is the name of the tenant that was configured in
+@sec:installation.
+
+#### Allowing historical exporting
+
+The historical exporter connection also requires a special entry to allow for
+the evolution of things to be stored. This allows for things to be excluded
+from the historical database such that only the strictly necessary things are
+saved, helping with costs, performance, and compliance.
+
+```{.json caption="Hono connection policy entry"}
+"KAFKA_EXPORT": {
+  "subjects": {
+    "pre-authenticated:kafka-export-connection-<tenant>": {
+      "type": "Kafka Connection"
+    }
+  },
+  "resources": {
+    "thing:/": {
+      "grant": [
+        "READ"
+      ],
+      "revoke": []
+    },
+    "policy:/": {
+      "grant": [
+        "READ"
+      ],
+      "revoke": []
+    }
+  },
+  "importable": "implicit"
+}
+```
+
+Where `<tenant>` is the name of the tenant that was configured in
+@sec:installation.
+
+### DevOps access
+
+Some operations, such as managing inbound (Hono) and outbound (historical
+exporter) connections or running administration operations in Ditto, require
+the use of a special account called the DevOps. This account does not utilize
+the centralized user management, and its credentials are generated during
+installation in-cluster.
+
+The username is `devops`, and the password can be recovered using the following
+command:
+
+```sh
+$ kubectl get secret dt4mob-ditto-gateway-secret -o jsonpath="{.data.devops-password}" | base64 -d
+```
+
+These credentials can then be used through basic authentication in the APIs that
+require the use of this account or in the Web UI by pressing the "Authorize"
+button on the far right of the navigation bar. This will trigger a popup with
+two forms for authentication. The top one is for regular authentication using
+Keycloak, while the bottom one is for DevOps authentication.
+
+Upon inserting the credentials and submitting the form, access to the
+"Connections" and "Operations" pages will be possible without receiving any
+missing authentication errors.
+
+Note: Sometimes the "Basic" radio button beside the DevOps login form is not
+selected (this is due to a bug in Ditto), and authentication won't progress in
+that case. To fix it, simply select the radio button and submit the form again.
