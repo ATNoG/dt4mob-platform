@@ -7,6 +7,8 @@ pandoc -o "$1".docx \
   --template=./template/template.ooxml \
   --metadata-file="$1"/metadata.yaml \
   -t docx+native_numbering \
+  --figure-caption-position=below \
+  --table-caption-position=below \
   --lua-filter ./template/diagram.lua \
   --filter pandoc-crossref \
   "$1"/*.md
