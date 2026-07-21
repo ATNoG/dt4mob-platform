@@ -166,10 +166,12 @@ class EventsService:
         if is_all_time:
             time_bucket = func.min(col(DittoEvent.time)).label("bucket")
         else:
-            bucket_seconds = bucket_minutes * 60
-            epoch_part = func.extract("epoch", col(DittoEvent.time))
-            bucket_series = func.floor(epoch_part / bucket_seconds) * bucket_seconds
-            time_bucket = func.to_timestamp(bucket_series).label("bucket")
+            time_bucket = func.time_bucket_gapfill(
+                text(f"'{bucket_minutes} minutes'"),
+                col(DittoEvent.time),
+                since_iso_timestamp,
+                until_iso_timestamp
+            ).label("bucket")
 
         query = select(time_bucket, chosen_agg(extracted_value).label("value")).where(
             (col(DittoEvent.time) >= since_iso_timestamp)
@@ -252,10 +254,12 @@ class EventsService:
             if is_all_time:
                 time_bucket = func.min(col(DittoEvent.time)).label("bucket")
             else:
-                bucket_seconds = bucket_minutes * 60
-                epoch_part = func.extract("epoch", col(DittoEvent.time))
-                bucket_series = func.floor(epoch_part / bucket_seconds) * bucket_seconds
-                time_bucket = func.to_timestamp(bucket_series).label("bucket")
+                time_bucket = func.time_bucket_gapfill(
+                    text(f"'{bucket_minutes} minutes'"),
+                    col(DittoEvent.time),
+                    since_iso_timestamp,
+                    until_iso_timestamp
+                ).label("bucket")
 
             query = select(
                 col(DittoEvent.path).label("path"), 
