@@ -269,7 +269,7 @@ the evolution of things to be stored. This allows for things to be excluded
 from the historical database such that only the strictly necessary things are
 saved, helping with costs, performance, and compliance.
 
-```{.json caption="Hono connection policy entry"}
+```{.json caption="Historical connection policy entry"}
 "KAFKA_EXPORT": {
   "subjects": {
     "pre-authenticated:kafka-export-connection-<tenant>": {

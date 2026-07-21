@@ -13,11 +13,11 @@ components need to be installed beforehand in the cluster:
 - [CloudNativePG](https://cloudnative-pg.io/)
 - [SeaweedFS Operator](https://github.com/seaweedfs/seaweedfs-operator/)
 
-The minimum size of the cluster necessary to run all the components is 8 vCPUs,
-16 GiB of RAM, and 200 GiB of storage. More resources may be required to scale
-the cluster to meet the demands. There is no constraint on the minimum number
-of nodes in the cluster except for high availability scenariosi where at least 3
-nodes are required.
+The minimum size of the cluster necessary to run all the required components
+is 8 vCPUs, 16 GiB of RAM, and 200 GiB of storage. More resources may be
+required to scale the cluster to meet the demands and install addons. There
+is no constraint on the minimum number of nodes in the cluster except for high
+availability scenarios where at least 3 nodes are required.
 
 ## Deploying
 
@@ -112,9 +112,9 @@ The adapters' certificates will always include the domain name configured in the
 `global.host` option in their Subject Alternative Name (SAN) extension values.
 In some cases, however, DNS might not be available, desired, or the domain does
 not resolve externally, and as such it might be necessary to connect directly
-to the adapters through the nodes' IP address. For such scenarios, the SAN
-values can be further extended with arbitrary IP addresses through the following
-modification to the values file.
+to the adapters through the nodes or load balancers' IP address. For such
+scenarios, the SAN values can be further extended with arbitrary IP addresses
+through the following modification to the values file.
 
 ```yaml
 dt4mob-ingress:
@@ -157,7 +157,7 @@ The platform APIs are exposed through the domain name configured in the
 self-signed certificate by default. Cert-manager is used for the issuance and
 lifecycle of the certificate, as such, to use a certificate issued by a CA,
 the issuer must be configured. This can be done in one of two way, by using an
-existing issuer present in the Cluster:
+issuer present in the cluster:
 
 ```yaml
 ingressTLS:

@@ -2,7 +2,7 @@
 
 This manual provides instructions on how to install, operate, and maintain
 the Digital Twins for Mobility platform, henceforth referred to as the dt4mob
-platform.
+platform or simply the platform.
 
 ## High-level overview
 
@@ -20,7 +20,7 @@ In practice, and in order to simplify operation, this is achieved through a set
 of hierarchical Helm[^helm] charts.
 
 ``` mermaid
-%%| fig-cap: Helm dependency graph.
+%%| fig-cap: Grafo de dependências do charts Helm.
 graph TD
     A[dt4mob] --> B[hono]
     A --> C[ditto]
@@ -73,7 +73,7 @@ as they refer to them, and Hono functions as the connectivity layer between the
 devices on the edge and Ditto.
 
 ``` mermaid
-%%| fig-cap: Digital twins components architecture.
+%%| fig-cap: Componentes da arquitetura de gemêo digital.
 graph LR
     %% Edge/IO devices
     edge_devices[Edge Devices] --> hono[Hono]
